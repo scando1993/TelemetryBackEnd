@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.pacificsoft.microservices.loka.core.LokaCoreTest" time="6.754" tests="7" errors="5" skipped="0" failures="0">
+  <properties>
+    <property name="idea.version" value="2017.3.2"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_111\jre\bin"/>
+    <property name="java.vm.version" value="25.111-b14"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="maven.multiModuleProjectDirectory" value="C:\Users\Kevin Cando\IdeaProjects\IoTPlatform\Loka-service\Core_Loka"/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="path.separator" value=";"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.script" value=""/>
+    <property name="user.country" value="EC"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="C:\Users\Kevin Cando\IdeaProjects\IoTPlatform\Loka-service\Core_Loka"/>
+    <property name="java.runtime.version" value="1.8.0_111-b14"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
+    <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.8.0_111\jre\lib\endorsed"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.io.tmpdir" value="C:\Users\KEVINC~1\AppData\Local\Temp\"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.variant" value=""/>
+    <property name="os.name" value="Windows 10"/>
+    <property name="classworlds.conf" value="C:\Users\Kevin Cando\AppData\Local\JetBrains\Toolbox\apps\IDEA-U\ch-0\173.4127.27\plugins\maven\lib\maven3\bin\m2.conf"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_111\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Python27\;C:\Python27\Scripts;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Git\cmd;C:\Program Files (x86)\Microchip\xc32\v1.44\bin;C:\Program Files (x86)\Microchip\xc8\v1.44\bin;C:\Program Files (x86)\Microchip\xc16\v1.33\bin;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\php-7.2.0;C:\ProgramData\ComposerSetup\bin;C:\Program Files\MySQL\MySQL Utilities 1.6\;C:\Program Files\nodejs\;C:\Users\Kevin Cando\AppData\Local\Microsoft\WindowsApps;C:\Users\Kevin Cando\AppData\Roaming\Composer\vendor\bin;C:\Users\Kevin Cando\AppData\Roaming\npm;C:\protoc-3.5.1-win32\bin;C:\Program Files (x86)\Nmap;."/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="52.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="10.0"/>
+    <property name="user.home" value="C:\Users\Kevin Cando"/>
+    <property name="user.timezone" value="America/Bogota"/>
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
+    <property name="java.specification.version" value="1.8"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="user.name" value="Kevin Cando"/>
+    <property name="java.class.path" value="C:\Users\Kevin Cando\AppData\Local\JetBrains\Toolbox\apps\IDEA-U\ch-0\173.4127.27\plugins\maven\lib\maven3\boot\plexus-classworlds-2.5.2.jar;C:\Users\Kevin Cando\AppData\Local\JetBrains\Toolbox\apps\IDEA-U\ch-0\173.4127.27\lib\idea_rt.jar"/>
+    <property name="java.vm.specification.version" value="1.8"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_111\jre"/>
+    <property name="sun.java.command" value="org.codehaus.classworlds.Launcher -Didea.version=2017.3.2 install"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.language" value="es"/>
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.8.0_111"/>
+    <property name="java.ext.dirs" value="C:\Program Files\Java\jdk1.8.0_111\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext"/>
+    <property name="sun.boot.class.path" value="C:\Program Files\Java\jdk1.8.0_111\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_111\jre\classes"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="maven.home" value="C:\Users\Kevin Cando\AppData\Local\JetBrains\Toolbox\apps\IDEA-U\ch-0\173.4127.27\plugins\maven\lib\maven3"/>
+    <property name="file.separator" value="\"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.desktop" value="windows"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+  </properties>
+  <testcase name="testLogin" classname="net.pacificsoft.microservices.loka.core.LokaCoreTest" time="1.945"/>
+  <testcase name="testUnsubscribeTerminal" classname="net.pacificsoft.microservices.loka.core.LokaCoreTest" time="1.121">
+    <error message="net.pacificsoft.microservices.loka.core.modelProto.LokaCoreProto$ControlMessage.getStatus()J" type="java.lang.NoSuchMethodError">java.lang.NoSuchMethodError: net.pacificsoft.microservices.loka.core.modelProto.LokaCoreProto$ControlMessage.getStatus()J
+	at net.pacificsoft.microservices.loka.core.LokaCoreTest.testUnsubscribeTerminal(LokaCoreTest.java:85)
+</error>
+    <system-out><![CDATA[2018-04-03 12:41:21.742  INFO [core-loka-service,8fe89ef7b6e703fb,8fe89ef7b6e703fb,true] 1912 --- [-auto-1-exec-10] n.p.microservices.loka.core.api.Api      : Unsubscribe loka device id: 5042045
+2018-04-03 12:41:22.182  INFO [core-loka-service,,,] 1912 --- [ender@300a38e7}] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@573048ad: startup date [Tue Apr 03 12:41:22 COT 2018]; parent: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@782a4fff
+2018-04-03 12:41:22.244  INFO [core-loka-service,,,] 1912 --- [ender@300a38e7}] f.a.AutowiredAnnotationBeanPostProcessor : JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2018-04-03 12:41:22.409  INFO [core-loka-service,,,] 1912 --- [ender@300a38e7}] c.netflix.config.ChainedDynamicProperty  : Flipping property: localhost.ribbon.ActiveConnectionsLimit to use NEXT property: niws.loadbalancer.availabilityFilteringRule.activeConnectionsLimit = 2147483647
+2018-04-03 12:41:22.469  INFO [core-loka-service,,,] 1912 --- [ender@300a38e7}] c.netflix.loadbalancer.BaseLoadBalancer  : Client: localhost instantiated a LoadBalancer: DynamicServerListLoadBalancer:{NFLoadBalancer:name=localhost,current list of Servers=[],Load balancer stats=Zone stats: {},Server stats: []}ServerList:null
+2018-04-03 12:41:22.480  INFO [core-loka-service,,,] 1912 --- [ender@300a38e7}] c.n.l.DynamicServerListLoadBalancer      : Using serverListUpdater PollingServerListUpdater
+2018-04-03 12:41:22.486  INFO [core-loka-service,,,] 1912 --- [ender@300a38e7}] c.n.l.DynamicServerListLoadBalancer      : DynamicServerListLoadBalancer for client localhost initialized: DynamicServerListLoadBalancer:{NFLoadBalancer:name=localhost,current list of Servers=[],Load balancer stats=Zone stats: {},Server stats: []}ServerList:com.netflix.loadbalancer.ConfigurationBasedServerList@7a5a395f
+2018-04-03 12:41:22.599  INFO [core-loka-service,8fe89ef7b6e703fb,8fe89ef7b6e703fb,true] 1912 --- [-auto-1-exec-10] n.p.microservices.loka.core.api.Api      : Request received: <200 OK,{"message":"UNSUBSCRIBED","status":200},{X-Content-Type-Options=[nosniff], X-XSS-Protection=[1; mode=block], Cache-Control=[no-cache, no-store, max-age=0, must-revalidate], Pragma=[no-cache], Expires=[0], Strict-Transport-Security=[max-age=31536000 ; includeSubDomains], X-Frame-Options=[DENY], Content-Type=[application/json;charset=UTF-8], Transfer-Encoding=[chunked], Date=[Tue, 03 Apr 2018 17:41:20 GMT]}>
+]]></system-out>
+  </testcase>
+  <testcase name="testNotValidSubscription" classname="net.pacificsoft.microservices.loka.core.LokaCoreTest" time="0.92">
+    <error message="net.pacificsoft.microservices.loka.core.modelProto.LokaCoreProto$ControlMessage.getStatus()J" type="java.lang.NoSuchMethodError">java.lang.NoSuchMethodError: net.pacificsoft.microservices.loka.core.modelProto.LokaCoreProto$ControlMessage.getStatus()J
+	at net.pacificsoft.microservices.loka.core.LokaCoreTest.testNotValidSubscription(LokaCoreTest.java:98)
+</error>
+    <system-out><![CDATA[2018-04-03 12:41:22.843  INFO [core-loka-service,743b1a9e4af6e9e6,743b1a9e4af6e9e6,true] 1912 --- [o-auto-1-exec-9] n.p.microservices.loka.core.api.Api      : Subscribe loka device id: 10203434
+2018-04-03 12:41:23.718 ERROR [core-loka-service,743b1a9e4af6e9e6,743b1a9e4af6e9e6,true] 1912 --- [o-auto-1-exec-9] n.p.microservices.loka.core.api.Api      : org.springframework.web.client.HttpClientErrorException: 403 null
+]]></system-out>
+  </testcase>
+  <testcase name="testNotValidUnsubscription" classname="net.pacificsoft.microservices.loka.core.LokaCoreTest" time="0.904">
+    <error message="net.pacificsoft.microservices.loka.core.modelProto.LokaCoreProto$ControlMessage.getStatus()J" type="java.lang.NoSuchMethodError">java.lang.NoSuchMethodError: net.pacificsoft.microservices.loka.core.modelProto.LokaCoreProto$ControlMessage.getStatus()J
+	at net.pacificsoft.microservices.loka.core.LokaCoreTest.testNotValidUnsubscription(LokaCoreTest.java:111)
+</error>
+    <system-out><![CDATA[2018-04-03 12:41:23.748  INFO [core-loka-service,94bf385e87961b23,94bf385e87961b23,true] 1912 --- [o-auto-1-exec-8] n.p.microservices.loka.core.api.Api      : Unsubscribe loka device id: 10203434
+2018-04-03 12:41:24.617  INFO [core-loka-service,94bf385e87961b23,94bf385e87961b23,true] 1912 --- [o-auto-1-exec-8] n.p.microservices.loka.core.api.Api      : Request received: <200 OK,{"message":"NOT SUBSCRIBED","status":200},{X-Content-Type-Options=[nosniff], X-XSS-Protection=[1; mode=block], Cache-Control=[no-cache, no-store, max-age=0, must-revalidate], Pragma=[no-cache], Expires=[0], Strict-Transport-Security=[max-age=31536000 ; includeSubDomains], X-Frame-Options=[DENY], Content-Type=[application/json;charset=UTF-8], Transfer-Encoding=[chunked], Date=[Tue, 03 Apr 2018 17:41:21 GMT]}>
+]]></system-out>
+  </testcase>
+  <testcase name="testSubscribeTerminal" classname="net.pacificsoft.microservices.loka.core.LokaCoreTest" time="0.901">
+    <error message="net.pacificsoft.microservices.loka.core.modelProto.LokaCoreProto$ControlMessage.getStatus()J" type="java.lang.NoSuchMethodError">java.lang.NoSuchMethodError: net.pacificsoft.microservices.loka.core.modelProto.LokaCoreProto$ControlMessage.getStatus()J
+	at net.pacificsoft.microservices.loka.core.LokaCoreTest.testSubscribeTerminal(LokaCoreTest.java:71)
+</error>
+    <system-out><![CDATA[2018-04-03 12:41:24.652  INFO [core-loka-service,6c76e0311f7fb8a1,6c76e0311f7fb8a1,true] 1912 --- [o-auto-1-exec-7] n.p.microservices.loka.core.api.Api      : Subscribe loka device id: 5042045
+2018-04-03 12:41:25.523  INFO [core-loka-service,6c76e0311f7fb8a1,6c76e0311f7fb8a1,true] 1912 --- [o-auto-1-exec-7] n.p.microservices.loka.core.api.Api      : Request received: <200 OK,{"message":"SUBSCRIBED","status":200},{X-Content-Type-Options=[nosniff], X-XSS-Protection=[1; mode=block], Cache-Control=[no-cache, no-store, max-age=0, must-revalidate], Pragma=[no-cache], Expires=[0], Strict-Transport-Security=[max-age=31536000 ; includeSubDomains], X-Frame-Options=[DENY], Content-Type=[application/json;charset=UTF-8], Transfer-Encoding=[chunked], Date=[Tue, 03 Apr 2018 17:41:23 GMT]}>
+]]></system-out>
+  </testcase>
+  <testcase name="testNotValidLogin" classname="net.pacificsoft.microservices.loka.core.LokaCoreTest" time="0.883"/>
+  <testcase name="testAllowedSubcriptions" classname="net.pacificsoft.microservices.loka.core.LokaCoreTest" time="0.08">
+    <error message="Could not extract response: no suitable HttpMessageConverter found for response type [class java.lang.String] and content type [application/json;charset=UTF-8]" type="org.springframework.web.client.RestClientException">org.springframework.web.client.RestClientException: Could not extract response: no suitable HttpMessageConverter found for response type [class java.lang.String] and content type [application/json;charset=UTF-8]
+	at org.springframework.web.client.HttpMessageConverterExtractor.extractData(HttpMessageConverterExtractor.java:110)
+	at org.springframework.web.client.RestTemplate$ResponseEntityResponseExtractor.extractData(RestTemplate.java:924)
+	at org.springframework.web.client.RestTemplate$ResponseEntityResponseExtractor.extractData(RestTemplate.java:908)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:662)
+	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:620)
+	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:538)
+	at org.springframework.boot.test.web.client.TestRestTemplate.exchange(TestRestTemplate.java:739)
+	at net.pacificsoft.microservices.loka.core.LokaCoreTest.testAllowedSubcriptions(LokaCoreTest.java:118)
+</error>
+  </testcase>
+</testsuite>

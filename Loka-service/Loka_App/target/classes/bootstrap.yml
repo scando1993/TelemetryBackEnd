@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: app-loka-service
+  cloud:
+    discovery:
+      enabled: true
+      serviceId: config-server
+    profile: default

@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package modelProto;
+
+option java_package = "net.pacificsoft.microservices.loka.app.modelProto";
+option java_outer_classname = "LokaAppProto";
+
+message Account{
+    string username = 1;
+    repeated string roles = 2;
+    string token_type = 3;
+    string access_token = 4;
+    string expires_in = 5;
+    string refresh_token = 6;
+}
+
+message Temperature{
+    int64 date = 1;
+    float value = 2;
+}
+
+message Position{
+    int64 date = 1;
+    float accuracy = 2;
+    float latitude = 3;
+    float longitude = 4;
+    float battery = 5;
+    float temperature = 6;
+    int64 to = 7;
+}
+
+message Device{
+    int32 id = 1;
+    string name = 2;
+    string color = 3;
+    bool mooving = 4;
+    float battery = 5;
+    int64 lastCommunication = 6;
+    float temperature = 7;
+    Position position = 8;
+    repeated Temperature temperatures = 9;
+    string unity = 10;
+    repeated Position positions = 11;
+}
+
+message Devices{
+    repeated Device device = 1;
+}
+
+message DeviceParams{
+    int64 deviceId = 1;
+    int64 startDate = 2;
+    int64 endDate = 3;
+}
+
+message Login{
+    string username = 1;
+    string password = 2;
+}

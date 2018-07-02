@@ -1,0 +1,31 @@
+-------------------------------------------------------------------------------
+Test set: net.pacificsoft.microservices.loka.core.LokaCoreTest
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 5, Skipped: 0, Time elapsed: 20.413 sec <<< FAILURE! - in net.pacificsoft.microservices.loka.core.LokaCoreTest
+testUnsubscribeTerminal(net.pacificsoft.microservices.loka.core.LokaCoreTest)  Time elapsed: 1.121 sec  <<< ERROR!
+java.lang.NoSuchMethodError: net.pacificsoft.microservices.loka.core.modelProto.LokaCoreProto$ControlMessage.getStatus()J
+	at net.pacificsoft.microservices.loka.core.LokaCoreTest.testUnsubscribeTerminal(LokaCoreTest.java:85)
+
+testNotValidSubscription(net.pacificsoft.microservices.loka.core.LokaCoreTest)  Time elapsed: 0.92 sec  <<< ERROR!
+java.lang.NoSuchMethodError: net.pacificsoft.microservices.loka.core.modelProto.LokaCoreProto$ControlMessage.getStatus()J
+	at net.pacificsoft.microservices.loka.core.LokaCoreTest.testNotValidSubscription(LokaCoreTest.java:98)
+
+testNotValidUnsubscription(net.pacificsoft.microservices.loka.core.LokaCoreTest)  Time elapsed: 0.904 sec  <<< ERROR!
+java.lang.NoSuchMethodError: net.pacificsoft.microservices.loka.core.modelProto.LokaCoreProto$ControlMessage.getStatus()J
+	at net.pacificsoft.microservices.loka.core.LokaCoreTest.testNotValidUnsubscription(LokaCoreTest.java:111)
+
+testSubscribeTerminal(net.pacificsoft.microservices.loka.core.LokaCoreTest)  Time elapsed: 0.901 sec  <<< ERROR!
+java.lang.NoSuchMethodError: net.pacificsoft.microservices.loka.core.modelProto.LokaCoreProto$ControlMessage.getStatus()J
+	at net.pacificsoft.microservices.loka.core.LokaCoreTest.testSubscribeTerminal(LokaCoreTest.java:71)
+
+testAllowedSubcriptions(net.pacificsoft.microservices.loka.core.LokaCoreTest)  Time elapsed: 0.08 sec  <<< ERROR!
+org.springframework.web.client.RestClientException: Could not extract response: no suitable HttpMessageConverter found for response type [class java.lang.String] and content type [application/json;charset=UTF-8]
+	at org.springframework.web.client.HttpMessageConverterExtractor.extractData(HttpMessageConverterExtractor.java:110)
+	at org.springframework.web.client.RestTemplate$ResponseEntityResponseExtractor.extractData(RestTemplate.java:924)
+	at org.springframework.web.client.RestTemplate$ResponseEntityResponseExtractor.extractData(RestTemplate.java:908)
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:662)
+	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:620)
+	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:538)
+	at org.springframework.boot.test.web.client.TestRestTemplate.exchange(TestRestTemplate.java:739)
+	at net.pacificsoft.microservices.loka.core.LokaCoreTest.testAllowedSubcriptions(LokaCoreTest.java:118)
+
