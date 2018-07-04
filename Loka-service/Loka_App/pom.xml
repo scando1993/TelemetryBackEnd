@@ -85,7 +85,7 @@
                 <!--<groupId>org.springframework.boot</groupId>-->
                 <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
                 <!--<configuration>-->
-                    <!--<mainClass>net.pacificsoft.microservices.loka.app.Application</mainClass>-->
+                    <!--<mainClass>net.pacificsoft.microservices.loka.app.net.pacificsoft.microservices.telemetry.sms.Application</mainClass>-->
                     <!--<addResources>true</addResources>-->
                 <!--</configuration>-->
                 <!--<executions>-->

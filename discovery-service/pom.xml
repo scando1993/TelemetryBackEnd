@@ -25,7 +25,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>net.pacificsoft.microservices.eureka.net.pacificsoft.microservices.loka.Application</mainClass>
+                    <mainClass>net.pacificsoft.microservices.eureka.net.pacificsoft.microservices.loka.net.pacificsoft.microservices.telemetry.sms.Application</mainClass>
                     <addResources>true</addResources>
                 </configuration>
                 <executions>

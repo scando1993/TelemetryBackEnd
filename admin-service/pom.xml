@@ -35,7 +35,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>net.pacificsoft.microservices.admin.Application</mainClass>
+                    <mainClass>net.pacificsoft.microservices.admin.net.pacificsoft.microservices.telemetry.sms.Application</mainClass>
                     <addResources>true</addResources>
                 </configuration>
                 <executions>

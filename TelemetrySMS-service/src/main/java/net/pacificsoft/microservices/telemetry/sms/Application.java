@@ -1,3 +1,6 @@
+package net.pacificsoft.microservices.telemetry.sms;
+
+import net.pacificsoft.microservices.telemetry.sms.events.EventHolderBean;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +16,6 @@ public class Application {
     public static void main(String[] args){
         ConfigurableApplicationContext ctx = SpringApplication.run(Application.class, args);
         EventHolderBean bean = ctx.getBean(EventHolderBean.class);
-        logger.debug("Loka Core Fetching: " + ( bean.getEventFired() ? "true":"false" ));
+        logger.debug("SMS Fetching: " + ( bean.getEventFired() ? "true":"false" ));
     }
 }

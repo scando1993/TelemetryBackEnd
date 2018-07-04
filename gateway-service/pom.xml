@@ -49,7 +49,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>net.pacificsoft.microservices.edge.Application</mainClass>
+                    <mainClass>net.pacificsoft.microservices.edge.net.pacificsoft.microservices.telemetry.sms.Application</mainClass>
                     <addResources>true</addResources>
                 </configuration>
                 <executions>
