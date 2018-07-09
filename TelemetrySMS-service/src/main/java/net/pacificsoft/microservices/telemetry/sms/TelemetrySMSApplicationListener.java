@@ -2,6 +2,7 @@ package net.pacificsoft.microservices.telemetry.sms;
 
 import net.pacificsoft.microservices.telemetry.sms.events.EventHolderBean;
 import net.pacificsoft.microservices.telemetry.sms.watcher.FileWatcher;
+import net.pacificsoft.microservices.telemetry.sms.watcher.databaseConMongo;
 import net.pacificsoft.microservices.telemetry.sms.watcher.databaseConMysql;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -36,8 +37,8 @@ public class TelemetrySMSApplicationListener  implements ApplicationListener<Con
 
         TimerTask task = new FileWatcher( archivo) {
             protected void onChange( File file ) throws IOException {
-                databaseConMysql.realizarCargaDB(path);
-                //databaseConMongo.realizarCargaDB(file);
+                //databaseConMysql.realizarCargaDB(path);
+                databaseConMongo.realizarCargaDB(path);
                 System.out.println( "File "+ file.getName() +" have change !" );
             }
         };
