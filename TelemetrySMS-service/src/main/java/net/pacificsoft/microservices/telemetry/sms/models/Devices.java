@@ -11,24 +11,40 @@ public class Devices {
     @Id
     private ObjectId _id;;
 
-    @Field(value="idnews")
-    public int idnews;
-    @Field(value="title")
-    public String title;
-    @Field(value="url")
-    public String url;
-    @Field(value="publisher")
-    public String publisher;
-    @Field(value="category")
-    public String category;
-    @Field(value="story")
-    public String story;
-    @Field(value="hostname")
+    @Field(value="SSID")
+    public long SSID;
+    @Field(value="family")
+    public int family;
+    @Field(value="version")
+    public int version;
+    @Field(value="reason")
+    public int reason;
+    @Field(value="datalog_resolution")
+    public int datalog_resolution;
+    @Field(value="calibration_value")
+    public String calibration_value;
+    @Field(value="")
     public String hostname;
-    @Field(value="timestamp")
-    public long timestamp;
-    @Field(value="views")
-    public int views;
+    @Field(value="battery_level")
+    public int baterry_level;
+    @Field(value="alarm_delay")
+    public int alarm_delay;
+    @Field(value = "send_frecuency")
+    public int send_frecuency;
+    @Field(value = "alarm_buffer")
+    public boolean[] alarm_buffer;
+    @Field(value = "country_code")
+    public int country_code;
+    @Field(value = "gsm_server_number")
+    public long gsm_server_number;
+    @Field(value = "gsm_number")
+    public long gsm_number;
+    @Field(value = "online_time")
+    public int online_time;
+    @Field(value = "wakeup_frequency")
+    public int wakeup_frequency;
+
+
 
     public Devices() {
     }
@@ -38,24 +54,11 @@ public class Devices {
                 String category, String story, String hostname, long timestamp,
                 int views) {
         super();
-        this.idnews = idnews;
-        this.title = title;
-        this.url = url;
-        this.publisher = publisher;
-        this.category = category;
-        this.story = story;
-        this.hostname = hostname;
-        this.timestamp = timestamp;
-        this.views = views;
+
     }
 
     @Override
     public String toString() {
-        return String.format(
-                "News[idnews=%d, title='%s', url='%s',publisher=%s, "
-                        + "category='%s', story='%s', hostname='%s', "
-                        + "timestamp='%d%n', views='%d']",
-                idnews, title, url, publisher, category, story, hostname,
-                timestamp, views);
+        return null;
     }
 }
