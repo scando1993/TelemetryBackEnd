@@ -20,7 +20,7 @@ public class Application {
         ConfigurableApplicationContext ctx = SpringApplication.run(Application.class, args);
         EventHolderBean bean = ctx.getBean(EventHolderBean.class);
         logger.debug("SMS Fetching: " + ( bean.getEventFired() ? "true":"false" ));
-        System.out.print(new String());
+
 
     }
 }
