@@ -3,7 +3,6 @@ package net.pacificsoft.microservices.telemetry.sms.protocols.fields;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Header {
 
@@ -61,11 +60,6 @@ public class Header {
 
     public void setCalibration(Calibration calibration) {
         this.calibration = calibration;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("sSID", sSID).append("swVersion", swVersion).append("reason", reason).append("cycleTime", cycleTime).append("calibration", calibration).toString();
     }
 
 }

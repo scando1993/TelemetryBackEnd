@@ -3,7 +3,6 @@ package net.pacificsoft.microservices.telemetry.sms.protocols.fields;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Calibration {
 
@@ -18,7 +17,7 @@ public class Calibration {
     private Integer posSMS;
     @SerializedName("Range")
     @Expose
-    private Integer range;
+    private String range;
     @SerializedName("Range_Hex")
     @Expose
     private String rangeHex;
@@ -50,11 +49,11 @@ public class Calibration {
         this.posSMS = posSMS;
     }
 
-    public Integer getRange() {
+    public String getRange() {
         return range;
     }
 
-    public void setRange(Integer range) {
+    public void setRange(String range) {
         this.range = range;
     }
 
@@ -72,11 +71,6 @@ public class Calibration {
 
     public void setOffset(Integer offset) {
         this.offset = offset;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("name", name).append("length", length).append("posSMS", posSMS).append("range", range).append("rangeHex", rangeHex).append("offset", offset).toString();
     }
 
 }

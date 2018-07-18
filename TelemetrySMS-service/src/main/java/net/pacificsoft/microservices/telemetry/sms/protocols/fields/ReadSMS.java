@@ -3,7 +3,6 @@ package net.pacificsoft.microservices.telemetry.sms.protocols.fields;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class ReadSMS {
 
@@ -17,11 +16,6 @@ public class ReadSMS {
 
     public void setProtocol(Protocol protocol) {
         this.protocol = protocol;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("protocol", protocol).toString();
     }
 
 }

@@ -1,0 +1,158 @@
+{
+  "Protocol" : {
+    "sms_data" : {
+      "Header" : {
+        "SSID" : {
+          "Name" : "System_Number",
+          "Length" : 3,
+          "PosSMS" : 0,
+          "Range" : "0;999999",
+          "Range_Hex" : "000000;0F423F",
+          "Offset" : 53
+        },
+        "sw_version" : {
+          "Name" : "Family.Version",
+          "Length" : 1,
+          "PosSMS" : 3,
+          "Range" : "0;85",
+          "Range_Hex" : "00;54",
+          "Offset" : 32
+        },
+        "reason" : {
+          "Name" : "Reason",
+          "Length" : 1,
+          "PosSMS" : 4
+        },
+        "cycle_time" : {
+          "Name" : "Datalog_Resolution",
+          "Length" : 1,
+          "PosSMS" : 5,
+          "Range" : "01;60",
+          "Range_Hex" : "01;3C",
+          "Offset" : 32
+        },
+        "calibration" : {
+          "Name" : "Calibration_Value",
+          "Length" : 8,
+          "PosSMS" : 6,
+          "Range" : "0;Long.MAX_VALUE",
+          "Range_Hex" : "0F423F",
+          "Offset" : 0
+        }
+      },
+      "Payload" : {
+        "Name" : "Data_Payload",
+        "Length" : 96,
+        "PosSMS" : 14
+      },
+      "Signature" : {
+        "Batery_Level" : {
+          "Name" : "Batery Level",
+          "Length" : 1,
+          "PosSMS" : 110,
+          "Range" : "31;99",
+          "Range_Hex" : "24;63",
+          "Offset" : 0
+        },
+        "Alarm_Delay" : {
+          "Name" : "Alarm Delay",
+          "Length" : 1,
+          "PosSMS" : 111,
+          "Range" : "00;94",
+          "Range_Hex" : "00;5E",
+          "Offset" : 32
+        },
+        "NotifyCycleH" : {
+          "Name" : "Message Frecuency",
+          "Length" : 1,
+          "PosSMS" : 112,
+          "Range" : "01;12",
+          "Range_Hex" : "00;18",
+          "Offset" : 32
+        },
+        "Alarm_Buffer" : {
+          "Name" : "Alarm Buffer",
+          "Length" : 2,
+          "PosSMS" : 113,
+          "Range" : "00000000;01111111",
+          "Range_Hex" : "00;7F",
+          "Offset" : 0
+        },
+        "Country_Code" : {
+          "Name" : "Country Code",
+          "Length" : 3,
+          "PosSMS" : 115,
+          "Range" : "000;999",
+          "Range_Hex" : "000;7CF",
+          "Offset" : 0
+        },
+        "TelNbr1" : {
+          "Name" : "Gsm Server Number",
+          "Length" : 8,
+          "PosSMS" : 118,
+          "Range" : "0;Long.MAX_VALUE",
+          "Range_Hex" : "0x0;0xFFFF",
+          "Offset" : 0
+        },
+        "TelNbr2" : {
+          "Name" : "Gsm Number",
+          "Length" : 8,
+          "PosSMS" : 126,
+          "Range" : "0;Long.MAX_VALUE",
+          "Range_Hex" : "0x0;0xFFFF",
+          "Offset" : 0
+        },
+        "Online_Time" : {
+          "Name" : "Online Time",
+          "Length" : 1,
+          "PosSMS" : 134,
+          "Range" : "00;94",
+          "Range_Hex" : "00;5E",
+          "Offset" : 32
+        },
+        "WakeUp_frequency" : {
+          "Name" : "Wakeup Frequency",
+          "Length" : 2,
+          "PosSMS" : 135,
+          "Range" : "10;240",
+          "Range_Hex" : "A;78",
+          "Offset" : 0
+        },
+        "Send_time" : {
+          "Name" : "Send Time",
+          "Length" : 3,
+          "PosSMS" : 137,
+          "Range" : "0;2359",
+          "Range_Hex" : "0;0937",
+          "Offset" : 32
+        },
+        "CustomerID" : {
+          "Name" : "Customer Identifier",
+          "Length" : 11,
+          "PosSMS" : 140
+        },
+        "Max_SMS" : {
+          "Name" : "Max Sms",
+          "Length" : 1,
+          "PosSMS" : 151,
+          "Range" : "1;12",
+          "Range_Hex" : "0;18",
+          "Offset" : 32
+        },
+        "Gsm_Signal" : {
+          "Name" : "Gsm_Signal",
+          "Length" : 1,
+          "PosSMS" : 152,
+          "Range" : "0;94",
+          "Range_Hex" : "0;5E",
+          "Offset" : 32
+        },
+        "Checksum" : {
+          "Name" : "Checksum",
+          "Length" : 2,
+          "PosSMS" : 153
+        }
+      }
+    }
+  }
+}

@@ -4,7 +4,7 @@ package net.pacificsoft.microservices.telemetry.sms.protocols.fields;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CycleTime {
+public class TelNbr1 {
 
     @SerializedName("Name")
     @Expose

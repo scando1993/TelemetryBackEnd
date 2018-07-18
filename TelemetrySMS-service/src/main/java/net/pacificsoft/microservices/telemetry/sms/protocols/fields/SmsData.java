@@ -3,7 +3,6 @@ package net.pacificsoft.microservices.telemetry.sms.protocols.fields;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class SmsData {
 
@@ -15,7 +14,7 @@ public class SmsData {
     private Payload payload;
     @SerializedName("Signature")
     @Expose
-    private Object signature;
+    private Signature signature;
 
     public Header getHeader() {
         return header;
@@ -33,17 +32,12 @@ public class SmsData {
         this.payload = payload;
     }
 
-    public Object getSignature() {
+    public Signature getSignature() {
         return signature;
     }
 
-    public void setSignature(Object signature) {
+    public void setSignature(Signature signature) {
         this.signature = signature;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("header", header).append("payload", payload).append("signature", signature).toString();
     }
 
 }

@@ -1,8 +1,7 @@
 package net.pacificsoft.microservices.telemetry.sms.protocols;
 
 import net.pacificsoft.microservices.telemetry.sms.protocols.fields.ReadSMS;
-
-import java.util.ArrayList;
+import org.apache.commons.lang.StringUtils;
 
 public class ConverterSms {
 
@@ -37,8 +36,25 @@ public class ConverterSms {
 
 
     public static String SimpleConverterFromHex(String data, ReadSMS model, int offset) {
-        String comb = String.valueOf(Integer.parseInt(data,16));
+        String comb = String.valueOf(Integer.parseInt(data,16)-offset);
         return comb;
+
+    }
+
+    public static String SimpleConverterFromHexToBin(String data, ReadSMS model, int offset) {
+        String comb = Integer.toBinaryString(Integer.parseInt(data,16)-offset);
+        return comb;
+
+    }
+
+    public static String[] SimpleConverterFromHexSubs(String data, int Ndivisions) {
+        String regex = ".";
+        String []dataHex = data.split("(?<=\\G"+StringUtils.repeat(regex,Ndivisions) +")");
+        String[] dataDec = new String[dataHex.length];
+        for (int i = 0; i<=dataHex.length-1;i++) {
+            dataDec[i] = String.valueOf(Integer.parseInt(dataHex[i],16));
+        }
+        return dataDec;
 
     }
 }

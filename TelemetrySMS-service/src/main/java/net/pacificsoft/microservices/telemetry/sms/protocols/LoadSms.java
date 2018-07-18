@@ -17,9 +17,9 @@ public class LoadSms {
     public static void main(String[] args) throws IOException {
 
         //Estableciendo paths de archivos
-        String PathRemote = "http://localhost:8081/config-server/default/master/telemetry_sms_service.yml";
-        String PathYaml = "TelemetrySMS-service/src/main/resources/telemetry_sms_service.yml";
-        String PathJson = "TelemetrySMS-service/src/main/resources/telemetry_sms_service.json";
+        String PathRemote = "http://localhost:8081/config-server/default/master/telemetry_confs.yml";
+        String PathYaml = "TelemetrySMS-service/src/main/resources/telemetry_confs.yml";
+        String PathJson = "TelemetrySMS-service/src/main/resources/telemetry_confs.json";
         String PathSMS = "TelemetrySMS-service/src/main/resources/textosms.txt";
 
         //Obteniendo archivo yaml remoto y convirtiendolo a json
