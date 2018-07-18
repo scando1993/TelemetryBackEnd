@@ -30,19 +30,24 @@ public class SMS {
 
         sw_version[0] =  sms_reader.getProtocol().getSmsData().getHeader().getSwVersion().getName() ;
         sw_version[1] =  sms.substring(sms_reader.getProtocol().getSmsData().getHeader().getSwVersion().getPosSMS(),sms_reader.getProtocol().getSmsData().getHeader().getSwVersion().getPosSMS() + sms_reader.getProtocol().getSmsData().getHeader().getSwVersion().getLength()) ;
-        sw_version[2] = String.valueOf(ConverterSms.SimpleConverter(sw_version[1],sms_reader , sms_reader.getProtocol().getSmsData().getHeader().getSwVersion().getOffset()));
+        sw_version[2] = String.valueOf(ConverterSms.SimpleConverterToAscii(sw_version[1],sms_reader , sms_reader.getProtocol().getSmsData().getHeader().getSwVersion().getOffset()));
 
         reason[0] = sms_reader.getProtocol().getSmsData().getHeader().getReason().getName()   ;
         reason[1] = sms.substring(sms_reader.getProtocol().getSmsData().getHeader().getReason().getPosSMS(),sms_reader.getProtocol().getSmsData().getHeader().getReason().getPosSMS() + sms_reader.getProtocol().getSmsData().getHeader().getReason().getLength());
+        reason[2] = reason[1];
 
         cycle_time[0] = sms_reader.getProtocol().getSmsData().getHeader().getCycleTime().getName()  ;
         cycle_time[1] =  sms.substring(sms_reader.getProtocol().getSmsData().getHeader().getCycleTime().getPosSMS(), sms_reader.getProtocol().getSmsData().getHeader().getCycleTime().getPosSMS() + sms_reader.getProtocol().getSmsData().getHeader().getCycleTime().getLength());
+        cycle_time[2] = String.valueOf(ConverterSms.SimpleConverterToAscii(cycle_time[1],sms_reader,sms_reader.getProtocol().getSmsData().getHeader().getCycleTime().getOffset()));
 
         calibration[0] = sms_reader.getProtocol().getSmsData().getHeader().getCalibration().getName()  ;
         calibration[1] =  sms.substring(sms_reader.getProtocol().getSmsData().getHeader().getCalibration().getPosSMS(),sms_reader.getProtocol().getSmsData().getHeader().getCalibration().getPosSMS() + sms_reader.getProtocol().getSmsData().getHeader().getCalibration().getLength()) ;
+        //System.out.println(calibration[1]);
+        calibration [2] = ConverterSms.SimpleConverterFromHex(calibration[1],sms_reader,sms_reader.getProtocol().getSmsData().getHeader().getCalibration().getOffset());
 
         Payload[0] = sms_reader.getProtocol().getSmsData().getPayload().getName()  ;
         Payload[1] =  sms.substring(sms_reader.getProtocol().getSmsData().getPayload().getPosSMS(),sms_reader.getProtocol().getSmsData().getPayload().getPosSMS() + sms_reader.getProtocol().getSmsData().getPayload().getLength()) ;
+        Payload[2] = Payload[1];
 
         Signature[0] = "Signature";
         Signature[1] = sms.substring(sms_reader.getProtocol().getSmsData().getPayload().getPosSMS() + sms_reader.getProtocol().getSmsData().getPayload().getLength()+1)  ;
