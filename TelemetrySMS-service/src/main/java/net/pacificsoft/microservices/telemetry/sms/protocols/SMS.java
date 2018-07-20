@@ -71,11 +71,11 @@ public class SMS {
         Batery_level[0] = sms_reader.getProtocol().getSmsData().getSignature().getBateryLevel().getName();
         Batery_level[1] = sms.substring(sms_reader.getProtocol().getSmsData().getSignature().getBateryLevel().getPosSMS(),sms_reader.getProtocol().getSmsData().getSignature().getBateryLevel().getPosSMS() + sms_reader.getProtocol().getSmsData().getSignature().getBateryLevel().getLength());
         //System.out.println(Batery_level[1]);
-        Batery_level[2] = ConverterSms.SimpleConverterFromHex(Batery_level[1],sms_reader,sms_reader.getProtocol().getSmsData().getSignature().getBateryLevel().getOffset());
+        Batery_level[2] = String.valueOf(ConverterSms.SimpleConverterToAscii(Batery_level[1],sms_reader,sms_reader.getProtocol().getSmsData().getSignature().getBateryLevel().getOffset()));
 
         Alarm_Delay[0] = sms_reader.getProtocol().getSmsData().getSignature().getAlarmDelay().getName();
         Alarm_Delay[1] = sms.substring(sms_reader.getProtocol().getSmsData().getSignature().getAlarmDelay().getPosSMS(),sms_reader.getProtocol().getSmsData().getSignature().getAlarmDelay().getPosSMS() + sms_reader.getProtocol().getSmsData().getSignature().getAlarmDelay().getLength());
-        Alarm_Delay[2] = ConverterSms.SimpleConverterFromHex(Alarm_Delay[1],sms_reader,sms_reader.getProtocol().getSmsData().getSignature().getAlarmDelay().getOffset());
+        Alarm_Delay[2] = String.valueOf(ConverterSms.SimpleConverterToAscii(Alarm_Delay[1],sms_reader,sms_reader.getProtocol().getSmsData().getSignature().getAlarmDelay().getOffset()));
 
         NotifyCycleH[0] = sms_reader.getProtocol().getSmsData().getSignature().getNotifyCycleH().getName();
         NotifyCycleH[1] = sms.substring(sms_reader.getProtocol().getSmsData().getSignature().getNotifyCycleH().getPosSMS(),sms_reader.getProtocol().getSmsData().getSignature().getNotifyCycleH().getPosSMS() + sms_reader.getProtocol().getSmsData().getSignature().getNotifyCycleH().getLength());
@@ -113,8 +113,17 @@ public class SMS {
         CustomerID[1] = sms.substring(sms_reader.getProtocol().getSmsData().getSignature().getCustomerID().getPosSMS(),sms_reader.getProtocol().getSmsData().getSignature().getCustomerID().getPosSMS() + sms_reader.getProtocol().getSmsData().getSignature().getCustomerID().getLength());
         CustomerID[2] = CustomerID[1];
 
+        Max_SMS[0] = sms_reader.getProtocol().getSmsData().getSignature().getMaxSMS().getName();
+        Max_SMS[1] = sms.substring(sms_reader.getProtocol().getSmsData().getSignature().getMaxSMS().getPosSMS(), sms_reader.getProtocol().getSmsData().getSignature().getMaxSMS().getPosSMS() + sms_reader.getProtocol().getSmsData().getSignature().getMaxSMS().getLength());
+        Max_SMS[2] = Max_SMS[1];
 
+        Gsm_Signal[0] = sms_reader.getProtocol().getSmsData().getSignature().getGsmSignal().getName();
+        Gsm_Signal[1] = sms.substring(sms_reader.getProtocol().getSmsData().getSignature().getGsmSignal().getPosSMS(),sms_reader.getProtocol().getSmsData().getSignature().getGsmSignal().getPosSMS() + sms_reader.getProtocol().getSmsData().getSignature().getGsmSignal().getLength());
+        Gsm_Signal[2] = Gsm_Signal[1];
 
+        Checksum[0] = sms_reader.getProtocol().getSmsData().getSignature().getChecksum().getName();
+        Checksum[1] = sms.substring(sms_reader.getProtocol().getSmsData().getSignature().getChecksum().getPosSMS(),sms_reader.getProtocol().getSmsData().getSignature().getChecksum().getPosSMS() + sms_reader.getProtocol().getSmsData().getSignature().getChecksum().getLength());
+        Checksum[2] = Checksum[1];
 
     }
 
@@ -138,6 +147,9 @@ public class SMS {
                 "\n"+ANSI_RED+"WakeUp_frequency ==> " +ANSI_RESET + ANSI_BLUE + WakeUp_frequency[0] + ": " + ANSI_RESET + WakeUp_frequency[2] +
                 "\n"+ANSI_RED+"Send_time ==> " +ANSI_RESET + ANSI_BLUE + Send_time[0] + ": " + ANSI_RESET + Send_time[2] +
                 "\n"+ANSI_RED+"CustomerID ==> " +ANSI_RESET + ANSI_BLUE + CustomerID[0] + ": " + ANSI_RESET + CustomerID[2] +
+                "\n"+ANSI_RED+"Max_SMS ==> " +ANSI_RESET + ANSI_BLUE + Max_SMS[0] + ": " + ANSI_RESET + Max_SMS[2] +
+                "\n"+ANSI_RED+"Gsm_Signal ==> " +ANSI_RESET + ANSI_BLUE + Gsm_Signal[0] + ": " + ANSI_RESET + Gsm_Signal[2] +
+                "\n"+ANSI_RED+"Checksum ==> " +ANSI_RESET + ANSI_BLUE + Checksum[0] + ": " + ANSI_RESET + Checksum[2] +
 
 
 

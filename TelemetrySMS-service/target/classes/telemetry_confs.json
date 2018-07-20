@@ -46,21 +46,21 @@
         "PosSMS" : 14
       },
       "Signature" : {
-        "Batery_Level" : {
-          "Name" : "Batery Level",
-          "Length" : 1,
-          "PosSMS" : 110,
-          "Range" : "31;99",
-          "Range_Hex" : "24;63",
-          "Offset" : 0
-        },
         "Alarm_Delay" : {
           "Name" : "Alarm Delay",
           "Length" : 1,
-          "PosSMS" : 111,
+          "PosSMS" : 110,
           "Range" : "00;94",
           "Range_Hex" : "00;5E",
           "Offset" : 32
+        },
+        "Batery_Level" : {
+          "Name" : "Batery Level",
+          "Length" : 1,
+          "PosSMS" : 111,
+          "Range" : "31;99",
+          "Range_Hex" : "24;63",
+          "Offset" : 26
         },
         "NotifyCycleH" : {
           "Name" : "Message Frecuency",
@@ -68,7 +68,7 @@
           "PosSMS" : 112,
           "Range" : "01;12",
           "Range_Hex" : "00;18",
-          "Offset" : 32
+          "Offset" : 0
         },
         "Alarm_Buffer" : {
           "Name" : "Alarm Buffer",
@@ -120,7 +120,7 @@
         },
         "Send_time" : {
           "Name" : "Send Time",
-          "Length" : 3,
+          "Length" : 2,
           "PosSMS" : 137,
           "Range" : "0;2359",
           "Range_Hex" : "0;0937",
@@ -129,12 +129,12 @@
         "CustomerID" : {
           "Name" : "Customer Identifier",
           "Length" : 11,
-          "PosSMS" : 140
+          "PosSMS" : 139
         },
         "Max_SMS" : {
           "Name" : "Max Sms",
           "Length" : 1,
-          "PosSMS" : 151,
+          "PosSMS" : 150,
           "Range" : "1;12",
           "Range_Hex" : "0;18",
           "Offset" : 32
@@ -142,7 +142,7 @@
         "Gsm_Signal" : {
           "Name" : "Gsm_Signal",
           "Length" : 1,
-          "PosSMS" : 152,
+          "PosSMS" : 151,
           "Range" : "0;94",
           "Range_Hex" : "0;5E",
           "Offset" : 32
@@ -150,7 +150,7 @@
         "Checksum" : {
           "Name" : "Checksum",
           "Length" : 2,
-          "PosSMS" : 153
+          "PosSMS" : 152
         }
       }
     }
