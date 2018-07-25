@@ -11,6 +11,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 @EnableAutoConfiguration
+
 //@EnableEurekaClient
 public class Application {
     private static final Logger logger = LogManager.getLogger(Application.class);

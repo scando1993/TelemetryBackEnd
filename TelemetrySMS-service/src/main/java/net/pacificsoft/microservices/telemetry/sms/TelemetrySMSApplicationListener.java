@@ -36,8 +36,8 @@ public class TelemetrySMSApplicationListener  implements ApplicationListener<Con
     public void onApplicationEvent(ContextRefreshedEvent event) {
         logger.debug("Event Fired");
         eventHolderBean.setEventFired(true);
-        File archivo = new File("c:/Users/carlo/Desktop/prueba.txt ");
-        String path= "c:/Users/carlo/Desktop/prueba.txt";
+        File archivo = new File("TelemetrySMS-service/src/main/resources/textosms.txt");
+        String path= "TelemetrySMS-service/src/main/resources/textosms.txt";
 
 
 

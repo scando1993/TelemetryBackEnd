@@ -1,21 +1,21 @@
-spring:
-    application:
-        name: telemetry-sms-service
-    cloud:
-        config:
-          uri: http://localhost:8081
-          name: telemetry-sms-service
-          enabled: true
+#spring:
+#    application:
+#        name: telemetry-sms-service
+#    cloud:
+#        config:
+#          uri: http://localhost:8081
+#          name: telemetry-sms-service
+#          enabled: true
 
 server:
     port: 8083
 
-eureka:
-    instance:
-        hostname: localhost
-    client:
-        serviceUrl:
-            defaultZone: http://localhost:8082/eureka/
-        register-with-eureka: false
-        fetch-registry: false
+#eureka:
+#    instance:
+#        hostname: localhost
+#    client:
+#        serviceUrl:
+#            defaultZone: http://localhost:8082/eureka/
+#        register-with-eureka: false
+#        fetch-registry: false
 
