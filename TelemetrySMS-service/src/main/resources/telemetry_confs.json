@@ -67,8 +67,8 @@
           "Length" : 1,
           "PosSMS" : 112,
           "Range" : "01;12",
-          "Range_Hex" : "00;18",
-          "Offset" : 0
+          "Range_Hex" : "00;0C",
+          "Offset" : 32
         },
         "Alarm_Buffer" : {
           "Name" : "Alarm Buffer",
@@ -78,26 +78,10 @@
           "Range_Hex" : "00;7F",
           "Offset" : 0
         },
-        "Country_Code" : {
-          "Name" : "Country Code",
-          "Length" : 3,
-          "PosSMS" : 115,
-          "Range" : "000;999",
-          "Range_Hex" : "000;7CF",
-          "Offset" : 0
-        },
-        "TelNbr1" : {
-          "Name" : "Gsm Server Number",
-          "Length" : 8,
-          "PosSMS" : 118,
-          "Range" : "0;Long.MAX_VALUE",
-          "Range_Hex" : "0x0;0xFFFF",
-          "Offset" : 0
-        },
         "TelNbr2" : {
           "Name" : "Gsm Number",
-          "Length" : 8,
-          "PosSMS" : 126,
+          "Length" : 15,
+          "PosSMS" : 115,
           "Range" : "0;Long.MAX_VALUE",
           "Range_Hex" : "0x0;0xFFFF",
           "Offset" : 0
@@ -105,7 +89,7 @@
         "Online_Time" : {
           "Name" : "Online Time",
           "Length" : 1,
-          "PosSMS" : 134,
+          "PosSMS" : 130,
           "Range" : "00;94",
           "Range_Hex" : "00;5E",
           "Offset" : 32
@@ -113,7 +97,7 @@
         "WakeUp_frequency" : {
           "Name" : "Wakeup Frequency",
           "Length" : 2,
-          "PosSMS" : 135,
+          "PosSMS" : 131,
           "Range" : "10;240",
           "Range_Hex" : "A;78",
           "Offset" : 0
@@ -121,36 +105,33 @@
         "Send_time" : {
           "Name" : "Send Time",
           "Length" : 2,
-          "PosSMS" : 137,
+          "PosSMS" : 133,
           "Range" : "0;2359",
           "Range_Hex" : "0;0937",
           "Offset" : 32
         },
         "CustomerID" : {
           "Name" : "Customer Identifier",
-          "Length" : 11,
-          "PosSMS" : 139
-        },
-        "Max_SMS" : {
-          "Name" : "Max Sms",
-          "Length" : 1,
-          "PosSMS" : 150,
-          "Range" : "1;12",
-          "Range_Hex" : "0;18",
-          "Offset" : 32
+          "Length" : 10,
+          "PosSMS" : 135
         },
         "Gsm_Signal" : {
           "Name" : "Gsm_Signal",
           "Length" : 1,
-          "PosSMS" : 151,
+          "PosSMS" : 145,
           "Range" : "0;94",
           "Range_Hex" : "0;5E",
           "Offset" : 32
         },
+        "Epoch_time_sent" : {
+          "Name" : "Epoch time",
+          "Length" : 8,
+          "PosSMS" : 146
+        },
         "Checksum" : {
           "Name" : "Checksum",
-          "Length" : 2,
-          "PosSMS" : 152
+          "Length" : 4,
+          "PosSMS" : 154
         }
       }
     }

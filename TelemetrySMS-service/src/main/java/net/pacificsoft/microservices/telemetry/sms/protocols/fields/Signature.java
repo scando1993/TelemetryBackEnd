@@ -48,6 +48,9 @@ public class Signature {
     @SerializedName("Checksum")
     @Expose
     private Checksum checksum;
+    @SerializedName("Epoch_time_sent")
+    @Expose
+    private Epoch_time_sent epoch_time_sent;
 
     public BateryLevel getBateryLevel() {
         return bateryLevel;
@@ -159,6 +162,14 @@ public class Signature {
 
     public void setChecksum(Checksum checksum) {
         this.checksum = checksum;
+    }
+
+    public Epoch_time_sent getEpoch() {
+        return epoch_time_sent;
+    }
+
+    public void setEpoch(Epoch_time_sent epoch_time_sent) {
+        this.epoch_time_sent = epoch_time_sent;
     }
 
 }

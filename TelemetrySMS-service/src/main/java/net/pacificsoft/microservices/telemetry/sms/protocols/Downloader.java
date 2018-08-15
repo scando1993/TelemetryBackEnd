@@ -12,7 +12,7 @@ public  class Downloader {
     public static void DownloadFile(String url) {
 
         try {
-            downloadUsingNIO(url, "TelemetrySMS-service/src/main/resources/telemetry_confs.yml");
+            downloadUsingNIO(url, "TelemetrySMS-service/src/main/resources/familia_8_5.yml");
         } catch (IOException e) {
             e.printStackTrace();
         }

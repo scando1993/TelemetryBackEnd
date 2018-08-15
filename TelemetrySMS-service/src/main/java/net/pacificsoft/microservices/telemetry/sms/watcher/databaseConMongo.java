@@ -28,16 +28,12 @@ public class databaseConMongo {
             // create a mongo database connection
             SMS sms = LoadSms.SmsProcessor();
             sms.setId(new Timestamp(System.currentTimeMillis()));
-
+            System.out.printf(sms.toString());
             Gson gson = new Gson();
-
             String json = gson.toJson(sms);
             DBObject dbObject = (DBObject)JSON.parse(json);
-            System.out.println(json);
             Document document = Document.parse(json);
-
             col.insertOne(document);
-            System.out.println(col.find().first().toString());
 
 
 

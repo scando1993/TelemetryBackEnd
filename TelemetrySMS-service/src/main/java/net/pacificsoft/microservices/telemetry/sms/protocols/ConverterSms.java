@@ -3,6 +3,8 @@ package net.pacificsoft.microservices.telemetry.sms.protocols;
 import net.pacificsoft.microservices.telemetry.sms.protocols.fields.ReadSMS;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Date;
+
 public class ConverterSms {
 
     public static int HardConverter(String data, ReadSMS model, int offset) {
@@ -45,6 +47,12 @@ public class ConverterSms {
         String comb = Integer.toBinaryString(Integer.parseInt(data,16)-offset);
         return comb;
 
+    }
+
+    public static Date EpochConverter(String data) {
+        long epoch = Long.parseLong(data,16)*1000;
+        Date fecha = new Date(epoch);
+        return fecha;
     }
 
     public static String[] SimpleConverterFromHexSubs(String data, int Ndivisions) {
