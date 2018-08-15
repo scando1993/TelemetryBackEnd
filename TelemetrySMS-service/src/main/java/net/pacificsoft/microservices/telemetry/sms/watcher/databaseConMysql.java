@@ -12,7 +12,7 @@ public class databaseConMysql {
 
         String contenidoArchivo = new String(Files.readAllBytes(Paths.get(path)));
         String rutaArchivo = path;
-        System.out.print(contenidoArchivo);
+        System.out.print(contenidoArchivo+"\n");
         try
         {
             /*// create a mysql database connection
