@@ -1,0 +1,89 @@
+package net.pacificsoft.microservices.favorita.models;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "messageGuess")
+@EntityListeners(AuditingEntityListener.class)
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+public class MessageGuess implements Serializable{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "location", nullable = false)
+    private String location;
+
+    @Column(name = "probability", nullable = false)
+    private Double probability;
+
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "messageGuess")
+        private Set<Message> messages = new HashSet<>();
+
+    /**
+     * @return the id
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the location
+     */
+    public String getLocation() {
+        return location;
+    }
+
+    /**
+     * @param location the location to set
+     */
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    /**
+     * @return the probability
+     */
+    public Double getProbability() {
+        return probability;
+    }
+
+    /**
+     * @param probability the probability to set
+     */
+    public void setProbability(Double probability) {
+        this.probability = probability;
+    }
+
+    /**
+     * @return the messages
+     */
+    public Set<Message> getMessages() {
+        return messages;
+    }
+
+    /**
+     * @param messages the messages to set
+     */
+    public void setMessages(Set<Message> messages) {
+        this.messages = messages;
+    }
+
+}

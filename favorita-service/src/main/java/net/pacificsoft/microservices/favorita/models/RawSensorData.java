@@ -1,15 +1,19 @@
 package net.pacificsoft.microservices.favorita.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table (name = "rawSensorData")
+@Table(name = "rawSensorData")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class RawSensorData implements Serializable{
@@ -19,26 +23,30 @@ public class RawSensorData implements Serializable{
 	private long id;
         @Column(name = "epoch", nullable = false)
         private long epoch;
-        @Column(name = "goAPIResponseID", nullable = false)
-        private long goAPIResponseID;
-        @Column(name = "furgonID", nullable = false)
-        private long furgonID;
         @Column(name = "temperature", nullable = false)
         private float temperature;
-        @Column(name = "sensorDataID", nullable = false)
-        private long sensorDataID;
-        @Column(name = "rawData", nullable = false)
-	private String rawData;
+        
+        @JsonFormat(pattern = "dd-MM-yyyy'T'HH:mm")
         @Column(name = "epochDateTime", nullable = false)
         private Date epochDateTime;
-        @Column(name = "family", nullable = false)
-        private String family;
-        @Column(name = "device", nullable = false)
-        private String device;
+        @Column(name = "rawData", nullable = false)
+        private String rawData;
         
         @ManyToOne(fetch = FetchType.EAGER)
-        @JoinColumn(name = "wifiScanID", nullable = false)
-        private WifiScan wifiScan;
+        @JoinColumn(name = "deviceID", nullable = false)
+        private Device device;
+        
+        @JsonIgnore
+        @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "rawSensorData")
+        private Set<WifiScan> wifiScans = new HashSet<>();
+        
+        @JsonIgnore
+        @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "rawSensorData")
+        private Set<SigfoxMessage> sigfoxMessages = new HashSet<>();
         
         public long getId() {
             return id;
@@ -56,36 +64,12 @@ public class RawSensorData implements Serializable{
             this.epoch = epoch;
         }
 
-        public long getGoAPIResponseID() {
-            return goAPIResponseID;
-        }
-
-        public void setGoAPIResponseID(long goAPIResponseID) {
-            this.goAPIResponseID = goAPIResponseID;
-        }
-
-        public long getFurgonID() {
-            return furgonID;
-        }
-
-        public void setFurgonID(long furgonID) {
-            this.furgonID = furgonID;
-        }
-
         public float getTemperature() {
             return temperature;
         }
 
         public void setTemperature(float temperature) {
             this.temperature = temperature;
-        }
-
-        public long getSensorDataID() {
-            return sensorDataID;
-        }
-
-        public void setSensorDataID(long sensorDataID) {
-            this.sensorDataID = sensorDataID;
         }
 
         public String getRawData() {
@@ -104,19 +88,27 @@ public class RawSensorData implements Serializable{
             this.epochDateTime = epochDateTime;
         }
 
-        public String getFamily() {
-            return family;
-        }
-
-        public void setFamily(String family) {
-            this.family = family;
-        }
-
-        public String getDevice() {
+        public Device getDevice() {
             return device;
         }
 
-        public void setDevice(String device) {
+        public void setDevice(Device device) {
             this.device = device;
         }
+
+        public Set<WifiScan> getWifiScans() {
+            return wifiScans;
+        }
+
+        public void setWifiScans(Set<WifiScan> wifiScans) {
+            this.wifiScans = wifiScans;
+        }
+
+        public Set<SigfoxMessage> getSigfoxMessages() {
+            return sigfoxMessages;
+        }
+
+        public void setSigfoxMessages(Set<SigfoxMessage> sigfoxMessages) {
+            this.sigfoxMessages = sigfoxMessages;
+        }   
 }
