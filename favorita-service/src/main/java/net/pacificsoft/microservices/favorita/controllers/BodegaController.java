@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import net.pacificsoft.springbootcrudrest.model.Ciudad;
 import net.pacificsoft.springbootcrudrest.repository.CiudadRepository;
-import net.pacificsoft.springbootcrudrest.repository.RawSensorDataRepository;
-import net.pacificsoft.springbootcrudrest.repository.SigfoxMessageRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,15 +24,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 //@RequestMapping("/api")
-public class SigfoxMessageController {
-        /*
+public class BodegaController {
+    
 	@Autowired
-	private SigfoxMessageRepository sigfoxRepository;
+	private BodegaRepository bodegaRepository;
         
         @Autowired
-	private RawSensorDataRepository rawSensorRepository;
+	private CiudadRepository ciudadRepository;
 	
-	@GetMapping("/sigfoxMessage")
+	@GetMapping("/bodega")
 	public ResponseEntity getAllBodegas() {
                 try{
                     List<Map<String, Object>> result = new ArrayList();
@@ -59,7 +57,7 @@ public class SigfoxMessageController {
                 }  
 	}
 
-	@GetMapping("/sigfoxMessage/{id}")
+	@GetMapping("/bodega/{id}")
 	public ResponseEntity getBodegaById(
 			@PathVariable(value = "id") Long bodegaId){
                 if(bodegaRepository.exists(bodegaId)){
@@ -80,7 +78,7 @@ public class SigfoxMessageController {
                 }
 	}
 
-	@PostMapping("/sigfoxMessage/{rawdataId}")
+	@PostMapping("/bodega/{ciudadid}")
 	public ResponseEntity createBodega(@PathVariable(value = "ciudadid") Long ciudadid,
                                  @Valid @RequestBody Bodega bodega) {
             try{
@@ -110,7 +108,7 @@ public class SigfoxMessageController {
             }
 	}
 
-        @PutMapping("/sigfoxMessage/{id}/{rawdataId}")
+        @PutMapping("/bodega/{id}/{ciudadid}")
 	public ResponseEntity updateBodega(
 			@PathVariable(value = "id") Long bodegaId,
                         @PathVariable(value = "ciudadid") Long ciudadId,
@@ -138,7 +136,7 @@ public class SigfoxMessageController {
                 }
 	}
 
-        @DeleteMapping("/sigfoxMessage/{id}")
+        @DeleteMapping("/bodega/{id}")
 	public ResponseEntity deleteBodega(
                                 @PathVariable(value = "id") Long bodegaId){
                 if(bodegaRepository.exists(bodegaId)){
@@ -153,5 +151,5 @@ public class SigfoxMessageController {
                             " does not exist.", HttpStatus.NOT_FOUND);
                 }
             
-	}*/
+	}
 }
