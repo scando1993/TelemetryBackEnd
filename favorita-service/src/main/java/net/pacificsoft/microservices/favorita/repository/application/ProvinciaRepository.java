@@ -1,10 +1,11 @@
-package net.pacificsoft.microservices.favorita.repository.application;
+package net.pacificsoft.springbootcrudrest.repository;
 
-import net.pacificsoft.microservices.favorita.models.application.Provincia;
+import net.pacificsoft.springbootcrudrest.model.Bodega;
+import net.pacificsoft.springbootcrudrest.model.Provincia;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProvinciaRepository extends JpaRepository<Provincia, Long> {
+public interface ProvinciaRepository extends JpaRepository<Provincia, Long>{
 
 }

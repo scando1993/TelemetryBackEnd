@@ -1,14 +1,12 @@
 package net.pacificsoft.springbootcrudrest.model;
 
-
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
+import java.sql.Time;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -18,34 +16,48 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "locationGroup")
+@Table (name = "telemetria")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class LocationGroup implements Serializable{
-    
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+public class Telemetria implements Serializable{
+
+	@Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+        
+        @JsonFormat(pattern = "dd-MM-yyyy'T'HH:mm")
+        @Column(name = "Dtm", nullable = false)
+	private Date Dtm;
+        
         @Column(name = "name", nullable = false)
 	private String name;
-         
-        @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            mappedBy = "locationGroup")
-        private Set<Tracking> trackings = new HashSet<>();
         
+        @Column(name = "value", nullable = false)
+	private float value;
+        
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "deviceID")
+        private Device device;
+
         public long getId() {
             return id;
         }
 
         public void setId(long id) {
             this.id = id;
+        }
+
+        public Date getDtm() {
+            return Dtm;
+        }
+
+        public void setDtm(Date Dtm) {
+            this.Dtm = Dtm;
         }
 
         public String getName() {
@@ -56,11 +68,21 @@ public class LocationGroup implements Serializable{
             this.name = name;
         }
 
-        public Set<Tracking> getTrackings() {
-            return trackings;
+        public float getValue() {
+            return value;
         }
 
-        public void setTrackings(Set<Tracking> trackings) {
-            this.trackings = trackings;
-        }   
+        public void setValue(float value) {
+            this.value = value;
+        }
+
+        public Device getDevice() {
+            return device;
+        }
+
+        public void setDevice(Device device) {
+            this.device = device;
+        }
+
+        
 }

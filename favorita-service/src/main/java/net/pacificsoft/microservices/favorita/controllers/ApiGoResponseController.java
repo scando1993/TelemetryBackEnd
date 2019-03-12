@@ -1,18 +1,30 @@
-package net.pacificsoft.microservices.favorita.controllers;
+package net.pacificsoft.springbootcrudrest.controller;
 
-import net.pacificsoft.microservices.favorita.models.Device;
-import net.pacificsoft.microservices.favorita.models.GoApiResponse;
-import net.pacificsoft.microservices.favorita.models.Message;
-import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
-import net.pacificsoft.microservices.favorita.repository.GoApiResponseRepository;
-import net.pacificsoft.microservices.favorita.repository.MessageRepository;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.validation.Valid;
+
+import net.pacificsoft.springbootcrudrest.model.*;
+import net.pacificsoft.springbootcrudrest.repository.*;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.List;
+import net.pacificsoft.springbootcrudrest.repository.LocationNamesRepository;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")

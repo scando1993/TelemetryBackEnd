@@ -1,15 +1,22 @@
-package net.pacificsoft.microservices.favorita.controllers.application;
+package net.pacificsoft.springbootcrudrest.controller;
+
+import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import net.pacificsoft.springbootcrudrest.model.Provincia;
 import net.pacificsoft.springbootcrudrest.model.Zona;
 import net.pacificsoft.springbootcrudrest.repository.ProvinciaRepository;
 import net.pacificsoft.springbootcrudrest.repository.ZonaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")

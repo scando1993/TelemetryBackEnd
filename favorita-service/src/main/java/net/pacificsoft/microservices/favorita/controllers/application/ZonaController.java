@@ -1,17 +1,31 @@
-package net.pacificsoft.microservices.favorita.controllers.application;
+package net.pacificsoft.springbootcrudrest.controller;
 
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import net.pacificsoft.springbootcrudrest.exception.ResourceNotFoundException;
+import net.pacificsoft.springbootcrudrest.model.Furgon;
 import net.pacificsoft.springbootcrudrest.model.Provincia;
 import net.pacificsoft.springbootcrudrest.model.Zona;
+import net.pacificsoft.springbootcrudrest.repository.FurgonRepository;
+import net.pacificsoft.springbootcrudrest.repository.RutaRepository;
 import net.pacificsoft.springbootcrudrest.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")

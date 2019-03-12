@@ -1,10 +1,11 @@
-package net.pacificsoft.microservices.favorita.repository;
+package net.pacificsoft.springbootcrudrest.repository;
 
-import net.pacificsoft.microservices.favorita.models.Features;
+import net.pacificsoft.springbootcrudrest.model.Bodega;
+import net.pacificsoft.springbootcrudrest.model.Features;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FeaturesRepository extends JpaRepository<Features, Long> {
+public interface FeaturesRepository extends JpaRepository<Features, Long>{
 
 }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,111 +17,62 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "locationNames")
+@Table(name = "groupFamily")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class LocationNames implements Serializable{
+public class Group implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "idName", nullable = false)
-    private long idname;
-
     @Column(name = "name", nullable = false)
     private String name;
 
-    /*
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "predictionID")
-    private Prediction prediction;
-    */
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
-            mappedBy = "locationNames")
-    private Set<Prediction> prediction = new HashSet<>();
+            mappedBy = "groupFamily")
+    private Set<Device> devices = new HashSet<>();
 
-
-    @OneToOne(cascade = CascadeType.ALL,
+    @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
-            mappedBy = "locationNames")
-    private Message  message;
+            mappedBy = "groupFamily")
+    private Set<Family> families = new HashSet<>();
 
-    /**
-     * @return the id
-     */
+
     public long getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
     public void setId(long id) {
         this.id = id;
     }
 
-    /**
-     * @return the idname
-     */
-    public long getIdname() {
-        return idname;
-    }
-
-    /**
-     * @param idname the idname to set
-     */
-    public void setIdname(long idname) {
-        this.idname = idname;
-    }
-
-    /**
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * @param name the name to set
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * @return the prediction
-     */
-    public Set<Prediction> getPrediction() {
-        return prediction;
+    public Set<Device> getDevices() {
+        return devices;
     }
 
-    /**
-     * @param prediction the prediction to set
-     */
-    public void setPrediction(Set<Prediction> prediction) {
-        this.prediction = prediction;
+    public void setDevices(Set<Device> devices) {
+        this.devices = devices;
     }
 
-    /**
-     * @return the message
-     */
-    public Message getMessage() {
-        return message;
+    public Set<Family> getFamilies() {
+        return families;
     }
 
-    /**
-     * @param message the message to set
-     */
-    public void setMessage(Message message) {
-        this.message = message;
+    public void setFamilies(Set<Family> families) {
+        this.families = families;
     }
-
-    
 }

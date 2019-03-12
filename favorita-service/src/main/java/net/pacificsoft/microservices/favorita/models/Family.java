@@ -17,75 +17,48 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table (name = "goApiResponse")
+@Table(name = "family")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class GoApiResponse implements Serializable{
 
+public class Family implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    
-    @Column(name = "sucess", nullable = false)
-    private int sucess;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "messageID")
-    private Message message;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    /*
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "deviceID")
-    private Device device;
-    */
-    
+    @JoinColumn(name = "groupid")
+    private Group groupFamily;
 
-    /**
-     * @return the id
-     */
     public long getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
     public void setId(long id) {
         this.id = id;
     }
 
-    /**
-     * @return the sucess
-     */
-    public int getSucess() {
-        return sucess;
+    public String getName() {
+        return name;
     }
 
-    /**
-     * @param sucess the sucess to set
-     */
-    public void setSucess(int sucess) {
-        this.sucess = sucess;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    /**
-     * @return the message
-     */
-    public Message getMessage() {
-        return message;
+    public Group getGroup() {
+        return groupFamily;
     }
 
-    /**
-     * @param message the message to set
-     */
-    public void setMessage(Message message) {
-        this.message = message;
+    public void setGroup(Group group) {
+        this.groupFamily = group;
     }
-
-    
 }

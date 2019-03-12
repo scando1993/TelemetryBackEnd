@@ -1,10 +1,10 @@
-package net.pacificsoft.microservices.favorita.repository;
+package net.pacificsoft.springbootcrudrest.repository;
 
-import net.pacificsoft.microservices.favorita.models.LocationNames;
+import net.pacificsoft.springbootcrudrest.model.LocationNames;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LocationNamesRepository extends JpaRepository<LocationNames, Long> {
+public interface LocationNamesRepository extends JpaRepository<LocationNames, Long>{
 
 }

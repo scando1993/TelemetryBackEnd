@@ -1,18 +1,27 @@
-package net.pacificsoft.microservices.favorita.models;
+package net.pacificsoft.springbootcrudrest.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import net.pacificsoft.microservices.favorita.models.application.Ruta;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
-@Table(name = "device")
+@Table (name = "device")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Device implements Serializable{
@@ -26,6 +35,11 @@ public class Device implements Serializable{
         private String name;
 
         @JsonIgnore
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "groupID")
+        private Group groupFamily;
+
+    @JsonIgnore
         @OneToMany(fetch = FetchType.EAGER,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
@@ -47,13 +61,13 @@ public class Device implements Serializable{
         @OneToMany(fetch = FetchType.EAGER,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
-        private Set<Alert> alerts = new HashSet<>();
+        private Set<Alerta> alertas = new HashSet<>();
         
         @JsonIgnore
         @OneToMany(fetch = FetchType.EAGER,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
-        private Set<Telemetry> telemetries = new HashSet<>();
+        private Set<Telemetria> telemetrias = new HashSet<>();
         
         @JsonIgnore
         @OneToOne(fetch = FetchType.EAGER,
@@ -113,20 +127,20 @@ public class Device implements Serializable{
             this.rawSensorDatas = rawSensorDatas;
         }
 
-        public Set<Alert> getAlerts() {
-            return alerts;
+        public Set<Alerta> getAlertas() {
+            return alertas;
         }
 
-        public void setAlerts(Set<Alert> alerts) {
-            this.alerts = alerts;
+        public void setAlertas(Set<Alerta> alertas) {
+            this.alertas = alertas;
         }
 
-        public Set<Telemetry> getTelemetries() {
-            return telemetries;
+        public Set<Telemetria> getTelemetrias() {
+            return telemetrias;
         }
 
-        public void setTelemetries(Set<Telemetry> telemetries) {
-            this.telemetries = telemetries;
+        public void setTelemetrias(Set<Telemetria> telemetrias) {
+            this.telemetrias = telemetrias;
         }
 
         public Status getStatus() {
@@ -136,6 +150,15 @@ public class Device implements Serializable{
         public void setStatus(Status status) {
             this.status = status;
         }
+
+        public Group getGroup() {
+            return groupFamily;
+        }
+
+           public void setGroup(Group group) {
+            this.groupFamily = group;
+        }
+
 
         /*public Features getFeatures() {
             return features;

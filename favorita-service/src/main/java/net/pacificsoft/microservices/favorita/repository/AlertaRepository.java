@@ -1,10 +1,11 @@
 package net.pacificsoft.springbootcrudrest.repository;
 
-import net.pacificsoft.springbootcrudrest.model.Probabilities;
+import net.pacificsoft.springbootcrudrest.model.Alerta;
+import net.pacificsoft.springbootcrudrest.model.Bodega;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProbabilitiesRepository extends JpaRepository<Probabilities, Long>{
+public interface AlertaRepository extends JpaRepository<Alerta, Long>{
 
 }
