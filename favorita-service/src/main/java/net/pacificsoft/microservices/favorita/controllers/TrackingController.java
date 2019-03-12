@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.springbootcrudrest.exception.ResourceNotFoundException;
-import net.pacificsoft.springbootcrudrest.model.Device;
-import net.pacificsoft.springbootcrudrest.model.Ruta;
-import net.pacificsoft.springbootcrudrest.model.Tracking;
-import net.pacificsoft.springbootcrudrest.repository.DeviceRepository;
-import net.pacificsoft.springbootcrudrest.repository.RutaRepository;
-import net.pacificsoft.springbootcrudrest.repository.TrackingRepository;
+import net.pacificsoft.microservices.favorita.exception.ResourceNotFoundException;
+import net.pacificsoft.microservices.favorita.models.Device;
+import net.pacificsoft.microservices.favorita.models.Ruta;
+import net.pacificsoft.microservices.favorita.models.Tracking;
+import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
+import net.pacificsoft.microservices.favorita.repository.RutaRepository;
+import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
 import java.util.Set;
-import net.pacificsoft.springbootcrudrest.model.LocationGroup;
-import net.pacificsoft.springbootcrudrest.repository.LocationGroupRepository;
+import net.pacificsoft.microservices.favorita.models.LocationGroup;
+import net.pacificsoft.microservices.favorita.repository.LocationGroupRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -55,8 +55,8 @@ public class TrackingController {
 	@GetMapping("/tracking/{id}")
 	public ResponseEntity getTrackingById(
 			@PathVariable(value = "id") Long trackingId){
-		if(trackingRepository.exists(trackingId)){
-                    Tracking tracking = trackingRepository.findOne(trackingId);
+		if(trackingRepository.existsById(trackingId)){
+                    Tracking tracking = trackingRepository.findById(trackingId).get();
                     return new ResponseEntity(tracking, HttpStatus.OK);
                 }
 		else{
@@ -70,10 +70,10 @@ public class TrackingController {
                                 @PathVariable(value = "deviceid") Long deviceId,
                                 @PathVariable(value = "locationid") Long locationId) {
 		try{
-                    if(deviceRepository.exists(deviceId) &&
-                       locationGroupRepository.exists(locationId)){
-                        Device device = deviceRepository.findOne(deviceId);
-                        LocationGroup location = locationGroupRepository.findOne(locationId);
+                    if(deviceRepository.existsById(deviceId) &&
+                       locationGroupRepository.existsById(locationId)){
+                        Device device = deviceRepository.findById(deviceId).get();
+                        LocationGroup location = locationGroupRepository.findById(locationId).get();
                         device.getTrackings().add(tracking);
                         location.getTrackings().add(tracking);
                         tracking.setDevice(device);
@@ -100,12 +100,12 @@ public class TrackingController {
                         @PathVariable(value = "deviceid") Long deviceId,
                         @PathVariable(value = "locationid") Long locationId,
 			@Valid @RequestBody Tracking trackingDetails){
-                if(trackingRepository.exists(trackingId) &&
-                   deviceRepository.exists(deviceId) &&
-                   locationGroupRepository.exists(locationId)){
-                    Tracking tracking = trackingRepository.findOne(trackingId);
-                    Device device = deviceRepository.findOne(deviceId);
-                    LocationGroup location = locationGroupRepository.findOne(locationId);
+                if(trackingRepository.existsById(trackingId) &&
+                   deviceRepository.existsById(deviceId) &&
+                   locationGroupRepository.existsById(locationId)){
+                    Tracking tracking = trackingRepository.findById(trackingId).get();
+                    Device device = deviceRepository.findById(deviceId).get();
+                    LocationGroup location = locationGroupRepository.findById(locationId).get();
                     device.getTrackings().add(tracking);
                     location.getTrackings().add(tracking);
                     tracking.setLocation(trackingDetails.getLocation());
@@ -127,8 +127,8 @@ public class TrackingController {
 	@DeleteMapping("/tracking/{id}")
 	public ResponseEntity deleteTracking(
 			@PathVariable(value = "id") Long trackingId){
-                if(trackingRepository.exists(trackingId)){
-                    Tracking tracking = trackingRepository.findOne(trackingId);
+                if(trackingRepository.existsById(trackingId)){
+                    Tracking tracking = trackingRepository.findById(trackingId).get();
                     tracking.getDevice().getTrackings().remove(tracking);
                     tracking.getLocationGroup().getTrackings().remove(tracking);
                     deviceRepository.save(tracking.getDevice());

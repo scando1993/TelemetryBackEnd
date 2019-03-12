@@ -1,6 +1,6 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
-import net.pacificsoft.springbootcrudrest.model.Device;
+import net.pacificsoft.microservices.favorita.models.Device;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.springbootcrudrest.repository.DeviceRepository;
+import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import net.pacificsoft.springbootcrudrest.model.Telemetria;
-import net.pacificsoft.springbootcrudrest.repository.TelemetriaRepository;
+import net.pacificsoft.microservices.favorita.models.Telemetria;
+import net.pacificsoft.microservices.favorita.repository.TelemetriaRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -59,8 +59,8 @@ public class TelemetriaController {
 	@GetMapping("/telemetria/{id}")
 	public ResponseEntity getTelemetriaById(
 			@PathVariable(value = "id") Long telemetriaId){
-		if(telemetriaRepository.exists(telemetriaId)){
-                    Telemetria t = telemetriaRepository.findOne(telemetriaId);
+		if(telemetriaRepository.existsById(telemetriaId)){
+                    Telemetria t = telemetriaRepository.findById(telemetriaId).get();
                     JSONObject json = new JSONObject();
                     json.put("id", t.getId());
                     json.put("Dtm", t.getDtm());
@@ -79,8 +79,8 @@ public class TelemetriaController {
 	@PostMapping("/telemetria/{deviceid}")
 	public ResponseEntity createTelemetria(@PathVariable(value = "deviceid") Long deviceid,
                                @Valid @RequestBody Telemetria telemetria) {
-                if(deviceRepository.exists(deviceid)){
-                        Device device = deviceRepository.findOne(deviceid);
+                if(deviceRepository.existsById(deviceid)){
+                        Device device = deviceRepository.findById(deviceid).get();
                         device.getTelemetrias().add(telemetria);                 
                         telemetria.setDevice(device);
                         Telemetria t = telemetriaRepository.save(telemetria);
@@ -104,8 +104,8 @@ public class TelemetriaController {
 	public ResponseEntity updateTelemetria(
 			@PathVariable(value = "id") Long telemetriaId,
 			@Valid @RequestBody Telemetria telemetriaDetails){
-                if(telemetriaRepository.exists(telemetriaId)){
-                    Telemetria telemetria = telemetriaRepository.findOne(telemetriaId);
+                if(telemetriaRepository.existsById(telemetriaId)){
+                    Telemetria telemetria = telemetriaRepository.findById(telemetriaId).get();
                     telemetria.setName(telemetriaDetails.getName());
                     telemetria.setDtm(telemetriaDetails.getDtm());
                     telemetria.setValue(telemetriaDetails.getValue());
@@ -121,8 +121,8 @@ public class TelemetriaController {
 	@DeleteMapping("/telemetria/{id}")
 	public ResponseEntity deleteTelemetria(
 			@PathVariable(value = "id") Long telemetriaId){
-                if(telemetriaRepository.exists(telemetriaId)){
-                    Telemetria telemetria = telemetriaRepository.findOne(telemetriaId);
+                if(telemetriaRepository.existsById(telemetriaId)){
+                    Telemetria telemetria = telemetriaRepository.findById(telemetriaId).get();
                     telemetria.getDevice().getTelemetrias().remove(telemetria);
                     deviceRepository.save(telemetria.getDevice());
                     telemetriaRepository.delete(telemetria);

@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 
 import java.util.ArrayList;
@@ -9,8 +9,8 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
-import net.pacificsoft.springbootcrudrest.model.*;
-import net.pacificsoft.springbootcrudrest.repository.*;
+import net.pacificsoft.microservices.favorita.models.*;
+import net.pacificsoft.microservices.favorita.repository.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,10 +57,10 @@ public class MessageController {
                                        @PathVariable(value = "guessID") Long messageGuessID,
                                        @Valid @RequestBody Message message) {
         try{
-            if(predictionsRepository.exists(predictionID) && locationNamesRepository.exists(locationNameId) && messageGuessRepository.exists(messageGuessID)){
-                Prediction prediction = predictionsRepository.findOne(predictionID);
-                LocationNames locationName = locationNamesRepository.findOne(locationNameId);
-                MessageGuess messageGuess = messageGuessRepository.findOne(messageGuessID);
+            if(predictionsRepository.existsById(predictionID) && locationNamesRepository.existsById(locationNameId) && messageGuessRepository.existsById(messageGuessID)){
+                Prediction prediction = predictionsRepository.findById(predictionID).get();
+                LocationNames locationName = locationNamesRepository.findById(locationNameId).get();
+                MessageGuess messageGuess = messageGuessRepository.findById(messageGuessID).get();
 
                 message.getPredictions().add(prediction);
                 message.setLocationNames(locationName);

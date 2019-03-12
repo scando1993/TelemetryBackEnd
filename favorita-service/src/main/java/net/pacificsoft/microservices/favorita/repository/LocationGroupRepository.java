@@ -1,6 +1,6 @@
-package net.pacificsoft.springbootcrudrest.repository;
+package net.pacificsoft.microservices.favorita.repository;
 
-import net.pacificsoft.springbootcrudrest.model.LocationGroup;
+import net.pacificsoft.microservices.favorita.models.LocationGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

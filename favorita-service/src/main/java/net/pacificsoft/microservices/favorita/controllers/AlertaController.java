@@ -1,6 +1,6 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
-import net.pacificsoft.springbootcrudrest.model.Device;
+import net.pacificsoft.microservices.favorita.models.Device;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.springbootcrudrest.model.Ruta;
-import net.pacificsoft.springbootcrudrest.repository.DeviceRepository;
-import net.pacificsoft.springbootcrudrest.repository.RutaRepository;
+import net.pacificsoft.microservices.favorita.models.Ruta;
+import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
+import net.pacificsoft.microservices.favorita.repository.RutaRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import net.pacificsoft.springbootcrudrest.model.Alerta;
-import net.pacificsoft.springbootcrudrest.repository.AlertaRepository;
+import net.pacificsoft.microservices.favorita.models.Alerta;
+import net.pacificsoft.microservices.favorita.repository.AlertaRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -63,8 +63,8 @@ public class AlertaController {
 	@GetMapping("/alerta/{id}")
 	public ResponseEntity getAlertaById(
 			@PathVariable(value = "id") Long alertaId){
-		if(rutaRepository.exists(alertaId)){
-                    Alerta a = alertaRepository.findOne(alertaId);
+		if(rutaRepository.existsById(alertaId)){
+                    Alerta a = alertaRepository.findById(alertaId).get();
                     JSONObject json = new JSONObject();
                     json.put("id", a.getId());
                     json.put("type_alert", a.getTipoAlerta());
@@ -85,11 +85,11 @@ public class AlertaController {
                                @Valid @RequestBody Alerta alerta) {
                 try{
                 if(rutaid!=0){
-                    if(deviceRepository.exists(deviceid) &&
-                       rutaRepository.exists(rutaid)){
-                        Ruta ruta = rutaRepository.findOne(rutaid);
+                    if(deviceRepository.existsById(deviceid) &&
+                       rutaRepository.existsById(rutaid)){
+                        Ruta ruta = rutaRepository.findById(rutaid).get();
                         ruta.getAlertas().add(alerta);
-                        Device device = deviceRepository.findOne(deviceid);
+                        Device device = deviceRepository.findById(deviceid).get();
                         device.getAlertas().add(alerta);                        
                         alerta.setRuta(ruta);
                         alerta.setDevice(device);
@@ -100,8 +100,8 @@ public class AlertaController {
                     }
                 }
                 else{
-                    if(deviceRepository.exists(deviceid)){
-                        Device device = deviceRepository.findOne(deviceid);
+                    if(deviceRepository.existsById(deviceid)){
+                        Device device = deviceRepository.findById(deviceid).get();
                         device.getAlertas().add(alerta);                        
                         alerta.setDevice(device);
                         Alerta a = alertaRepository.save(alerta);
@@ -121,8 +121,8 @@ public class AlertaController {
 	public ResponseEntity updateAlerta(
 			@PathVariable(value = "id") Long alertaId,
 			@Valid @RequestBody Alerta alertaDetails){
-                if(alertaRepository.exists(alertaId)){
-                    Alerta alerta = alertaRepository.findOne(alertaId);
+                if(alertaRepository.existsById(alertaId)){
+                    Alerta alerta = alertaRepository.findById(alertaId).get();
                     alerta.setMensaje(alertaDetails.getMensaje());
                     alerta.setTipoAlerta(alertaDetails.getTipoAlerta());
                     final Alerta updatedAlerta = alertaRepository.save(alerta);
@@ -137,8 +137,8 @@ public class AlertaController {
 	@DeleteMapping("/alerta/{id}")
 	public ResponseEntity deleteAlerta(
 			@PathVariable(value = "id") Long alertaId){
-                if(alertaRepository.exists(alertaId)){
-                    Alerta alerta = alertaRepository.findOne(alertaId);
+                if(alertaRepository.existsById(alertaId)){
+                    Alerta alerta = alertaRepository.findById(alertaId).get();
                     alerta.getRuta().setAlertas(null);
                     alerta.getDevice().setAlertas(null);
                     rutaRepository.save(alerta.getRuta());

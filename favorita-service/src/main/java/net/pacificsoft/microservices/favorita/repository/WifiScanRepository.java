@@ -1,8 +1,8 @@
-package net.pacificsoft.springbootcrudrest.repository;
+package net.pacificsoft.microservices.favorita.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import net.pacificsoft.springbootcrudrest.model.WifiScan;
+import net.pacificsoft.microservices.favorita.models.WifiScan;
 
 @Repository
 public interface WifiScanRepository extends JpaRepository<WifiScan, Long>{

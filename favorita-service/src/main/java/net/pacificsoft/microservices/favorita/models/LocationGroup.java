@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.model;
+package net.pacificsoft.microservices.favorita.models;
 
 
 

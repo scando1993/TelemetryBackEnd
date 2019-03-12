@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.springbootcrudrest.model.Formato;
-import net.pacificsoft.springbootcrudrest.repository.FormatoRepository;
+import net.pacificsoft.microservices.favorita.models.Formato;
+import net.pacificsoft.microservices.favorita.repository.FormatoRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import net.pacificsoft.springbootcrudrest.model.Locales;
-import net.pacificsoft.springbootcrudrest.repository.LocalesRepository;
+import net.pacificsoft.microservices.favorita.models.Locales;
+import net.pacificsoft.microservices.favorita.repository.LocalesRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -57,8 +57,8 @@ public class FormatoController {
 	@GetMapping("/formato/{id}")
 	public ResponseEntity getFormatoById(
 			@PathVariable(value = "id") Long formatoId){
-		if(formatoRepository.exists(formatoId)){
-                    Formato f = formatoRepository.findOne(formatoId);
+		if(formatoRepository.existsById(formatoId)){
+                    Formato f = formatoRepository.findById(formatoId);
                     JSONObject json = new JSONObject();
                     json.put("id", f.getId());
                     json.put("name",f.getName());
@@ -76,8 +76,8 @@ public class FormatoController {
 	public ResponseEntity createFormato(@PathVariable(value = "localesid") Long localesid,
                                   @Valid @RequestBody Formato formato) {
             try{
-                if(localesRepository.exists(localesid)){
-                    Locales locales = localesRepository.findOne(localesid);
+                if(localesRepository.existsById(localesid)){
+                    Locales locales = localesRepository.findById(localesid);
                     if(locales.getFormato()==null){
                         locales.setFormato(formato);
                         formato.setLocales(locales);
@@ -109,11 +109,11 @@ public class FormatoController {
                         @PathVariable(value = "localid") Long localesid,
 			@Valid @RequestBody Formato formatoDetails){
             try{
-                if(formatoRepository.exists(formatoid) &&
-                   localesRepository.exists(localesid)){
-                    Locales locales = localesRepository.findOne(localesid);
+                if(formatoRepository.existsById(formatoid) &&
+                   localesRepository.existsById(localesid)){
+                    Locales locales = localesRepository.findById(localesid);
                     if(locales.getFormato()==null){
-                        Formato formato = formatoRepository.findOne(formatoid);                        
+                        Formato formato = formatoRepository.findById(formatoid);
                         formato.setName(formatoDetails.getName());
                         formato.setCode(formatoDetails.getCode());
                         formato.setLocales(locales);
@@ -138,8 +138,8 @@ public class FormatoController {
 	@DeleteMapping("/formato/{id}")
 	public ResponseEntity deleteFormato(
 			@PathVariable(value = "id") Long formatoId){
-                if(formatoRepository.exists(formatoId)){
-                    Formato formato = formatoRepository.findOne(formatoId);
+                if(formatoRepository.existsById(formatoId)){
+                    Formato formato = formatoRepository.findById(formatoId);
                     formato.getLocales().setFormato(null);
                     localesRepository.save(formato.getLocales());
                     formatoRepository.delete(formato);

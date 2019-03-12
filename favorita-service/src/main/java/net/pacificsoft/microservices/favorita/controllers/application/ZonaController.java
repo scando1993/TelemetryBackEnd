@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 
 import java.util.HashSet;
@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.springbootcrudrest.exception.ResourceNotFoundException;
-import net.pacificsoft.springbootcrudrest.model.Furgon;
-import net.pacificsoft.springbootcrudrest.model.Provincia;
-import net.pacificsoft.springbootcrudrest.model.Zona;
-import net.pacificsoft.springbootcrudrest.repository.FurgonRepository;
-import net.pacificsoft.springbootcrudrest.repository.RutaRepository;
-import net.pacificsoft.springbootcrudrest.repository.*;
+import net.pacificsoft.microservices.favorita.exception.ResourceNotFoundException;
+import net.pacificsoft.microservices.favorita.models.Furgon;
+import net.pacificsoft.microservices.favorita.models.Provincia;
+import net.pacificsoft.microservices.favorita.models.Zona;
+import net.pacificsoft.microservices.favorita.repository.FurgonRepository;
+import net.pacificsoft.microservices.favorita.repository.RutaRepository;
+import net.pacificsoft.microservices.favorita.repository.*;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -52,8 +52,8 @@ public class ZonaController {
 	@GetMapping("/zona/{id}")
 	public ResponseEntity getZonaById(
 			@PathVariable(value = "id") Long zonaId){
-		if(zonaRepository.exists(zonaId)){
-                    Zona zona = zonaRepository.findOne(zonaId);
+		if(zonaRepository.existsById(zonaId)){
+                    Zona zona = zonaRepository.findById(zonaId);
                     return new ResponseEntity(zona, HttpStatus.OK);
                 }
 		else{
@@ -67,8 +67,8 @@ public class ZonaController {
                                     @Valid @RequestBody Zona zona) {
                 try{
                     for(Long l:provincias){
-                        if(provinciaRepository.exists(l)){
-                            Provincia p = provinciaRepository.findOne(l);
+                        if(provinciaRepository.existsById(l)){
+                            Provincia p = provinciaRepository.findById(l);
                             p.setZona(zona);
                             zona.getProvincias().add(p);
                             zonaRepository.save(zona);
@@ -90,8 +90,8 @@ public class ZonaController {
                         @PathVariable(value = "provincias") Long[] provincias,
 			@Valid @RequestBody Zona zonaDetails){
             try{
-                if(zonaRepository.exists(zonaId)){
-                    Zona zona = zonaRepository.findOne(zonaId);
+                if(zonaRepository.existsById(zonaId)){
+                    Zona zona = zonaRepository.findById(zonaId);
                     for(Provincia p: zona.getProvincias()){
                         p.setZona(null);
                         provinciaRepository.save(p);
@@ -99,7 +99,7 @@ public class ZonaController {
                     zona.setProvincias(new HashSet<>());
                     zona.setName(zonaDetails.getName());
                     for(Long l:provincias){
-                        Provincia p = provinciaRepository.findOne(l);
+                        Provincia p = provinciaRepository.findById(l);
                         zona.getProvincias().add(p);
                         p.setZona(zona);
                         provinciaRepository.save(p);
@@ -120,8 +120,8 @@ public class ZonaController {
 	@DeleteMapping("/zona/{id}")
 	public ResponseEntity deleteZona(
 			@PathVariable(value = "id") Long zonaId){
-                if(zonaRepository.exists(zonaId)){
-                    Zona zona = zonaRepository.findOne(zonaId);
+                if(zonaRepository.existsById(zonaId)){
+                    Zona zona = zonaRepository.findById(zonaId);
                     if(zona.getProvincias().size()>0){
                         Set<Provincia> ps = zona.getProvincias();
                         for(Provincia p: ps){

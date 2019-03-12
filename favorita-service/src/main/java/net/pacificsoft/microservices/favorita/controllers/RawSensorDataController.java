@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.springbootcrudrest.model.Ciudad;
-import net.pacificsoft.springbootcrudrest.model.Device;
-import net.pacificsoft.springbootcrudrest.model.Provincia;
-import net.pacificsoft.springbootcrudrest.model.RawSensorData;
-import net.pacificsoft.springbootcrudrest.repository.CiudadRepository;
-import net.pacificsoft.springbootcrudrest.repository.DeviceRepository;
-import net.pacificsoft.springbootcrudrest.repository.ProvinciaRepository;
-import net.pacificsoft.springbootcrudrest.repository.RawSensorDataRepository;
+import net.pacificsoft.microservices.favorita.models.Ciudad;
+import net.pacificsoft.microservices.favorita.models.Device;
+import net.pacificsoft.microservices.favorita.models.Provincia;
+import net.pacificsoft.microservices.favorita.models.RawSensorData;
+import net.pacificsoft.microservices.favorita.repository.CiudadRepository;
+import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
+import net.pacificsoft.microservices.favorita.repository.ProvinciaRepository;
+import net.pacificsoft.microservices.favorita.repository.RawSensorDataRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -46,8 +46,8 @@ public class RawSensorDataController {
 	@GetMapping("/rawSensorData/{id}")
 	public ResponseEntity getCiudadById(
 			@PathVariable(value = "id") Long rawId){
-                if(rawSensorDataRepository.exists(rawId)){
-                    RawSensorData rawD = rawSensorDataRepository.findOne(rawId);
+                if(rawSensorDataRepository.existsById(rawId)){
+                    RawSensorData rawD = rawSensorDataRepository.findById(rawId).get();
                     return new ResponseEntity(rawD, HttpStatus.OK);
                 }
 		else{
@@ -60,8 +60,8 @@ public class RawSensorDataController {
 	public ResponseEntity createCiudad(@PathVariable(value = "deviceid") Long deviceId,
                                  @Valid @RequestBody RawSensorData rawData) {
             try{
-                if(deviceRepository.exists(deviceId)){
-                    Device device = deviceRepository.findOne(deviceId);
+                if(deviceRepository.existsById(deviceId)){
+                    Device device = deviceRepository.findById(deviceId).get();
                     rawData.setDevice(device);
                     device.getRawSensorDatas().add(rawData);
                     RawSensorData r = rawSensorDataRepository.save(rawData);
@@ -84,8 +84,8 @@ public class RawSensorDataController {
 			@PathVariable(value = "id") Long rawId,
 			@Valid @RequestBody RawSensorData rawDetails){
             try{
-                if(rawSensorDataRepository.exists(rawId)) {
-                    RawSensorData rawD = rawSensorDataRepository.findOne(rawId);
+                if(rawSensorDataRepository.existsById(rawId)) {
+                    RawSensorData rawD = rawSensorDataRepository.findById(rawId).get();
                     rawD.setEpoch(rawDetails.getEpoch());
                     rawD.setEpochDateTime(rawDetails.getEpochDateTime());
                     rawD.setRawData(rawDetails.getRawData());
@@ -107,8 +107,8 @@ public class RawSensorDataController {
         @DeleteMapping("/rawSensorData/{id}")
 	public ResponseEntity deleteCiudad(
                                 @PathVariable(value = "id") Long rawId){
-                if(rawSensorDataRepository.exists(rawId)){
-                    RawSensorData rawD = rawSensorDataRepository.findOne(rawId);
+                if(rawSensorDataRepository.existsById(rawId)){
+                    RawSensorData rawD = rawSensorDataRepository.findById(rawId).get();
                     rawD.getDevice().getRawSensorDatas().remove(rawD);
                     deviceRepository.save(rawD.getDevice());
                     rawSensorDataRepository.delete(rawD);

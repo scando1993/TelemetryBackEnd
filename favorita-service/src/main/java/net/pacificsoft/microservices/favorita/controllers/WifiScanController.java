@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.springbootcrudrest.model.Bodega;
-import net.pacificsoft.springbootcrudrest.repository.BodegaRepository;
+import net.pacificsoft.microservices.favorita.models.Bodega;
+import net.pacificsoft.microservices.favorita.repository.BodegaRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import net.pacificsoft.springbootcrudrest.model.Ciudad;
-import net.pacificsoft.springbootcrudrest.model.RawSensorData;
-import net.pacificsoft.springbootcrudrest.model.WifiScan;
-import net.pacificsoft.springbootcrudrest.repository.CiudadRepository;
-import net.pacificsoft.springbootcrudrest.repository.RawSensorDataRepository;
-import net.pacificsoft.springbootcrudrest.repository.WifiScanRepository;
+import net.pacificsoft.microservices.favorita.models.Ciudad;
+import net.pacificsoft.microservices.favorita.models.RawSensorData;
+import net.pacificsoft.microservices.favorita.models.WifiScan;
+import net.pacificsoft.microservices.favorita.repository.CiudadRepository;
+import net.pacificsoft.microservices.favorita.repository.RawSensorDataRepository;
+import net.pacificsoft.microservices.favorita.repository.WifiScanRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -50,8 +50,8 @@ public class WifiScanController {
 	@GetMapping("/wifiScan/{id}")
 	public ResponseEntity getBodegaById(
 			@PathVariable(value = "id") Long wifiId){
-                if(wifiScanRepository.exists(wifiId)){
-                    WifiScan w = wifiScanRepository.findOne(wifiId);
+                if(wifiScanRepository.existsById(wifiId)){
+                    WifiScan w = wifiScanRepository.findById(wifiId).get();
                     return new ResponseEntity(w, HttpStatus.OK);
                 }
 		else{
@@ -64,8 +64,8 @@ public class WifiScanController {
 	public ResponseEntity createBodega(@PathVariable(value = "ciudadid") Long rawId,
                                  @Valid @RequestBody WifiScan wifi) {
             try{
-                if(rawSensorDataRepository.exists(rawId)){
-                    RawSensorData rw = rawSensorDataRepository.findOne(rawId);
+                if(rawSensorDataRepository.existsById(rawId)){
+                    RawSensorData rw = rawSensorDataRepository.findById(rawId).get();
                     rw.getWifiScans().add(wifi);
                     wifi.setRawSensorData(rw);
                     WifiScan w = wifiScanRepository.save(wifi);
@@ -88,8 +88,8 @@ public class WifiScanController {
 			@PathVariable(value = "id") Long wifiId,
 			@Valid @RequestBody WifiScan wifiDetails){
             try{
-                if(wifiScanRepository.exists(wifiId)) {
-                    WifiScan wifi = wifiScanRepository.findOne(wifiId);
+                if(wifiScanRepository.existsById(wifiId)) {
+                    WifiScan wifi = wifiScanRepository.findById(wifiId).get();
                     wifi.setMAC(wifiDetails.getMAC());
                     wifi.setRSSI(wifiDetails.getRSSI());
                     final WifiScan wifiUpdate = wifiScanRepository.save(wifi);
@@ -109,8 +109,8 @@ public class WifiScanController {
         @DeleteMapping("/wifiScan/{id}")
 	public ResponseEntity deleteBodega(
                                 @PathVariable(value = "id") Long wifiId){
-                if(wifiScanRepository.exists(wifiId)){
-                    WifiScan wifi = wifiScanRepository.findOne(wifiId);
+                if(wifiScanRepository.existsById(wifiId)){
+                    WifiScan wifi = wifiScanRepository.findById(wifiId).get();
                     wifi.getRawSensorData().getWifiScans().remove(wifi);
                     rawSensorDataRepository.save(wifi.getRawSensorData());
                     wifiScanRepository.delete(wifi);

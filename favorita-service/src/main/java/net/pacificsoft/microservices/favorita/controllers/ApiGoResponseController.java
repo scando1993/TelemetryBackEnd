@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 
 import java.util.ArrayList;
@@ -9,8 +9,8 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
-import net.pacificsoft.springbootcrudrest.model.*;
-import net.pacificsoft.springbootcrudrest.repository.*;
+import net.pacificsoft.microservices.favorita.models.*;
+import net.pacificsoft.microservices.favorita.repository.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.pacificsoft.springbootcrudrest.repository.LocationNamesRepository;
+import net.pacificsoft.microservices.favorita.repository.LocationNamesRepository;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -55,9 +55,9 @@ public class ApiGoResponseController {
                                        @PathVariable(value = "deviceID") Long deviceID,
                                        @Valid @RequestBody GoApiResponse goApiResponse) {
         try{
-            if(messageRepository.exists(messageID) && deviceRepository.exists(deviceID)){
-                Message message = messageRepository.findOne(messageID);
-                Device device = deviceRepository.findOne(deviceID);
+            if(messageRepository.existsById(messageID) && deviceRepository.existsById(deviceID)){
+                Message message = messageRepository.findById(messageID).get();
+                Device device = deviceRepository.findById(deviceID).get();
 
                 // device.setGoApiResponse(setGoApiResponse);
                 message.setGoApiResponse(goApiResponse);

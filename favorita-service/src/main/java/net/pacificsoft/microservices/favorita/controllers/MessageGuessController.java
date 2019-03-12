@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
-import net.pacificsoft.springbootcrudrest.model.Message;
-import net.pacificsoft.springbootcrudrest.model.MessageGuess;
-import net.pacificsoft.springbootcrudrest.repository.*;
+import net.pacificsoft.microservices.favorita.models.Message;
+import net.pacificsoft.microservices.favorita.models.MessageGuess;
+import net.pacificsoft.microservices.favorita.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.pacificsoft.springbootcrudrest.model.Prediction;
+import net.pacificsoft.microservices.favorita.models.Prediction;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -63,8 +63,8 @@ public class MessageGuessController {
             @PathVariable(value = "id") Long messageGuessId,
             @Valid @RequestBody MessageGuess messageGuessDetails){
         try{
-            if(messageGuessRepository.exists(messageGuessId)){
-                MessageGuess messageGuess = messageGuessRepository.findOne(messageGuessId);
+            if(messageGuessRepository.existsById(messageGuessId)){
+                MessageGuess messageGuess = messageGuessRepository.findById(messageGuessId).get();
                 messageGuess.setLocation(messageGuessDetails.getLocation());
                 messageGuess.setProbability(messageGuessDetails.getProbability());
                 final MessageGuess updatemessageGuess = messageGuessRepository.save(messageGuess);
@@ -83,8 +83,8 @@ public class MessageGuessController {
     @DeleteMapping("/messageGuess/{id}")
     public ResponseEntity deletemessageGuess(
             @PathVariable(value = "id") Long messageGuessId){
-        if(messageGuessRepository.exists(messageGuessId)){
-            MessageGuess messageGuess = messageGuessRepository.findOne(messageGuessId);
+        if(messageGuessRepository.existsById(messageGuessId)){
+            MessageGuess messageGuess = messageGuessRepository.findById(messageGuessId).get();
             if(messageGuess.getMessages().size()>0){
                 Set<Message> m = messageGuess.getMessages();
                 for (Message i : m){

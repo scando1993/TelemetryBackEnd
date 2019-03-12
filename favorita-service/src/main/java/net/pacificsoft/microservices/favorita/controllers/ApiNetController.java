@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.springbootcrudrest.model.Device;
-import net.pacificsoft.springbootcrudrest.model.Tracking;
-import net.pacificsoft.springbootcrudrest.repository.DeviceRepository;
+import net.pacificsoft.microservices.favorita.models.Device;
+import net.pacificsoft.microservices.favorita.models.Tracking;
+import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;

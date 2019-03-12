@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 
 import javax.validation.Valid;
@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.springbootcrudrest.model.Furgon;
-import net.pacificsoft.springbootcrudrest.repository.FurgonRepository;
-import net.pacificsoft.springbootcrudrest.repository.RutaRepository;
+import net.pacificsoft.microservices.favorita.models.Furgon;
+import net.pacificsoft.microservices.favorita.repository.FurgonRepository;
+import net.pacificsoft.microservices.favorita.repository.RutaRepository;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import net.pacificsoft.springbootcrudrest.model.LocationGroup;
-import net.pacificsoft.springbootcrudrest.model.Ruta;
-import net.pacificsoft.springbootcrudrest.model.Tracking;
-import net.pacificsoft.springbootcrudrest.repository.LocationGroupRepository;
-import net.pacificsoft.springbootcrudrest.repository.TrackingRepository;
+import net.pacificsoft.microservices.favorita.models.LocationGroup;
+import net.pacificsoft.microservices.favorita.models.Ruta;
+import net.pacificsoft.microservices.favorita.models.Tracking;
+import net.pacificsoft.microservices.favorita.repository.LocationGroupRepository;
+import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -75,8 +75,8 @@ public class LocationGroupController {
 	@GetMapping("/locationGroup/{id}")
 	public ResponseEntity getLocationGroupById(
 			@PathVariable(value = "id") Long locationId){
-		if(locationGroupRepository.exists(locationId)){
-                    LocationGroup lg = locationGroupRepository.findOne(locationId);
+		if(locationGroupRepository.existsById(locationId)){
+                    LocationGroup lg = locationGroupRepository.findById(locationId).get();
                     JSONObject json = new JSONObject();
                     JSONObject resp = new JSONObject();
                     Set<Map<String, Object>> ubs = new HashSet();
@@ -130,8 +130,8 @@ public class LocationGroupController {
 			@PathVariable(value = "id") Long locationId,
 			@Valid @RequestBody LocationGroup locationDetails){
             try{
-                if(locationGroupRepository.exists(locationId)){
-                    LocationGroup location = locationGroupRepository.findOne(locationId);                    
+                if(locationGroupRepository.existsById(locationId)){
+                    LocationGroup location = locationGroupRepository.findById(locationId).get();
                     location.setName(locationDetails.getName());
                     final LocationGroup updatedLocation = locationGroupRepository.save(location);
                     return new ResponseEntity(HttpStatus.OK);
@@ -149,8 +149,8 @@ public class LocationGroupController {
 	@DeleteMapping("/locationGroup/{id}")
 	public ResponseEntity deleteLocationGroup(
 			@PathVariable(value = "id") Long locationId){
-                if(locationGroupRepository.exists(locationId)){
-                    LocationGroup location = locationGroupRepository.findOne(locationId);                    
+                if(locationGroupRepository.existsById(locationId)){
+                    LocationGroup location = locationGroupRepository.findById(locationId).get();
                     if(location.getTrackings().size()>0){
                         Set<Tracking> ubFs = location.getTrackings();
                         for(Tracking t:ubFs){

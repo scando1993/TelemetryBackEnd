@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import net.pacificsoft.springbootcrudrest.model.Device;
-import net.pacificsoft.springbootcrudrest.model.Status;
-import net.pacificsoft.springbootcrudrest.repository.DeviceRepository;
-import net.pacificsoft.springbootcrudrest.repository.StatusRepository;
+import net.pacificsoft.microservices.favorita.models.Device;
+import net.pacificsoft.microservices.favorita.models.Status;
+import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
+import net.pacificsoft.microservices.favorita.repository.StatusRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -59,8 +59,8 @@ public class StatusController {
 	@GetMapping("/status/{id}")
 	public ResponseEntity getStatusById(
 			@PathVariable(value = "id") Long statusId){
-		if(statusRepository.exists(statusId)){
-                    Status s = statusRepository.findOne(statusId);
+		if(statusRepository.existsById(statusId)){
+                    Status s = statusRepository.findById(statusId).get();
                     JSONObject json = new JSONObject();
                     json.put("id", s.getId());
                     json.put("batery", s.getBatery());
@@ -81,8 +81,8 @@ public class StatusController {
 	public ResponseEntity createStatus(@PathVariable(value = "deviceid") Long deviceid,
                                   @Valid @RequestBody Status status) {
             try{
-                if(deviceRepository.exists(deviceid)){
-                    Device device = deviceRepository.findOne(deviceid);
+                if(deviceRepository.existsById(deviceid)){
+                    Device device = deviceRepository.findById(deviceid).get();
                     device.setStatus(status);
                     status.setDevice(device);
                     Status s = statusRepository.save(status);
@@ -112,8 +112,8 @@ public class StatusController {
 			@PathVariable(value = "id") Long statusid,
 			@Valid @RequestBody Status statusDetails){
             try{
-                if(statusRepository.exists(statusid)){
-                    Status status = statusRepository.findOne(statusid);
+                if(statusRepository.existsById(statusid)){
+                    Status status = statusRepository.findById(statusid).get();
                     status.setBatery(statusDetails.getBatery());
                     status.setLast_transmision(statusDetails.getLast_transmision());
                     status.setSignal_level(statusDetails.getSignal_level());
@@ -134,8 +134,8 @@ public class StatusController {
 	@DeleteMapping("/status/{id}")
 	public ResponseEntity deleteStatus(
 			@PathVariable(value = "id") Long statusId){
-                if(statusRepository.exists(statusId)){
-                    Status status = statusRepository.findOne(statusId);
+                if(statusRepository.existsById(statusId)){
+                    Status status = statusRepository.findById(statusId).get();
                     status.getDevice().setStatus(null);
                     deviceRepository.save(status.getDevice());
                     statusRepository.delete(status);

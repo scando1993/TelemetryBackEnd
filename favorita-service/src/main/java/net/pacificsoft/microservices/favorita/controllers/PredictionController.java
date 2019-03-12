@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 
 import java.util.ArrayList;
@@ -9,9 +9,9 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
-import net.pacificsoft.springbootcrudrest.model.*;
-import net.pacificsoft.springbootcrudrest.repository.LocationNamesRepository;
-import net.pacificsoft.springbootcrudrest.repository.MessageRepository;
+import net.pacificsoft.microservices.favorita.models.*;
+import net.pacificsoft.microservices.favorita.repository.LocationNamesRepository;
+import net.pacificsoft.microservices.favorita.repository.MessageRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.pacificsoft.springbootcrudrest.repository.PredictionsRepository;
-import net.pacificsoft.springbootcrudrest.repository.ProbabilitiesRepository;
+import net.pacificsoft.microservices.favorita.repository.PredictionsRepository;
+import net.pacificsoft.microservices.favorita.repository.ProbabilitiesRepository;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -59,9 +59,9 @@ public class PredictionController {
                                        @PathVariable(value = "LocationNameID") Long locationNameId,
                                        @Valid @RequestBody Prediction prediction) {
         try{
-            if(probabilitiesRepository.exists(probabilityId) && locationNamesRepository.exists(locationNameId)){
-                Probabilities probability = probabilitiesRepository.findOne(probabilityId);
-                LocationNames locationName = locationNamesRepository.findOne(locationNameId);
+            if(probabilitiesRepository.existsById(probabilityId) && locationNamesRepository.existsById(locationNameId)){
+                Probabilities probability = probabilitiesRepository.findById(probabilityId).get();
+                LocationNames locationName = locationNamesRepository.findById(locationNameId).get();
                 prediction.setLocationNames(locationName);
                 prediction.setProbabilities(probability);
 
@@ -90,8 +90,8 @@ public class PredictionController {
             @PathVariable(value = "id") Long predictionID,
             @Valid @RequestBody Prediction predictionDetails){
         try{
-            if(predictionsRepository.exists(predictionID)) {
-                Prediction prediction = predictionsRepository.findOne(predictionID);
+            if(predictionsRepository.existsById(predictionID)) {
+                Prediction prediction = predictionsRepository.findById(predictionID).get();
                 prediction.setName(predictionDetails.getName());
                 final Prediction updated = predictionsRepository.save(prediction);
                 return new ResponseEntity(HttpStatus.OK);
@@ -110,8 +110,8 @@ public class PredictionController {
     @DeleteMapping("/prediction/{id}")
     public ResponseEntity deletePrediction(
             @PathVariable(value = "id") Long predictionID){
-        if(predictionsRepository.exists(predictionID)){
-            Prediction prediction = predictionsRepository.findOne(predictionID);
+        if(predictionsRepository.existsById(predictionID)){
+            Prediction prediction = predictionsRepository.findById(predictionID).get();
             predictionsRepository.delete(predictionID);
             return new ResponseEntity(HttpStatus.OK);
         }

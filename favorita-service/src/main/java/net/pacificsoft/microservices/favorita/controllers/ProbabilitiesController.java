@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.pacificsoft.springbootcrudrest.model.Prediction;
-import net.pacificsoft.springbootcrudrest.model.Probabilities;
-import net.pacificsoft.springbootcrudrest.repository.PredictionsRepository;
-import net.pacificsoft.springbootcrudrest.repository.ProbabilitiesRepository;
+import net.pacificsoft.microservices.favorita.models.Prediction;
+import net.pacificsoft.microservices.favorita.models.Probabilities;
+import net.pacificsoft.microservices.favorita.repository.PredictionsRepository;
+import net.pacificsoft.microservices.favorita.repository.ProbabilitiesRepository;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -83,8 +83,8 @@ public class ProbabilitiesController {
 			@PathVariable(value = "id") Long probabilityId,
 			@Valid @RequestBody Probabilities probabilityDetails){
             try{
-                if(probabilitiesRepository.exists(probabilityId)){
-                    Probabilities probability = probabilitiesRepository.findOne(probabilityId);
+                if(probabilitiesRepository.existsById(probabilityId)){
+                    Probabilities probability = probabilitiesRepository.findById(probabilityId).get();
                     probability.setName(probabilityDetails.getName());
                     probability.setProbability(probabilityDetails.getProbability());
                     final Probabilities updatedpProbability = probabilitiesRepository.save(probability);
@@ -103,8 +103,8 @@ public class ProbabilitiesController {
     @DeleteMapping("/probability/{id}")
 	public ResponseEntity deleteFurgon(
 			@PathVariable(value = "id") Long probabilityId){
-                if(probabilitiesRepository.exists(probabilityId)){
-                    Probabilities probability = probabilitiesRepository.findOne(probabilityId);
+                if(probabilitiesRepository.existsById(probabilityId)){
+                    Probabilities probability = probabilitiesRepository.findById(probabilityId).get();
                     if(probability.getPrediction().size()>0){
                         Set<Prediction> ubFs = probability.getPrediction();
                         for(Prediction r: ubFs){

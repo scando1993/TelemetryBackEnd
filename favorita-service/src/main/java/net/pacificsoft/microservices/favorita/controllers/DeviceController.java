@@ -1,4 +1,4 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.springbootcrudrest.model.Device;
-import net.pacificsoft.springbootcrudrest.model.Tracking;
-import net.pacificsoft.springbootcrudrest.repository.DeviceRepository;
-import net.pacificsoft.springbootcrudrest.repository.TrackingRepository;
+import net.pacificsoft.microservices.favorita.models.Device;
+import net.pacificsoft.microservices.favorita.models.Tracking;
+import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
+import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -42,8 +42,8 @@ public class DeviceController {
 	@GetMapping("/device/{id}")
 	public ResponseEntity getDeviceById(
 			@PathVariable(value = "id") Long deviceId){
-		if(deviceRepository.exists(deviceId)){
-                    Device device = deviceRepository.findOne(deviceId);
+		if(deviceRepository.existsById(deviceId)){
+                    Device device = deviceRepository.findById(deviceId).get();
                     return new ResponseEntity(device, HttpStatus.OK);
                 }
 		else{
@@ -67,8 +67,8 @@ public class DeviceController {
 	public ResponseEntity updateDevice(
 			@PathVariable(value = "id") Long deviceId,
 			@Valid @RequestBody Device deviceDetails){
-                if(deviceRepository.exists(deviceId)){
-                    Device device = deviceRepository.findOne(deviceId);
+                if(deviceRepository.existsById(deviceId)){
+                    Device device = deviceRepository.findById(deviceId).get();
                     device.setFamily(deviceDetails.getFamily());
                     device.setName(deviceDetails.getName());
                     final Device updatedDevice = deviceRepository.save(device);
@@ -83,8 +83,8 @@ public class DeviceController {
 	@DeleteMapping("/device/{id}")
 	public ResponseEntity deleteDevice(
 			@PathVariable(value = "id") Long deviceId){
-                if(deviceRepository.exists(deviceId)){
-                    Device device = deviceRepository.findOne(deviceId);
+                if(deviceRepository.existsById(deviceId)){
+                    Device device = deviceRepository.findById(deviceId).get();
                     for(Tracking t:device.getTrackings()){
                         t.setDevice(null);
                         trackingRepository.save(t);

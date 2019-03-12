@@ -1,11 +1,11 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 import javax.validation.Valid;
 
-import net.pacificsoft.springbootcrudrest.model.Family;
-import net.pacificsoft.springbootcrudrest.model.Group;
-import net.pacificsoft.springbootcrudrest.repository.FamilyRepository;
-import net.pacificsoft.springbootcrudrest.repository.GroupRepository;
+import net.pacificsoft.microservices.favorita.models.Family;
+import net.pacificsoft.microservices.favorita.models.Group;
+import net.pacificsoft.microservices.favorita.repository.FamilyRepository;
+import net.pacificsoft.microservices.favorita.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.springbootcrudrest.model.Bodega;
-import net.pacificsoft.springbootcrudrest.repository.BodegaRepository;
+import net.pacificsoft.microservices.favorita.models.Bodega;
+import net.pacificsoft.microservices.favorita.repository.BodegaRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import net.pacificsoft.springbootcrudrest.model.Ciudad;
-import net.pacificsoft.springbootcrudrest.repository.CiudadRepository;
+import net.pacificsoft.microservices.favorita.models.Ciudad;
+import net.pacificsoft.microservices.favorita.repository.CiudadRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -52,8 +52,8 @@ public class FamilyController {
     public ResponseEntity createCiudad(@PathVariable(value = "groupID") Long groupID,
                                        @Valid @RequestBody Family family) {
         try{
-            if(groupRepository.exists(groupID)){
-                Group group = groupRepository.findOne(groupID);
+            if(groupRepository.existsById(groupID)){
+                Group group = groupRepository.findById(groupID).get();
 
                 family.setGroup(group);
                 group.getFamilies().add(family);;
@@ -79,8 +79,8 @@ public class FamilyController {
             @PathVariable(value = "id") Long familyID,
             @Valid @RequestBody Family familyDetails){
         try{
-            if(familyRepository.exists(familyID)) {
-                Family family = familyRepository.findOne(familyID);
+            if(familyRepository.existsById(familyID)) {
+                Family family = familyRepository.findById(familyID).get();
                 family.setName(familyDetails.getName());
                 final Family updated = familyRepository.save(family);
                 return new ResponseEntity(HttpStatus.OK);
@@ -98,8 +98,8 @@ public class FamilyController {
     @DeleteMapping("/family/{id}")
     public ResponseEntity deleteCiudad(
             @PathVariable(value = "id") Long familyID){
-        if(familyRepository.exists(familyID)){
-            Family family = familyRepository.findOne(familyID);
+        if(familyRepository.existsById(familyID)){
+            Family family = familyRepository.findById(familyID).get();
             familyRepository.delete(family);
             return new ResponseEntity(HttpStatus.OK);
         }

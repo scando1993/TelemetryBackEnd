@@ -1,7 +1,7 @@
-package net.pacificsoft.springbootcrudrest.controller;
+package net.pacificsoft.microservices.favorita.controllers;
 
 import java.text.SimpleDateFormat;
-import net.pacificsoft.springbootcrudrest.model.Device;
+import net.pacificsoft.microservices.favorita.models.Device;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.springbootcrudrest.model.Furgon;
-import net.pacificsoft.springbootcrudrest.model.Ruta;
-import net.pacificsoft.springbootcrudrest.repository.DeviceRepository;
-import net.pacificsoft.springbootcrudrest.repository.FurgonRepository;
-import net.pacificsoft.springbootcrudrest.repository.RutaRepository;
+import net.pacificsoft.microservices.favorita.models.Furgon;
+import net.pacificsoft.microservices.favorita.models.Ruta;
+import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
+import net.pacificsoft.microservices.favorita.repository.FurgonRepository;
+import net.pacificsoft.microservices.favorita.repository.RutaRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import net.pacificsoft.springbootcrudrest.model.Alerta;
-import net.pacificsoft.springbootcrudrest.model.Locales;
-import net.pacificsoft.springbootcrudrest.model.Producto;
-import net.pacificsoft.springbootcrudrest.repository.AlertaRepository;
-import net.pacificsoft.springbootcrudrest.repository.LocalesRepository;
-import net.pacificsoft.springbootcrudrest.repository.ProductoRepository;
+import net.pacificsoft.microservices.favorita.models.Alerta;
+import net.pacificsoft.microservices.favorita.models.Locales;
+import net.pacificsoft.microservices.favorita.models.Producto;
+import net.pacificsoft.microservices.favorita.repository.AlertaRepository;
+import net.pacificsoft.microservices.favorita.repository.LocalesRepository;
+import net.pacificsoft.microservices.favorita.repository.ProductoRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -89,8 +89,8 @@ public class RutaController {
 	@GetMapping("/ruta/{id}")
 	public ResponseEntity getRutaById(
 			@PathVariable(value = "id") Long rutaId){
-		if(rutaRepository.exists(rutaId)){
-                    Ruta r = rutaRepository.findOne(rutaId);
+		if(rutaRepository.existsById(rutaId)){
+                    Ruta r = rutaRepository.findById(rutaId);
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
                     JSONObject json = new JSONObject();
                     json.put("id", r.getId());
@@ -122,20 +122,20 @@ public class RutaController {
                                @PathVariable(value = "localinicioid") Long localinicioid,
                                @PathVariable(value = "localfinid") Long localfinid,
                                @Valid @RequestBody Ruta ruta) {
-                if(furgonRepository.exists(furgonid) &&
-                   deviceRepository.exists(deviceid) &&
-                   localesRepository.exists(localinicioid) &&
-                   localesRepository.exists(localfinid) &&
-                   productoRepository.exists(productid) ){
-                    Furgon furgon = furgonRepository.findOne(furgonid);
+                if(furgonRepository.existsById(furgonid) &&
+                   deviceRepository.existsById(deviceid) &&
+                   localesRepository.existsById(localinicioid) &&
+                   localesRepository.existsById(localfinid) &&
+                   productoRepository.existsById(productid) ){
+                    Furgon furgon = furgonRepository.findById(furgonid);
                     furgon.getRutas().add(ruta);
-                    Device device = deviceRepository.findOne(deviceid);
+                    Device device = deviceRepository.findById(deviceid);
                     device.getRutas().add(ruta);
-                    Locales localInicio = localesRepository.findOne(localinicioid);
+                    Locales localInicio = localesRepository.findById(localinicioid);
                     localInicio.setRutaInicio(ruta);
-                    Locales localFin = localesRepository.findOne(localfinid);
+                    Locales localFin = localesRepository.findById(localfinid);
                     localFin.setRutaFin(ruta);
-                    Producto producto = productoRepository.findOne(productid);
+                    Producto producto = productoRepository.findById(productid);
                     producto.getRutas().add(ruta);
                     ruta.setFurgon(furgon);
                     ruta.setProducto(producto);
@@ -181,24 +181,24 @@ public class RutaController {
                         @PathVariable(value = "localinicioid") Long localinicioid,
                         @PathVariable(value = "localfinid") Long localfinid,
 			@Valid @RequestBody Ruta rutaDetails){
-                if(rutaRepository.exists(rutaId) &&
-                   furgonRepository.exists(furgonid) &&
-                   deviceRepository.exists(deviceid) &&
-                   localesRepository.exists(localinicioid) &&
-                   localesRepository.exists(localfinid) &&
-                   productoRepository.exists(productid)){
-                    Ruta ruta = rutaRepository.findOne(rutaId);
+                if(rutaRepository.existsById(rutaId) &&
+                   furgonRepository.existsById(furgonid) &&
+                   deviceRepository.existsById(deviceid) &&
+                   localesRepository.existsById(localinicioid) &&
+                   localesRepository.existsById(localfinid) &&
+                   productoRepository.existsById(productid)){
+                    Ruta ruta = rutaRepository.findById(rutaId);
                     ruta.setStart_date(rutaDetails.getStart_date());
                     ruta.setEnd_date(rutaDetails.getEnd_date());
-                    Furgon furgon = furgonRepository.findOne(furgonid);
+                    Furgon furgon = furgonRepository.findById(furgonid);
                     furgon.getRutas().add(ruta);
-                    Device device = deviceRepository.findOne(deviceid);
+                    Device device = deviceRepository.findById(deviceid);
                     device.getRutas().add(ruta);
-                    Locales localInicio = localesRepository.findOne(localinicioid);
+                    Locales localInicio = localesRepository.findById(localinicioid);
                     localInicio.setRutaInicio(ruta);
-                    Locales localFin = localesRepository.findOne(localfinid);
+                    Locales localFin = localesRepository.findById(localfinid);
                     localFin.setRutaFin(ruta);
-                    Producto producto = productoRepository.findOne(productid);
+                    Producto producto = productoRepository.findById(productid);
                     producto.getRutas().add(ruta);
                     ruta.setFurgon(furgon);
                     ruta.setProducto(producto);
@@ -223,8 +223,8 @@ public class RutaController {
 	@DeleteMapping("/ruta/{id}")
 	public ResponseEntity deleteRuta(
 			@PathVariable(value = "id") Long rutaId){
-                if(rutaRepository.exists(rutaId)){
-                    Ruta ruta = rutaRepository.findOne(rutaId);
+                if(rutaRepository.existsById(rutaId)){
+                    Ruta ruta = rutaRepository.findById(rutaId);
                     for(Alerta a:ruta.getAlertas()){
                         a.setRuta(null);
                         alertaRepository.save(a);
