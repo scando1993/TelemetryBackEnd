@@ -26,14 +26,10 @@ public class Api {
         return findLastSms();
     }
 
-    @RequestMapping(
-            value = "/mensajes?year={year}&month={month}&day={day}", method = RequestMethod.GET)
+    @RequestMapping(value = "/mensajes?year={year}&month={month}&day={day}", method = RequestMethod.GET)
     public Object getSpecific(@PathVariable int year,@PathVariable String month, @PathVariable int day) {
         return findSpecificDay(year,month,day);
     }
-
-
-
 
     private Object findAllSms()  {
             MongoClient mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
