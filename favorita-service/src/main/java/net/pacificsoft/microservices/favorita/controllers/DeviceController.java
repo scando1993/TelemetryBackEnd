@@ -13,7 +13,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/api")
+//@RequestMapping("/api")
 public class DeviceController {
 
     @Autowired
@@ -24,9 +24,10 @@ public class DeviceController {
 
     @GetMapping("/device")
     public ResponseEntity getAllDevices() {
-        try {
+        try{
             return new ResponseEntity(deviceRepository.findAll(), HttpStatus.OK);
-        } catch (Exception e) {
+        }
+        catch(Exception e){
             return new ResponseEntity<String>("Resources not available.",
                     HttpStatus.NOT_FOUND);
         }
@@ -34,43 +35,40 @@ public class DeviceController {
 
     @GetMapping("/device/{id}")
     public ResponseEntity getDeviceById(
-            @PathVariable(value = "id") Long deviceId) {
-        if (deviceRepository.existsById(deviceId)) {
-            Device device = deviceRepository.findById(deviceId).get();
+            @PathVariable(value = "id") Long deviceId){
+        if(deviceRepository.exists(deviceId)){
+            Device device = deviceRepository.findOne(deviceId);
             return new ResponseEntity(device, HttpStatus.OK);
-        } else {
+        }
+        else{
             return new ResponseEntity<String>("Device #" + deviceId +
                     " does not exist.", HttpStatus.NOT_FOUND);
         }
     }
 
-    @PostMapping("/device/{trackingid}")
-    public ResponseEntity createDevice(@PathVariable(value = "trackingid") Long trackingid,
-                                       @Valid @RequestBody Device device) {
-        if (trackingRepository.existsById(trackingid)) {
-            Tracking tracking = trackingRepository.findById(trackingid).get();
-            tracking.getDevices().add(device);
-            device.setTracking(tracking);
+    @PostMapping("/device")
+    public ResponseEntity createDevice(@Valid @RequestBody Device device) {
+        try{
             Device d = deviceRepository.save(device);
-            trackingRepository.save(tracking);
             return new ResponseEntity(d, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<String>("Tracking #" + trackingid +
-                    " does not exist, isn't possible create new Device", HttpStatus.NOT_FOUND);
+        }
+        catch(Exception e){
+            return new ResponseEntity<String>("It's not possible create new Device", HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping("/device/{id}")
     public ResponseEntity updateDevice(
             @PathVariable(value = "id") Long deviceId,
-            @Valid @RequestBody Device deviceDetails) {
-        if (deviceRepository.existsById(deviceId)) {
-            Device device = deviceRepository.findById(deviceId).get();
+            @Valid @RequestBody Device deviceDetails){
+        if(deviceRepository.exists(deviceId)){
+            Device device = deviceRepository.findOne(deviceId);
             device.setFamily(deviceDetails.getFamily());
             device.setName(deviceDetails.getName());
             final Device updatedDevice = deviceRepository.save(device);
-            return new ResponseEntity(updatedDevice, HttpStatus.OK);
-        } else {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        else{
             return new ResponseEntity<String>("Device #" + deviceId +
                     " does not exist.", HttpStatus.NOT_FOUND);
         }
@@ -78,14 +76,17 @@ public class DeviceController {
 
     @DeleteMapping("/device/{id}")
     public ResponseEntity deleteDevice(
-            @PathVariable(value = "id") Long deviceId) {
-        if (deviceRepository.existsById(deviceId)) {
-            Device device = deviceRepository.findById(deviceId).get();
-            device.getTracking().getDevices().remove(device);
-            trackingRepository.save(device.getTracking());
+            @PathVariable(value = "id") Long deviceId){
+        if(deviceRepository.exists(deviceId)){
+            Device device = deviceRepository.findOne(deviceId);
+            for(Tracking t:device.getTrackings()){
+                t.setDevice(null);
+                trackingRepository.save(t);
+            }
             deviceRepository.delete(device);
             return new ResponseEntity(HttpStatus.OK);
-        } else {
+        }
+        else{
             return new ResponseEntity<String>("Device #" + deviceId +
                     " does not exist.", HttpStatus.NOT_FOUND);
         }

@@ -6,7 +6,7 @@
 package net.pacificsoft.microservices.favorita.repository;
 
 
-import net.pacificsoft.microservices.favorita.models.Formato;
+import net.pacificsoft.microservices.favorita.models.application.Formato;
 
 /**
  *

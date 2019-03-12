@@ -1,9 +1,5 @@
 package net.pacificsoft.microservices.favorita;
 
-import net.pacificsoft.microservices.favorita.models.Bodega;
-import net.pacificsoft.microservices.favorita.models.Formato;
-import net.pacificsoft.microservices.favorita.models.Locales;
-import net.pacificsoft.microservices.favorita.models.Ubicacion;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

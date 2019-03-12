@@ -1,16 +1,17 @@
 package net.pacificsoft.microservices.favorita.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Date;
 
 @Entity
-@Table (name = "tracking")
+@Table(name = "tracking")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Tracking implements Serializable{
@@ -20,14 +21,21 @@ public class Tracking implements Serializable{
 	private long id;
         @Column(name = "location", nullable = false)
 	private String location;
-        @Column(name = "temperature", nullable = false)
-        private float temperature;
         
-        @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            mappedBy = "tracking")
-        private Set<Device> devices = new HashSet<>();
+        @JsonIgnore
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "deviceID")
+        private Device device;
 
+        @JsonIgnore
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "locationGroupID")
+        private LocationGroup locationGroup;
+        
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        @Column(name = "dtm")
+        private Date dtm;
+        
         public long getId() {
             return id;
         }
@@ -44,20 +52,27 @@ public class Tracking implements Serializable{
             this.location = location;
         }
 
-        public float getTemperature() {
-            return temperature;
+        public Device getDevice() {
+            return device;
         }
 
-        public void setTemperature(float temperature) {
-            this.temperature = temperature;
+        public void setDevice(Device device) {
+            this.device = device;
         }
 
-        public Set<Device> getDevices() {
-            return devices;
+        public LocationGroup getLocationGroup() {
+            return locationGroup;
         }
 
-        public void setDevices(Set<Device> devices) {
-            this.devices = devices;
+        public void setLocationGroup(LocationGroup locationGroup) {
+            this.locationGroup = locationGroup;
+        }
+        
+        public Date getDtm() {
+            return dtm;
         }
 
+        public void setDtm(Date dtm) {
+            this.dtm = dtm;
+        }
 }

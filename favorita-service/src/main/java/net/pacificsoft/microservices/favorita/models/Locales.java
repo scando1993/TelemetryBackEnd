@@ -3,13 +3,16 @@ package net.pacificsoft.microservices.favorita.models;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import net.pacificsoft.microservices.favorita.models.application.Ciudad;
+import net.pacificsoft.microservices.favorita.models.application.Formato;
+import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table (name = "locales")
+@Table(name = "locales")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Locales implements Serializable{
@@ -25,13 +28,29 @@ public class Locales implements Serializable{
         private long latitude;
         @Column(name = "name", nullable = false)
 	private String name;
-        @Column(name = "place", nullable = false)
-        private String place;
+        @Column(name = "family", nullable = false)
+        private String family;
+        
 
         @JsonIgnore
         @ManyToOne(fetch = FetchType.EAGER)
-        @JoinColumn(name = "ubicacionID")
-        private Ubicacion ubication;
+        @JoinColumn(name = "ciudadID")
+        private Ciudad ciudad;
+        
+        @OneToOne(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "localInicio")
+        private Ruta rutaInicio;
+        
+        @OneToOne(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "localFin")
+        private Ruta rutaFin;
+        
+        @OneToOne(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "locales")
+        private Formato formato;
 
         public long getId() {
             return id;
@@ -72,24 +91,49 @@ public class Locales implements Serializable{
         public void setName(String name) {
             this.name = name;
         }
-
-        public String getPlace() {
-            return place;
+        
+        public String getFamily() {
+            return family;
         }
 
-        public void setPlace(String place) {
-            this.place = place;
+        public void setFamily(String family) {
+            this.family = family;
         }
 
-        public Ubicacion getUbication() {
-            return ubication;
+        public Ciudad getCiudad() {
+            return ciudad;
         }
 
-        public void setUbication(Ubicacion ubication) {
-            this.ubication = ubication;
+        public void setCiudad(Ciudad ciudad) {
+            this.ciudad = ciudad;
         }
 
+        public Ruta getRutaInicio() {
+            return rutaInicio;
+        }
+
+        public void setRutaInicio(Ruta rutaInicio) {
+            this.rutaInicio = rutaInicio;
+        }
+
+        public Ruta getRutaFin() {
+            return rutaFin;
+        }
+
+        public void setRutaFin(Ruta rutaFin) {
+            this.rutaFin = rutaFin;
+        }
+
+        public Formato getFormato() {
+            return formato;
+        }
+
+        public void setFormato(Formato formato) {
+            this.formato = formato;
+        }
+
+        
         public String toString(){
-            return "Locales: "+id+" "+numLoc + " "+length+" "+latitude+" "+name+" "+place;
+            return "Locales: "+id+" "+numLoc + " "+length+" "+latitude+" "+name+" ";
         }
 }
