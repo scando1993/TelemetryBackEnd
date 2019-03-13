@@ -46,6 +46,10 @@ public class Alerta implements Serializable{
     @JoinColumn(name = "deviceID")
     private Device device;
 
+    public Alerta(){
+        this.type_alert = null;
+        this.message = null;
+    }
     public Alerta(String type_alert, String message) {
         this.type_alert = type_alert;
         this.message = message;
@@ -53,9 +57,6 @@ public class Alerta implements Serializable{
         this.ruta = null;
     }
 
-    public Alerta() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     public long getId() {
         return id;

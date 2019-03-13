@@ -43,10 +43,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(FamilyController.class)
-@EnableJpaRepositories(basePackages = {"net.pacificsoft.microservices.favorita.models",
-                                       "net.pacificsoft.microservices.favorita.models.application",
-                                       "net.pacificsoft.microservices.favorita.repository",
-                                       "net.pacificsoft.microservices.favorita.repository.application"})
+//@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 public class FamilyControllerTest {
 
     @Autowired
