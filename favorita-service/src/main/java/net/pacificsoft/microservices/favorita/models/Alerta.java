@@ -46,6 +46,11 @@ public class Alerta implements Serializable{
     @JoinColumn(name = "deviceID")
     private Device device;
 
+    public Alerta(String type_alert, String message) {
+        this.type_alert = type_alert;
+        this.message = message;
+    }
+
     public long getId() {
         return id;
     }
@@ -84,6 +89,14 @@ public class Alerta implements Serializable{
 
     public void setDevice(Device device) {
         this.device = device;
+    }
+
+    public String getType_alert() {
+        return type_alert;
+    }
+
+    public void setType_alert(String type_alert) {
+        this.type_alert = type_alert;
     }
 
 }

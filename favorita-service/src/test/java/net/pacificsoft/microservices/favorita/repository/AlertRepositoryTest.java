@@ -1,6 +1,6 @@
 package net.pacificsoft.microservices.favorita.repository;
 
-import net.pacificsoft.microservices.favorita.models.Alert;
+import net.pacificsoft.microservices.favorita.models.Alerta;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,22 +14,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-class AlertRepositoryTest {
+class AlertaRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
-    private AlertRepository alertRepository;
+    private AlertaRepository alertRepository;
 
     @Test
-    public void whenFindByTypeAlert_thenReturnAlert(){
+    public void whenFindByTypeAlerta_thenReturnAlerta(){
         //Data given
-        Alert alert = new Alert();
+        Alerta alert = new Alerta();
         entityManager.persist(alert);
         entityManager.flush();
 
         //When
-        Alert found = alertRepository.findByType_alert(alert.getType_alert());
+        Alerta found = alertRepository.findByType_alert(alert.getType_alert());
 
         //then
         assertThat(found.getType_alert())
