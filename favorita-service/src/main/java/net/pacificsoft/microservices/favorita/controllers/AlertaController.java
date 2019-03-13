@@ -2,6 +2,8 @@ package net.pacificsoft.microservices.favorita.controllers;
 
 import net.pacificsoft.microservices.favorita.models.Device;
 import javax.validation.Valid;
+
+import net.pacificsoft.microservices.favorita.repository.application.RutaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

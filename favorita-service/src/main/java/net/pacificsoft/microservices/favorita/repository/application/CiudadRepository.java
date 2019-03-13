@@ -1,7 +1,7 @@
-package net.pacificsoft.microservices.favorita.repository;
+package net.pacificsoft.microservices.favorita.repository.application;
 
-import net.pacificsoft.microservices.favorita.models.Bodega;
-import net.pacificsoft.microservices.favorita.models.Ciudad;
+import net.pacificsoft.microservices.favorita.models.application.Bodega;
+import net.pacificsoft.microservices.favorita.models.application.Ciudad;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

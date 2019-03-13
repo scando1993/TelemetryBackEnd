@@ -1,6 +1,9 @@
-package net.pacificsoft.microservices.favorita.controllers;
+package net.pacificsoft.microservices.favorita.controllers.application;
 
 import javax.validation.Valid;
+
+import net.pacificsoft.microservices.favorita.models.application.Locales;
+import net.pacificsoft.microservices.favorita.repository.application.LocalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import net.pacificsoft.microservices.favorita.models.Ciudad;
-import net.pacificsoft.microservices.favorita.repository.CiudadRepository;
+import net.pacificsoft.microservices.favorita.models.application.Ciudad;
+import net.pacificsoft.microservices.favorita.repository.application.CiudadRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -63,7 +66,7 @@ public class LocalesController {
 	public ResponseEntity getLocalesById(
 			@PathVariable(value = "id") Long localesId){
 		if(localesRepository.existsById(localesId)){
-                    Locales l = localesRepository.findById(localesId);
+                    Locales l = localesRepository.findById(localesId).get();
                     JSONObject json = new JSONObject();
                     Ciudad c = l.getCiudad();
                     json.put("id", l.getId());
@@ -89,7 +92,7 @@ public class LocalesController {
                             @Valid @RequestBody Locales locales) {
             try{
                 if(ciudadRepository.existsById(ciudadid)){
-                    Ciudad ciudad = ciudadRepository.findById(ciudadid);
+                    Ciudad ciudad = ciudadRepository.findById(ciudadid).get();
                     ciudad.getLocales().add(locales);
                     locales.setCiudad(ciudad);
                     Locales l = localesRepository.save(locales);
@@ -126,8 +129,8 @@ public class LocalesController {
             try{
                 if(localesRepository.existsById(localesId) &&
                    ciudadRepository.existsById(ciudadId)){
-                    Locales locales = localesRepository.findById(localesId);
-                    Ciudad ciudad = ciudadRepository.findById(ciudadId);
+                    Locales locales = localesRepository.findById(localesId).get();
+                    Ciudad ciudad = ciudadRepository.findById(ciudadId).get();
                     locales.setLatitude(localesDetails.getLatitude());
                     locales.setLength(localesDetails.getLength());
                     locales.setName(localesDetails.getName());
@@ -153,7 +156,7 @@ public class LocalesController {
 	public ResponseEntity deleteLocales(
 			@PathVariable(value = "id") Long localesId){
                 if(localesRepository.existsById(localesId)){
-                    Locales locales = localesRepository.findById(localesId);
+                    Locales locales = localesRepository.findById(localesId).get();
                     locales.getCiudad().getLocales().remove(locales);
                     ciudadRepository.save(locales.getCiudad());
                     localesRepository.delete(locales);

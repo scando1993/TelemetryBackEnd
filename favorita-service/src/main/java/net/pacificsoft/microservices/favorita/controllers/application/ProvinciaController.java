@@ -1,4 +1,4 @@
-package net.pacificsoft.microservices.favorita.controllers;
+package net.pacificsoft.microservices.favorita.controllers.application;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.pacificsoft.microservices.favorita.models.Provincia;
-import net.pacificsoft.microservices.favorita.models.Zona;
-import net.pacificsoft.microservices.favorita.repository.ProvinciaRepository;
-import net.pacificsoft.microservices.favorita.repository.ZonaRepository;
+import net.pacificsoft.microservices.favorita.models.application.Provincia;
+import net.pacificsoft.microservices.favorita.models.application.Zona;
+import net.pacificsoft.microservices.favorita.repository.application.ProvinciaRepository;
+import net.pacificsoft.microservices.favorita.repository.application.ZonaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -43,7 +43,7 @@ public class ProvinciaController {
 	public ResponseEntity getProvinciaById(
 			@PathVariable(value = "id") Long provinciaId){
                 if(provinciaRepository.existsById(provinciaId)){
-                    Provincia provincia = provinciaRepository.findById(provinciaId);
+                    Provincia provincia = provinciaRepository.findById(provinciaId).get();
                     return new ResponseEntity(provincia, HttpStatus.OK);
                 }
 		else{
@@ -61,7 +61,7 @@ public class ProvinciaController {
                     return new ResponseEntity(p, HttpStatus.CREATED);
                 }
                 else if(zonaRepository.existsById(zonaid)){
-                    Zona zona = zonaRepository.findById(zonaid);
+                    Zona zona = zonaRepository.findById(zonaid).get();
                     zona.getProvincias().add(provincia);
                     provincia.setZona(zona);
                     Provincia p = provinciaRepository.save(provincia);
@@ -85,7 +85,7 @@ public class ProvinciaController {
 			@Valid @RequestBody Provincia provinciaDetails){
             try{
                 if(provinciaRepository.existsById(provinciaid)) {
-                    Provincia provincia = provinciaRepository.findById(provinciaid);
+                    Provincia provincia = provinciaRepository.findById(provinciaid).get();
                     provincia.setName(provinciaDetails.getName());
                     final Provincia updatedProvincia = provinciaRepository.save(provincia);
                     return new ResponseEntity(HttpStatus.OK);
@@ -105,7 +105,7 @@ public class ProvinciaController {
 	public ResponseEntity deleteProvincia(
                                 @PathVariable(value = "id") Long provinciaid){
                 if(provinciaRepository.existsById(provinciaid)){
-                    Provincia provincia = provinciaRepository.findById(provinciaid);
+                    Provincia provincia = provinciaRepository.findById(provinciaid).get();
                     provinciaRepository.delete(provincia);
                     return new ResponseEntity(HttpStatus.OK);
                 }

@@ -1,4 +1,4 @@
-package net.pacificsoft.microservices.favorita.controllers;
+package net.pacificsoft.microservices.favorita.controllers.application;
 
 
 import javax.validation.Valid;
@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.microservices.favorita.repository.RutaRepository;
+import net.pacificsoft.microservices.favorita.repository.application.RutaRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import net.pacificsoft.microservices.favorita.models.Producto;
-import net.pacificsoft.microservices.favorita.models.Ruta;
-import net.pacificsoft.microservices.favorita.repository.ProductoRepository;
+import net.pacificsoft.microservices.favorita.models.application.Producto;
+import net.pacificsoft.microservices.favorita.models.application.Ruta;
+import net.pacificsoft.microservices.favorita.repository.application.ProductoRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -63,7 +63,7 @@ public class ProductoController {
 	public ResponseEntity getProductoById(
 			@PathVariable(value = "id") Long productoId){
 		if(productoRepository.existsById(productoId)){
-                    Producto p = productoRepository.findById(productoId);
+                    Producto p = productoRepository.findById(productoId).get();
                     JSONObject json = new JSONObject();
                     json.put("id", p.getId());
                     json.put("name", p.getName());
@@ -104,7 +104,7 @@ public class ProductoController {
 			@Valid @RequestBody Producto productoDetails){
             try{
                 if(productoRepository.existsById(productoId)){
-                    Producto producto = productoRepository.findById(productoId);
+                    Producto producto = productoRepository.findById(productoId).get();
                     producto.setName(productoDetails.getName());
                     producto.setTemp_max(productoDetails.getTemp_max());
                     producto.setTemp_min(productoDetails.getTemp_min());
@@ -127,7 +127,7 @@ public class ProductoController {
 	public ResponseEntity deleteProducto(
 			@PathVariable(value = "id") Long productoId){
                 if(productoRepository.existsById(productoId)){
-                    Producto producto = productoRepository.findById(productoId);
+                    Producto producto = productoRepository.findById(productoId).get();
                     if(producto.getRutas().size()>0){
                         Set<Ruta> ubFs = producto.getRutas();
                         for(Ruta r:ubFs){
