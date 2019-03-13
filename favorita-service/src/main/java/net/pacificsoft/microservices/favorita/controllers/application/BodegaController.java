@@ -1,17 +1,25 @@
 package net.pacificsoft.microservices.favorita.controllers.application;
 
-import net.pacificsoft.microservices.favorita.repository.application.BodegaRepository;
-import net.pacificsoft.microservices.favorita.repository.application.CiudadRepository;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import net.pacificsoft.microservices.favorita.models.application.Bodega;
+import net.pacificsoft.microservices.favorita.repository.application.BodegaRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import net.pacificsoft.microservices.favorita.models.application.Ciudad;
+import net.pacificsoft.microservices.favorita.repository.application.CiudadRepository;
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -52,8 +60,8 @@ public class BodegaController {
 	@GetMapping("/bodega/{id}")
 	public ResponseEntity getBodegaById(
 			@PathVariable(value = "id") Long bodegaId){
-                if(bodegaRepository.exists(bodegaId)){
-                    Bodega b = bodegaRepository.findOne(bodegaId);
+                if(bodegaRepository.existsById(bodegaId)){
+                    Bodega b = bodegaRepository.findById(bodegaId).get();
                     JSONObject json = new JSONObject();  
                     Ciudad c = b.getCiudad();
                     json.put("id", b.getId());
@@ -74,8 +82,8 @@ public class BodegaController {
 	public ResponseEntity createBodega(@PathVariable(value = "ciudadid") Long ciudadid,
                                  @Valid @RequestBody Bodega bodega) {
             try{
-                if(ciudadRepository.exists(ciudadid)){
-                    Ciudad ciudad = ciudadRepository.findOne(ciudadid);
+                if(ciudadRepository.existsById(ciudadid)){
+                    Ciudad ciudad = ciudadRepository.findById(ciudadid).get();
                     ciudad.getBodegas().add(bodega);
                     bodega.setCiudad(ciudad);
                     Bodega b = bodegaRepository.save(bodega);
@@ -106,10 +114,10 @@ public class BodegaController {
                         @PathVariable(value = "ciudadid") Long ciudadId,
 			@Valid @RequestBody Bodega bodegaDetails){
             try{
-                if(bodegaRepository.exists(bodegaId) &&
-                   ciudadRepository.exists(ciudadId)) {
-                    Bodega bodega = bodegaRepository.findOne(bodegaId);
-                    Ciudad ciudad = ciudadRepository.findOne(ciudadId);
+                if(bodegaRepository.existsById(bodegaId) &&
+                   ciudadRepository.existsById(ciudadId)) {
+                    Bodega bodega = bodegaRepository.findById(bodegaId).get();
+                    Ciudad ciudad = ciudadRepository.findById(ciudadId).get();
                     bodega.setName(bodegaDetails.getName());
                     bodega.setCiudad(ciudad);
                     ciudad.getBodegas().add(bodega);
@@ -131,8 +139,8 @@ public class BodegaController {
         @DeleteMapping("/bodega/{id}")
 	public ResponseEntity deleteBodega(
                                 @PathVariable(value = "id") Long bodegaId){
-                if(bodegaRepository.exists(bodegaId)){
-                    Bodega bodega = bodegaRepository.findOne(bodegaId);
+                if(bodegaRepository.existsById(bodegaId)){
+                    Bodega bodega = bodegaRepository.findById(bodegaId).get();
                     bodega.getCiudad().getBodegas().remove(bodega);
                     ciudadRepository.save(bodega.getCiudad());
                     bodegaRepository.delete(bodega);

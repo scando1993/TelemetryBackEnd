@@ -4,14 +4,27 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.*;
+import com.sun.xml.internal.bind.Locatable;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "tracking")
+@Table (name = "tracking")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Tracking implements Serializable{
@@ -31,6 +44,11 @@ public class Tracking implements Serializable{
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "locationGroupID")
         private LocationGroup locationGroup;
+        
+        @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "tracking")
+        private Set<LocationPriority> locationPrioritys = new HashSet<>();
         
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "dtm")
@@ -74,5 +92,13 @@ public class Tracking implements Serializable{
 
         public void setDtm(Date dtm) {
             this.dtm = dtm;
+        }
+
+        public Set<LocationPriority> getLocationPrioritys() {
+            return locationPrioritys;
+        }
+
+        public void setLocationPrioritys(Set<LocationPriority> locationPrioritys) {
+            this.locationPrioritys = locationPrioritys;
         }
 }

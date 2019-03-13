@@ -4,19 +4,31 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import net.pacificsoft.microservices.favorita.models.Alert;
-import net.pacificsoft.microservices.favorita.models.Device;
-import net.pacificsoft.microservices.favorita.models.Locales;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import net.pacificsoft.microservices.favorita.models.Alerta;
+import net.pacificsoft.microservices.favorita.models.Device;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "ruta")
+@Table (name = "ruta")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Ruta implements Serializable{
@@ -57,7 +69,7 @@ public class Ruta implements Serializable{
         @OneToMany(fetch = FetchType.EAGER,
             cascade =  CascadeType.ALL,
             mappedBy = "ruta")
-        private Set<Alert> alerts = new HashSet<>();
+        private Set<Alerta> alertas = new HashSet<>();
         
         public long getId() {
             return id;
@@ -123,12 +135,12 @@ public class Ruta implements Serializable{
             this.localFin = localFin;
         }
 
-        public Set<Alert> getAlerts() {
-            return alerts;
+        public Set<Alerta> getAlertas() {
+            return alertas;
         }
 
-        public void setAlerts(Set<Alert> alerts) {
-            this.alerts = alerts;
+        public void setAlertas(Set<Alerta> alertas) {
+            this.alertas = alertas;
         }   
         
         

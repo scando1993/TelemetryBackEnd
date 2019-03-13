@@ -1,5 +1,6 @@
-package net.pacificsoft.microservices.favorita;
+package net.pacificsoft.microservices.favorita.test;
 
+import net.pacificsoft.microservices.favorita.Application;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UbicacionTest {
+public class WifiScanTest {
 
 	@Autowired
 	private TestRestTemplate restTemplate;
@@ -38,7 +39,7 @@ public class UbicacionTest {
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
-		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/ubicacion",
+		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/bodega",
 				HttpMethod.GET, entity, String.class);
 		
 		assertNotNull(response.getBody());
@@ -46,29 +47,25 @@ public class UbicacionTest {
 
 	@Test
 	public void testGetUserById() {
-		Ubicacion ubicacion = restTemplate.getForObject(getRootUrl() + "/ubicacion/1", Ubicacion.class);
-		System.out.println(ubicacion.getZone());
-		assertNotNull(ubicacion);
+		Bodega bodega = restTemplate.getForObject(getRootUrl() + "/bodega/", Bodega.class);
+		System.out.println(bodega.getName());
+		assertNotNull(bodega);
 	}
 //
-	@Test
-	public void testCreateUser() {
-		Ubicacion ubicacion = new Ubicacion();
-		ubicacion.setCity("ciudad");
-		ubicacion.setProvince("provincia");
-		ubicacion.setRegional("rgional");
-                Bodega bodega = new Bodega();
-                Locales locales = new Locales();
-                Formato formato = new Formato();
-                ubicacion.setBodegas(null);
-                ubicacion.setLocales(null);
-                ubicacion.setFormatos(null);
-
-		ResponseEntity<Ubicacion> postResponse = restTemplate.postForEntity(getRootUrl() + "/Ubicacion", ubicacion, Ubicacion.class);
-		assertNotNull(postResponse);
-		assertNotNull(postResponse.getBody());
-	}
-
+//	@Test
+//	public void testCreateUser() {
+//		User user = new User();
+//		user.setEmailId("admin@gmail.com");
+//		user.setFirstName("admin");
+//		user.setLastName("admin");
+//		user.setCreatedBy("admin");
+//		user.setUpdatedby("admin");
+//
+//		ResponseEntity<User> postResponse = restTemplate.postForEntity(getRootUrl() + "/users", user, User.class);
+//		assertNotNull(postResponse);
+//		assertNotNull(postResponse.getBody());
+//	}
+//
 //	@Test
 //	public void testUpdatePost() {
 //		int id = 1;

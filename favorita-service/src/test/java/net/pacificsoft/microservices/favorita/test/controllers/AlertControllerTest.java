@@ -1,4 +1,4 @@
-package net.pacificsoft.microservices.favorita.controllers;
+package net.pacificsoft.microservices.favorita.test.controllers;
 
 import net.pacificsoft.microservices.favorita.Application;
 import net.pacificsoft.microservices.favorita.models.Alert;

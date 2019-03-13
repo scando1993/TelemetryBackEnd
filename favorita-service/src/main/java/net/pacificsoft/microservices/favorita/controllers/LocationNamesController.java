@@ -1,19 +1,35 @@
 package net.pacificsoft.microservices.favorita.controllers;
 
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.validation.Valid;
+
 import net.pacificsoft.microservices.favorita.models.LocationNames;
 import net.pacificsoft.microservices.favorita.models.Message;
-import net.pacificsoft.microservices.favorita.models.Prediction;
 import net.pacificsoft.microservices.favorita.repository.LocationNamesRepository;
 import net.pacificsoft.microservices.favorita.repository.MessageRepository;
-import net.pacificsoft.microservices.favorita.repository.PredictionsRepository;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.List;
-import java.util.Set;
+import net.pacificsoft.microservices.favorita.models.Prediction;
+import net.pacificsoft.microservices.favorita.models.Probabilities;
+import net.pacificsoft.microservices.favorita.repository.PredictionsRepository;
+import net.pacificsoft.microservices.favorita.repository.LocationNamesRepository;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -56,8 +72,8 @@ public class LocationNamesController {
             @PathVariable(value = "id") Long locationNameId,
             @Valid @RequestBody LocationNames locationNameDetails){
         try{
-            if(locationNamesRepository.exists(locationNameId)){
-                LocationNames locationName = locationNamesRepository.findOne(locationNameId);
+            if(locationNamesRepository.existsById(locationNameId)){
+                LocationNames locationName = locationNamesRepository.findById(locationNameId).get();
                 locationName.setName(locationNameDetails.getName());
                 locationName.setIdname(locationNameDetails.getIdname());
                 final LocationNames updateLocationName = locationNamesRepository.save(locationName);
@@ -76,8 +92,8 @@ public class LocationNamesController {
     @DeleteMapping("/locationNames/{id}")
     public ResponseEntity deleteLocationName(
             @PathVariable(value = "id") Long locationNameId){
-        if(locationNamesRepository.exists(locationNameId)){
-            LocationNames locationName = locationNamesRepository.findOne(locationNameId);
+        if(locationNamesRepository.existsById(locationNameId)){
+            LocationNames locationName = locationNamesRepository.findById(locationNameId).get();
             try {
                 if(locationName.getPrediction().size() != 0){
                     Set<Prediction> p =locationName.getPrediction();

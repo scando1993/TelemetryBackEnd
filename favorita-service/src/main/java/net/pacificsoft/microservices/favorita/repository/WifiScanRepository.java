@@ -1,10 +1,10 @@
 package net.pacificsoft.microservices.favorita.repository;
 
-import net.pacificsoft.microservices.favorita.models.WifiScan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import net.pacificsoft.microservices.favorita.models.WifiScan;
 
 @Repository
-public interface WifiScanRepository extends JpaRepository<WifiScan, Long> {
+public interface WifiScanRepository extends JpaRepository<WifiScan, Long>{
 
 }
