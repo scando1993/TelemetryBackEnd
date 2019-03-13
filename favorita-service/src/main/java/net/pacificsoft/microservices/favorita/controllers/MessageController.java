@@ -1,20 +1,28 @@
 package net.pacificsoft.microservices.favorita.controllers;
 
-import net.pacificsoft.microservices.favorita.models.LocationNames;
-import net.pacificsoft.microservices.favorita.models.Message;
-import net.pacificsoft.microservices.favorita.models.MessageGuess;
-import net.pacificsoft.microservices.favorita.models.Prediction;
-import net.pacificsoft.microservices.favorita.repository.LocationNamesRepository;
-import net.pacificsoft.microservices.favorita.repository.MessageGuessRepository;
-import net.pacificsoft.microservices.favorita.repository.MessageRepository;
-import net.pacificsoft.microservices.favorita.repository.PredictionsRepository;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.validation.Valid;
+
+import net.pacificsoft.microservices.favorita.models.*;
+import net.pacificsoft.microservices.favorita.repository.*;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -49,10 +57,10 @@ public class MessageController {
                                        @PathVariable(value = "guessID") Long messageGuessID,
                                        @Valid @RequestBody Message message) {
         try{
-            if(predictionsRepository.exists(predictionID) && locationNamesRepository.exists(locationNameId) && messageGuessRepository.exists(messageGuessID)){
-                Prediction prediction = predictionsRepository.findOne(predictionID);
-                LocationNames locationName = locationNamesRepository.findOne(locationNameId);
-                MessageGuess messageGuess = messageGuessRepository.findOne(messageGuessID);
+            if(predictionsRepository.existsById(predictionID) && locationNamesRepository.existsById(locationNameId) && messageGuessRepository.existsById(messageGuessID)){
+                Prediction prediction = predictionsRepository.findById(predictionID).get();
+                LocationNames locationName = locationNamesRepository.findById(locationNameId).get();
+                MessageGuess messageGuess = messageGuessRepository.findById(messageGuessID).get();
 
                 message.getPredictions().add(prediction);
                 message.setLocationNames(locationName);

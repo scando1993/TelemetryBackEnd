@@ -1,18 +1,29 @@
-package net.pacificsoft.microservices.favorita.controllers.application;
+package net.pacificsoft.microservices.favorita.controllers;
 
-
-import net.pacificsoft.springbootcrudrest.model.Furgon;
-import net.pacificsoft.springbootcrudrest.model.Ruta;
-import net.pacificsoft.springbootcrudrest.repository.FurgonRepository;
-import net.pacificsoft.springbootcrudrest.repository.RutaRepository;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import net.pacificsoft.microservices.favorita.models.Furgon;
+import net.pacificsoft.microservices.favorita.repository.FurgonRepository;
+import net.pacificsoft.microservices.favorita.repository.RutaRepository;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import net.pacificsoft.microservices.favorita.models.Ruta;
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -73,8 +84,8 @@ public class FurgonController {
 	@GetMapping("/furgon/{id}")
 	public ResponseEntity getFurgonById(
 			@PathVariable(value = "id") Long furgonId){
-		if(furgonRepository.exists(furgonId)){
-                    Furgon f = furgonRepository.findOne(furgonId);
+		if(furgonRepository.existsById(furgonId)){
+                    Furgon f = furgonRepository.findById(furgonId);
                     JSONObject json = new JSONObject();
                     JSONObject resp = new JSONObject();
                     Set<Map<String, Object>> ubs = new HashSet();
@@ -154,8 +165,8 @@ public class FurgonController {
 			@PathVariable(value = "id") Long furgonId,
 			@Valid @RequestBody Furgon furgonDetails){
             try{
-                if(furgonRepository.exists(furgonId)){
-                    Furgon furgon = furgonRepository.findOne(furgonId);
+                if(furgonRepository.existsById(furgonId)){
+                    Furgon furgon = furgonRepository.findById(furgonId);
                     furgon.setNumFurgon(furgonDetails.getNumFurgon());
                     furgon.setName(furgonDetails.getName());
                     final Furgon updatedFurgon = furgonRepository.save(furgon);
@@ -174,8 +185,8 @@ public class FurgonController {
 	@DeleteMapping("/furgon/{id}")
 	public ResponseEntity deleteFurgon(
 			@PathVariable(value = "id") Long furgonId){
-                if(furgonRepository.exists(furgonId)){
-                    Furgon furgon = furgonRepository.findOne(furgonId);
+                if(furgonRepository.existsById(furgonId)){
+                    Furgon furgon = furgonRepository.findById(furgonId);
                     if(furgon.getRutas().size()>0){
                         Set<Ruta> ubFs = furgon.getRutas();
                         for(Ruta r:ubFs){
