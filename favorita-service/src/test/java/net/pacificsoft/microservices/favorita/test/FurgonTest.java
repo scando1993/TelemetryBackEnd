@@ -1,5 +1,7 @@
-package net.pacificsoft.microservices.favorita;
+package net.pacificsoft.microservices.favorita.test;
 
+import net.pacificsoft.microservices.favorita.Application;
+import net.pacificsoft.microservices.favorita.models.application.Bodega;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class FormatoTest {
+public class FurgonTest {
 
 	@Autowired
 	private TestRestTemplate restTemplate;
