@@ -25,6 +25,7 @@ import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import net.pacificsoft.microservices.favorita.models.Tracking;
 import net.pacificsoft.microservices.favorita.repository.LocationGroupRepository;
 import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -74,7 +75,7 @@ public class LocationGroupController {
 
 	@GetMapping("/locationGroup/{id}")
 	public ResponseEntity getLocationGroupById(
-			@PathVariable(value = "id") Long locationId){
+			@PathVariable(value = "id") Long locationId) throws JSONException{
 		if(locationGroupRepository.existsById(locationId)){
                     LocationGroup lg = locationGroupRepository.findById(locationId).get();
                     JSONObject json = new JSONObject();
