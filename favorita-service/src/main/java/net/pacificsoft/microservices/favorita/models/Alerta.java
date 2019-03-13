@@ -46,29 +46,28 @@ public class Alerta implements Serializable{
     @JoinColumn(name = "deviceID")
     private Device device;
 
-
-    public String getType_alert() {
-        return type_alert;
-    }
-
-    public void setType_alert(String type_alert) {
-        this.type_alert = type_alert;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getTipoAlerta() {
+        return type_alert;
+    }
+
+    public void setTipoAlerta(String tipo_Alerta) {
+        this.type_alert = tipo_Alerta;
+    }
+
+    public String getMensaje() {
+        return message;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.message = mensaje;
     }
 
     public Ruta getRuta() {
