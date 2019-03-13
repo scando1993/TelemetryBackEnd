@@ -1,6 +1,7 @@
 package net.pacificsoft.microservices.favorita.test;
 
 import net.pacificsoft.microservices.favorita.Application;
+import net.pacificsoft.microservices.favorita.models.application.Bodega;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
