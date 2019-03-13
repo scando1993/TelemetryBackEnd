@@ -39,7 +39,14 @@ public class LocationGroup implements Serializable{
             fetch = FetchType.EAGER,
             mappedBy = "locationGroup")
         private Set<Tracking> trackings = new HashSet<>();
-        
+
+        public LocationGroup(){
+            this.name= null;
+        }
+        public LocationGroup(String name) {
+            this.name = name;
+        }
+
         public long getId() {
             return id;
         }
