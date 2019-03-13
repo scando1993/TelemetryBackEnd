@@ -1,4 +1,4 @@
-package net.pacificsoft.microservices.favorita.controllers;
+package net.pacificsoft.microservices.favorita.controllers.application;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.microservices.favorita.models.Bodega;
-import net.pacificsoft.microservices.favorita.repository.BodegaRepository;
+import net.pacificsoft.microservices.favorita.models.application.Bodega;
+import net.pacificsoft.microservices.favorita.repository.application.BodegaRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import net.pacificsoft.microservices.favorita.models.Ciudad;
-import net.pacificsoft.microservices.favorita.repository.CiudadRepository;
+import net.pacificsoft.microservices.favorita.models.application.Ciudad;
+import net.pacificsoft.microservices.favorita.repository.application.CiudadRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -61,7 +61,7 @@ public class BodegaController {
 	public ResponseEntity getBodegaById(
 			@PathVariable(value = "id") Long bodegaId){
                 if(bodegaRepository.existsById(bodegaId)){
-                    Bodega b = bodegaRepository.findById(bodegaId);
+                    Bodega b = bodegaRepository.findById(bodegaId).get();
                     JSONObject json = new JSONObject();  
                     Ciudad c = b.getCiudad();
                     json.put("id", b.getId());
@@ -83,7 +83,7 @@ public class BodegaController {
                                  @Valid @RequestBody Bodega bodega) {
             try{
                 if(ciudadRepository.existsById(ciudadid)){
-                    Ciudad ciudad = ciudadRepository.findById(ciudadid);
+                    Ciudad ciudad = ciudadRepository.findById(ciudadid).get();
                     ciudad.getBodegas().add(bodega);
                     bodega.setCiudad(ciudad);
                     Bodega b = bodegaRepository.save(bodega);
@@ -116,8 +116,8 @@ public class BodegaController {
             try{
                 if(bodegaRepository.existsById(bodegaId) &&
                    ciudadRepository.existsById(ciudadId)) {
-                    Bodega bodega = bodegaRepository.findById(bodegaId);
-                    Ciudad ciudad = ciudadRepository.findById(ciudadId);
+                    Bodega bodega = bodegaRepository.findById(bodegaId).get();
+                    Ciudad ciudad = ciudadRepository.findById(ciudadId).get();
                     bodega.setName(bodegaDetails.getName());
                     bodega.setCiudad(ciudad);
                     ciudad.getBodegas().add(bodega);
@@ -140,7 +140,7 @@ public class BodegaController {
 	public ResponseEntity deleteBodega(
                                 @PathVariable(value = "id") Long bodegaId){
                 if(bodegaRepository.existsById(bodegaId)){
-                    Bodega bodega = bodegaRepository.findById(bodegaId);
+                    Bodega bodega = bodegaRepository.findById(bodegaId).get();
                     bodega.getCiudad().getBodegas().remove(bodega);
                     ciudadRepository.save(bodega.getCiudad());
                     bodegaRepository.delete(bodega);

@@ -1,4 +1,4 @@
-package net.pacificsoft.microservices.favorita.models;
+package net.pacificsoft.microservices.favorita.models.application;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -22,6 +22,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import net.pacificsoft.microservices.favorita.models.Alerta;
+import net.pacificsoft.microservices.favorita.models.Device;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity

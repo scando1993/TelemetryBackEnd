@@ -1,6 +1,6 @@
-package net.pacificsoft.microservices.favorita.repository;
+package net.pacificsoft.microservices.favorita.repository.application;
 
-import net.pacificsoft.microservices.favorita.models.Ruta;
+import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

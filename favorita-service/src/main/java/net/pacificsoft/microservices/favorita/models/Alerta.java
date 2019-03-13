@@ -18,6 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -26,62 +28,62 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Alerta implements Serializable{
 
-	@Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-        @Column(name = "type_alert", nullable = false)
-	private String type_alert;
-        @Column(name = "message", nullable = false)
-        private String message;
-        
-        @JsonIgnore
-        @ManyToOne(fetch = FetchType.EAGER)
-        @JoinColumn(name = "rutaID")
-        private Ruta ruta;
-        
-        @JsonIgnore
-        @ManyToOne(fetch = FetchType.EAGER)
-        @JoinColumn(name = "deviceID")
-        private Device device;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column(name = "type_alert", nullable = false)
+    private String type_alert;
+    @Column(name = "message", nullable = false)
+    private String message;
 
-        public long getId() {
-            return id;
-        }
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "rutaID")
+    private Ruta ruta;
 
-        public void setId(long id) {
-            this.id = id;
-        }
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "deviceID")
+    private Device device;
 
-        public String getTipoAlerta() {
-            return type_alert;
-        }
+    public long getId() {
+        return id;
+    }
 
-        public void setTipoAlerta(String tipo_Alerta) {
-            this.type_alert = tipo_Alerta;
-        }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-        public String getMensaje() {
-            return message;
-        }
+    public String getTipoAlerta() {
+        return type_alert;
+    }
 
-        public void setMensaje(String mensaje) {
-            this.message = mensaje;
-        }
+    public void setTipoAlerta(String tipo_Alerta) {
+        this.type_alert = tipo_Alerta;
+    }
 
-        public Ruta getRuta() {
-            return ruta;
-        }
+    public String getMensaje() {
+        return message;
+    }
 
-        public void setRuta(Ruta ruta) {
-            this.ruta = ruta;
-        }
+    public void setMensaje(String mensaje) {
+        this.message = mensaje;
+    }
 
-        public Device getDevice() {
-            return device;
-        }
+    public Ruta getRuta() {
+        return ruta;
+    }
 
-        public void setDevice(Device device) {
-            this.device = device;
-        }
-   
+    public void setRuta(Ruta ruta) {
+        this.ruta = ruta;
+    }
+
+    public Device getDevice() {
+        return device;
+    }
+
+    public void setDevice(Device device) {
+        this.device = device;
+    }
+
 }

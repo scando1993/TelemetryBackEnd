@@ -1,4 +1,4 @@
-package net.pacificsoft.microservices.favorita.models;
+package net.pacificsoft.microservices.favorita.models.application;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;

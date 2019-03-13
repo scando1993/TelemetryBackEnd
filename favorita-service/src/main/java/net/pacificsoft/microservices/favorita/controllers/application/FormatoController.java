@@ -1,6 +1,9 @@
-package net.pacificsoft.microservices.favorita.controllers;
+package net.pacificsoft.microservices.favorita.controllers.application;
 
 import javax.validation.Valid;
+
+import net.pacificsoft.microservices.favorita.models.application.Locales;
+import net.pacificsoft.microservices.favorita.repository.application.LocalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,15 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.microservices.favorita.models.Formato;
-import net.pacificsoft.microservices.favorita.repository.FormatoRepository;
+import net.pacificsoft.microservices.favorita.models.application.Formato;
+import net.pacificsoft.microservices.favorita.repository.application.FormatoRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import net.pacificsoft.microservices.favorita.models.Locales;
-import net.pacificsoft.microservices.favorita.repository.LocalesRepository;
+
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -58,7 +59,7 @@ public class FormatoController {
 	public ResponseEntity getFormatoById(
 			@PathVariable(value = "id") Long formatoId){
 		if(formatoRepository.existsById(formatoId)){
-                    Formato f = formatoRepository.findById(formatoId);
+                    Formato f = formatoRepository.findById(formatoId).get();
                     JSONObject json = new JSONObject();
                     json.put("id", f.getId());
                     json.put("name",f.getName());
@@ -77,7 +78,7 @@ public class FormatoController {
                                   @Valid @RequestBody Formato formato) {
             try{
                 if(localesRepository.existsById(localesid)){
-                    Locales locales = localesRepository.findById(localesid);
+                    Locales locales = localesRepository.findById(localesid).get();
                     if(locales.getFormato()==null){
                         locales.setFormato(formato);
                         formato.setLocales(locales);
@@ -111,9 +112,9 @@ public class FormatoController {
             try{
                 if(formatoRepository.existsById(formatoid) &&
                    localesRepository.existsById(localesid)){
-                    Locales locales = localesRepository.findById(localesid);
+                    Locales locales = localesRepository.findById(localesid).get();
                     if(locales.getFormato()==null){
-                        Formato formato = formatoRepository.findById(formatoid);
+                        Formato formato = formatoRepository.findById(formatoid).get();
                         formato.setName(formatoDetails.getName());
                         formato.setCode(formatoDetails.getCode());
                         formato.setLocales(locales);
@@ -139,7 +140,7 @@ public class FormatoController {
 	public ResponseEntity deleteFormato(
 			@PathVariable(value = "id") Long formatoId){
                 if(formatoRepository.existsById(formatoId)){
-                    Formato formato = formatoRepository.findById(formatoId);
+                    Formato formato = formatoRepository.findById(formatoId).get();
                     formato.getLocales().setFormato(null);
                     localesRepository.save(formato.getLocales());
                     formatoRepository.delete(formato);

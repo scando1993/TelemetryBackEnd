@@ -1,4 +1,4 @@
-package net.pacificsoft.microservices.favorita.controllers;
+package net.pacificsoft.microservices.favorita.controllers.application;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.microservices.favorita.models.Ciudad;
-import net.pacificsoft.microservices.favorita.models.Provincia;
-import net.pacificsoft.microservices.favorita.repository.CiudadRepository;
-import net.pacificsoft.microservices.favorita.repository.ProvinciaRepository;
+import net.pacificsoft.microservices.favorita.models.application.Ciudad;
+import net.pacificsoft.microservices.favorita.models.application.Provincia;
+import net.pacificsoft.microservices.favorita.repository.application.CiudadRepository;
+import net.pacificsoft.microservices.favorita.repository.application.ProvinciaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -43,7 +43,7 @@ public class CiudadController {
 	public ResponseEntity getCiudadById(
 			@PathVariable(value = "id") Long ciudadid){
                 if(ciudadRepository.existsById(ciudadid)){
-                    Ciudad ciudad = ciudadRepository.findById(ciudadid);
+                    Ciudad ciudad = ciudadRepository.findById(ciudadid).get();
                     return new ResponseEntity(ciudad, HttpStatus.OK);
                 }
 		else{
@@ -57,7 +57,7 @@ public class CiudadController {
                                  @Valid @RequestBody Ciudad ciudad) {
             try{
                 if(provinciaRepository.existsById(provinciaid)){
-                    Provincia provincia = provinciaRepository.findById(provinciaid);
+                    Provincia provincia = provinciaRepository.findById(provinciaid).get();
                     ciudad.setProvincia(provincia);
                     provincia.getCiudades().add(ciudad);
                     Ciudad c = ciudadRepository.save(ciudad);
@@ -81,7 +81,7 @@ public class CiudadController {
 			@Valid @RequestBody Ciudad ciudadDetails){
             try{
                 if(ciudadRepository.existsById(ciudadid)) {
-                    Ciudad ciudad = ciudadRepository.findById(ciudadid);
+                    Ciudad ciudad = ciudadRepository.findById(ciudadid).get();
                     ciudad.setName(ciudadDetails.getName());
                     final Ciudad updatedCiudad = ciudadRepository.save(ciudad);
                     return new ResponseEntity(HttpStatus.OK);
@@ -101,7 +101,7 @@ public class CiudadController {
 	public ResponseEntity deleteCiudad(
                                 @PathVariable(value = "id") Long ciudadid){
                 if(ciudadRepository.existsById(ciudadid)){
-                    Ciudad ciudad = ciudadRepository.findById(ciudadid);
+                    Ciudad ciudad = ciudadRepository.findById(ciudadid).get();
                     ciudadRepository.delete(ciudad);
                     return new ResponseEntity(HttpStatus.OK);
                 }

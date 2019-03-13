@@ -19,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table (name = "device")
