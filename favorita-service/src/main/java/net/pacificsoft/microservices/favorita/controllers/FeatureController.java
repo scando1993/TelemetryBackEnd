@@ -3,18 +3,9 @@ package net.pacificsoft.microservices.favorita.controllers;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.microservices.favorita.models.Device;
-import net.pacificsoft.microservices.favorita.models.Tracking;
-import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
 import net.pacificsoft.microservices.favorita.repository.FeaturesRepository;
-import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -25,10 +16,6 @@ public class FeatureController {
 	
 	@Autowired
 	private FeaturesRepository featuresRepository;
-        
-        @Autowired
-	private TrackingRepository trackingRepository;
-	
 	@GetMapping("/features")
 	public ResponseEntity getAllDevices() {
 		try{

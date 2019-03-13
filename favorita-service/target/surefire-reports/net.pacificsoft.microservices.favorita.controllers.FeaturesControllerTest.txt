@@ -1,0 +1,10 @@
+-------------------------------------------------------------------------------
+Test set: net.pacificsoft.microservices.favorita.controllers.FeaturesControllerTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 7.584 s <<< FAILURE! - in net.pacificsoft.microservices.favorita.controllers.FeaturesControllerTest
+givenAlertas_whenGetAlertas_thenReturnJSONArray(net.pacificsoft.microservices.favorita.controllers.FeaturesControllerTest)  Time elapsed: 0.461 s  <<< FAILURE!
+java.lang.AssertionError: No value at JSON path "$[2].mensaje"
+	at net.pacificsoft.microservices.favorita.controllers.FeaturesControllerTest.givenAlertas_whenGetAlertas_thenReturnJSONArray(FeaturesControllerTest.java:62)
+Caused by: com.jayway.jsonpath.PathNotFoundException: No results for path: $[2]['mensaje']
+	at net.pacificsoft.microservices.favorita.controllers.FeaturesControllerTest.givenAlertas_whenGetAlertas_thenReturnJSONArray(FeaturesControllerTest.java:62)
+
