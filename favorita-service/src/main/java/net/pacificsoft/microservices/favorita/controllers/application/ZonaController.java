@@ -1,9 +1,5 @@
 package net.pacificsoft.microservices.favorita.controllers.application;
 
-import net.pacificsoft.microservices.favorita.models.application.Provincia;
-import net.pacificsoft.microservices.favorita.models.application.Zona;
-import net.pacificsoft.microservices.favorita.repository.application.ProvinciaRepository;
-import net.pacificsoft.microservices.favorita.repository.application.ZonaRepository;
 
 import java.util.HashSet;
 import java.util.List;

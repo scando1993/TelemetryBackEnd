@@ -12,19 +12,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.microservices.favorita.models.Furgon;
-import net.pacificsoft.microservices.favorita.repository.FurgonRepository;
-import net.pacificsoft.microservices.favorita.repository.RutaRepository;
+import net.pacificsoft.microservices.favorita.models.application.Furgon;
+import net.pacificsoft.microservices.favorita.repository.application.FurgonRepository;
+import net.pacificsoft.microservices.favorita.repository.application.RutaRepository;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import net.pacificsoft.microservices.favorita.models.LocationGroup;
-import net.pacificsoft.microservices.favorita.models.Ruta;
+import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import net.pacificsoft.microservices.favorita.models.Tracking;
 import net.pacificsoft.microservices.favorita.repository.LocationGroupRepository;
 import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -74,7 +75,7 @@ public class LocationGroupController {
 
 	@GetMapping("/locationGroup/{id}")
 	public ResponseEntity getLocationGroupById(
-			@PathVariable(value = "id") Long locationId){
+			@PathVariable(value = "id") Long locationId) throws JSONException{
 		if(locationGroupRepository.existsById(locationId)){
                     LocationGroup lg = locationGroupRepository.findById(locationId).get();
                     JSONObject json = new JSONObject();

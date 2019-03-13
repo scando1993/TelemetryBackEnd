@@ -112,7 +112,7 @@ public class PredictionController {
             @PathVariable(value = "id") Long predictionID){
         if(predictionsRepository.existsById(predictionID)){
             Prediction prediction = predictionsRepository.findById(predictionID).get();
-            predictionsRepository.delete(predictionID);
+            predictionsRepository.delete(prediction);
             return new ResponseEntity(HttpStatus.OK);
         }
         else{

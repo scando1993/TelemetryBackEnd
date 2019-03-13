@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.sun.xml.internal.bind.Locatable;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -53,8 +52,10 @@ public class Tracking implements Serializable{
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "dtm")
         private Date dtm;
-        
-        public long getId() {
+
+
+
+    public long getId() {
             return id;
         }
 

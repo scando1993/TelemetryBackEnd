@@ -19,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table (name = "device")
@@ -78,6 +80,15 @@ public class Device implements Serializable{
         /*@OneToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "featureID")
         private Features features;*/
+
+    public Device(String family, String name, Group groupFamily) {
+        this.family = family;
+        this.name = name;
+        this.groupFamily = groupFamily;
+    }
+        
+        
+        
         
         public long getId() {
             return id;

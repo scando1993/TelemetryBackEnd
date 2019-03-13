@@ -18,6 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -36,7 +38,7 @@ public class Alerta implements Serializable{
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "rutaID")
+    @JoinColumn(name = "rutaID", nullable = true)
     private Ruta ruta;
 
     @JsonIgnore
@@ -44,26 +46,19 @@ public class Alerta implements Serializable{
     @JoinColumn(name = "deviceID")
     private Device device;
 
-    public Alert(String type_alert, String message) {
+    public Alerta(){
+        this.type_alert = null;
+        this.message = null;
+    }
+    public Alerta(String type_alert, String message) {
         this.type_alert = type_alert;
         this.message = message;
+        this.device = null;
+        this.ruta = null;
     }
 
-
-    public String getType_alert() {
-        return type_alert;
-    }
-
-    public void setType_alert(String type_alert) {
-        this.type_alert = type_alert;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public Alerta() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public long getId() {
@@ -72,6 +67,22 @@ public class Alerta implements Serializable{
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getTipoAlerta() {
+        return type_alert;
+    }
+
+    public void setTipoAlerta(String tipo_Alerta) {
+        this.type_alert = tipo_Alerta;
+    }
+
+    public String getMensaje() {
+        return message;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.message = mensaje;
     }
 
     public Ruta getRuta() {
@@ -88,6 +99,14 @@ public class Alerta implements Serializable{
 
     public void setDevice(Device device) {
         this.device = device;
+    }
+
+    public String getType_alert() {
+        return type_alert;
+    }
+
+    public void setType_alert(String type_alert) {
+        this.type_alert = type_alert;
     }
 
 }

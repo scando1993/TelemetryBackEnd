@@ -34,7 +34,7 @@ public class Features implements Serializable{
 	private boolean tracking;
         @Column(name = "identificador", nullable = false)
         private String mensaje;
-        @Column(name = "tipo_sensores", nullable = false)
+        /*@Column(name = "tipo_sensores", nullable = false)
         private String tipo_sensores;
         @Column(name = "modos_transmision", nullable = false)
         private String modos_transmision;
@@ -49,17 +49,32 @@ public class Features implements Serializable{
         @Column(name = "nivel_voltaje", nullable = false)
         private float nivel_voltaje;
         @Column(name = "memoria", nullable = false)
-        private boolean memoria;
+        private boolean memoria;*/
         
         /*@JsonIgnore
         @OneToOne(fetch = FetchType.EAGER,
             cascade =  CascadeType.ALL,
             mappedBy = "features")
         private Device device;*/
-
-        public long getId() {
-            return id;
+        
+        public Features() {
+            this.mensaje="m";
+            this.tracking=true;
+            this.mensaje="i1";
+            /*this.tipo_sensores="s1";
+            this.modos_transmision="t1";
+            this.version="v1";
+            this.firmware="f1";
+            this.modelo="m1";
+            this.alimentacion="no se";
+            this.nivel_voltaje=0;
+            this.memoria=true;*/
+            
         }
+
+    public long getId() {
+        return id;
+    }
 
         public void setId(long id) {
             this.id = id;
@@ -81,7 +96,7 @@ public class Features implements Serializable{
             this.mensaje = mensaje;
         }
 
-        public String getTipo_sensores() {
+        /*public String getTipo_sensores() {
             return tipo_sensores;
         }
 
