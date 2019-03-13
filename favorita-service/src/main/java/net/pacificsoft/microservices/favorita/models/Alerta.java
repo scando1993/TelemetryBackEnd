@@ -38,7 +38,7 @@ public class Alerta implements Serializable{
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "rutaID")
+    @JoinColumn(name = "rutaID", nullable = true)
     private Ruta ruta;
 
     @JsonIgnore
@@ -49,6 +49,12 @@ public class Alerta implements Serializable{
     public Alerta(String type_alert, String message) {
         this.type_alert = type_alert;
         this.message = message;
+        this.device = null;
+        this.ruta = null;
+    }
+
+    public Alerta() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public long getId() {

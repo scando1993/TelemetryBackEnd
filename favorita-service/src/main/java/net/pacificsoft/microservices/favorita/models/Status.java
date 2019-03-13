@@ -49,7 +49,7 @@ public class Status implements Serializable{
         @OneToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "deviceID")
         private Device device;
-
+        
         public long getId() {
             return id;
         }

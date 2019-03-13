@@ -80,6 +80,15 @@ public class Device implements Serializable{
         /*@OneToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "featureID")
         private Features features;*/
+
+    public Device(String family, String name, Group groupFamily) {
+        this.family = family;
+        this.name = name;
+        this.groupFamily = groupFamily;
+    }
+        
+        
+        
         
         public long getId() {
             return id;

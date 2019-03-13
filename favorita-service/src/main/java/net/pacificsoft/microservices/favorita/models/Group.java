@@ -18,12 +18,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "groupFamily")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@EnableAutoConfiguration(exclude = {
+        JpaRepositoriesAutoConfiguration.class
+})
 public class Group implements Serializable{
 
     @Id
@@ -43,7 +48,16 @@ public class Group implements Serializable{
             mappedBy = "groupFamily")
     private Set<Family> families = new HashSet<>();
 
+    
+    
+    
+    public Group(String name) {
+        this.name = name;
+    }
 
+
+    
+    
     public long getId() {
         return id;
     }

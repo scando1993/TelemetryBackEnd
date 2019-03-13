@@ -37,6 +37,10 @@ public class Zona implements Serializable{
             mappedBy = "zona")
         private Set<Provincia> provincias = new HashSet<>();
 
+    public Zona(String name) {
+        this.name = name;
+    }
+
         public long getId() {
             return id;
         }
