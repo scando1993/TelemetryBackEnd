@@ -32,8 +32,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = FeatureController.class)
-@AutoConfigureMockMvc(secure=false)
+@WebMvcTest(FeatureController.class)
+//@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 public class FeaturesControllerTest {
 
     @Autowired
@@ -58,6 +59,6 @@ public class FeaturesControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[2].mensaje", is(f1.getMensaje())));
+                .andExpect(jsonPath("$[2].mensaje", is("hkj")));
     }
 }
