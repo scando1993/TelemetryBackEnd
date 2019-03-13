@@ -57,9 +57,6 @@ public class Alerta implements Serializable{
         this.ruta = null;
     }
 
-    public Alerta() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     public long getId() {
         return id;
