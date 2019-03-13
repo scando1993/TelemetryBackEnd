@@ -1,9 +1,7 @@
 package net.pacificsoft.microservices.favorita.controllers.application;
 
-import net.pacificsoft.springbootcrudrest.model.Bodega;
-import net.pacificsoft.springbootcrudrest.model.Ciudad;
-import net.pacificsoft.springbootcrudrest.repository.BodegaRepository;
-import net.pacificsoft.springbootcrudrest.repository.CiudadRepository;
+import net.pacificsoft.microservices.favorita.repository.application.BodegaRepository;
+import net.pacificsoft.microservices.favorita.repository.application.CiudadRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

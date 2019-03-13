@@ -31,7 +31,7 @@ public class AlertController {
     @Autowired
     private AlertRepository alertaRepository;
 
-    @GetMapping("/alerta")
+    @GetMapping("/alert")
     public ResponseEntity getAllAlerta() {
         try{
             List<Map<String, Object>> result = new ArrayList();
@@ -40,8 +40,8 @@ public class AlertController {
             for(Alert a: alerts){
                 json = new JSONObject();
                 json.put("id", a.getId());
-                json.put("type_alert", a.getTipoAlerta());
-                json.put("message", a.getMensaje());
+                json.put("type_alert", a.getType_alert());
+                json.put("message", a.getMessage());
                 json.put("rutaID", a.getRuta().getId());
                 json.put("deviceID", a.getDevice().getId());
                 result.add(json.toMap());
@@ -54,15 +54,15 @@ public class AlertController {
         }
     }
 
-    @GetMapping("/alerta/{id}")
+    @GetMapping("/alert/{id}")
     public ResponseEntity getAlertaById(
             @PathVariable(value = "id") Long alertaId){
         if(rutaRepository.exists(alertaId)){
             Alert a = alertaRepository.findOne(alertaId);
             JSONObject json = new JSONObject();
             json.put("id", a.getId());
-            json.put("type_alert", a.getTipoAlerta());
-            json.put("message", a.getMensaje());
+            json.put("type_alert", a.getType_alert());
+            json.put("message", a.getMessage());
             json.put("rutaID", a.getRuta().getId());
             json.put("deviceID", a.getDevice().getId());
             return new ResponseEntity(json.toMap(), HttpStatus.OK);
@@ -73,7 +73,7 @@ public class AlertController {
         }
     }
 
-    @PostMapping("/alerta/{deviceid}/{rutaid}")
+    @PostMapping("/alert/{deviceid}/{rutaid}")
     public ResponseEntity createAlerta(@PathVariable(value = "deviceid") Long deviceid,
                                        @PathVariable(value = "rutaid") Long rutaid,
                                        @Valid @RequestBody Alert alert) {
@@ -111,14 +111,14 @@ public class AlertController {
                 HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/alerta/{id}")
+    @PutMapping("/alert/{id}")
     public ResponseEntity updateAlerta(
             @PathVariable(value = "id") Long alertaId,
             @Valid @RequestBody Alert alertDetails){
         if(alertaRepository.exists(alertaId)){
             Alert alert = alertaRepository.findOne(alertaId);
-            alert.setMensaje(alertDetails.getMensaje());
-            alert.setTipoAlerta(alertDetails.getTipoAlerta());
+            alert.setMessage(alertDetails.getMessage());
+            alert.setType_alert(alertDetails.getType_alert());
             final Alert updatedAlert = alertaRepository.save(alert);
             return new ResponseEntity(HttpStatus.OK);
         }
@@ -128,7 +128,7 @@ public class AlertController {
         }
     }
 
-    @DeleteMapping("/alerta/{id}")
+    @DeleteMapping("/alerts/{id}")
     public ResponseEntity deleteAlerta(
             @PathVariable(value = "id") Long alertaId){
         if(alertaRepository.exists(alertaId)){

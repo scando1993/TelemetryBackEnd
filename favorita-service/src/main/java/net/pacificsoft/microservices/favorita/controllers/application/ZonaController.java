@@ -1,9 +1,9 @@
 package net.pacificsoft.microservices.favorita.controllers.application;
 
-
-import net.pacificsoft.springbootcrudrest.model.Provincia;
-import net.pacificsoft.springbootcrudrest.model.Zona;
-import net.pacificsoft.springbootcrudrest.repository.*;
+import net.pacificsoft.microservices.favorita.models.application.Provincia;
+import net.pacificsoft.microservices.favorita.models.application.Zona;
+import net.pacificsoft.microservices.favorita.repository.application.ProvinciaRepository;
+import net.pacificsoft.microservices.favorita.repository.application.ZonaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
