@@ -56,11 +56,21 @@ public class RawSensorData implements Serializable{
             fetch = FetchType.EAGER,
             mappedBy = "rawSensorData")
         private Set<WifiScan> wifiScans = new HashSet<>();
-        
-        @JsonIgnore
+
+    public RawSensorData(long epoch, float temperature, Date epochDateTime, String rawData) {
+        this.epoch = epoch;
+        this.temperature = temperature;
+        this.epochDateTime = epochDateTime;
+        this.rawData = rawData;
+    }
+    public RawSensorData(){}
+
+    @JsonIgnore
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "rawSensorData")
+
+
         private Set<SigfoxMessage> sigfoxMessages = new HashSet<>();
         
         public long getId() {
