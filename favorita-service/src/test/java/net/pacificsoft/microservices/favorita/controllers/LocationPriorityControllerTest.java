@@ -37,7 +37,12 @@ public class LocationPriority {
     private MockMvc mvc;
 
     @MockBean
+    @Autowired
     private LocationPriority repository;
+
+    @MockBean
+    @Autowired
+    private TrackingRepository repositoryT;
 
     @Test
     public void added_expected_ok() throws Exception{
