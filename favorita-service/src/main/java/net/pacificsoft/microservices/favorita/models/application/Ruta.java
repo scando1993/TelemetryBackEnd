@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -70,7 +69,12 @@ public class Ruta implements Serializable{
             cascade =  CascadeType.ALL,
             mappedBy = "ruta")
         private Set<Alerta> alertas = new HashSet<>();
-        
+
+        public Ruta(Date start_date, Date end_date) {
+            this.start_date = start_date;
+            this.end_date = end_date;
+        }
+    
         public long getId() {
             return id;
         }

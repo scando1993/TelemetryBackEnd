@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: net.pacificsoft.microservices.favorita.controllers.GroupControllerTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.561 s - in net.pacificsoft.microservices.favorita.controllers.GroupControllerTest

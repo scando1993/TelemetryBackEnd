@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: net.pacificsoft.microservices.favorita.controllers.FamilyControllerTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.992 s - in net.pacificsoft.microservices.favorita.controllers.FamilyControllerTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.198 s - in net.pacificsoft.microservices.favorita.controllers.FamilyControllerTest

@@ -59,6 +59,6 @@ public class FeaturesControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[2].mensaje", is("hkj")));
+                .andExpect(jsonPath("$[1].mensaje", is("hkj")));
     }
 }
