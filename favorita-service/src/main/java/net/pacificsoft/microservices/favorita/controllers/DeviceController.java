@@ -1,6 +1,14 @@
 package net.pacificsoft.microservices.favorita.controllers;
 
 import javax.validation.Valid;
+import net.pacificsoft.microservices.favorita.models.Device;
+import net.pacificsoft.microservices.favorita.models.GoApiResponse;
+import net.pacificsoft.microservices.favorita.models.Group;
+import net.pacificsoft.microservices.favorita.models.Tracking;
+import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
+import net.pacificsoft.microservices.favorita.repository.GoApiResponseRepository;
+import net.pacificsoft.microservices.favorita.repository.GroupRepository;
+import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,10 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.microservices.favorita.models.Device;
-import net.pacificsoft.microservices.favorita.models.Tracking;
-import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
-import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -28,6 +32,12 @@ public class DeviceController {
         @Autowired
 	private TrackingRepository trackingRepository;
 	
+        @Autowired
+	private GroupRepository groupRepository;
+        
+        @Autowired
+	private GoApiResponseRepository goRepository;
+        
 	@GetMapping("/device")
 	public ResponseEntity getAllDevices() {
 		try{
@@ -52,11 +62,22 @@ public class DeviceController {
                 }
 	}
 
-	@PostMapping("/device")
-	public ResponseEntity createDevice(@Valid @RequestBody Device device) {
+	@PostMapping("/device/{groupid}")
+	public ResponseEntity createDevice(@Valid @RequestBody Device device,
+                                        @PathVariable(value = "groupid") Long groupId) {
                 try{
-                    Device d = deviceRepository.save(device);
-                    return new ResponseEntity(d, HttpStatus.CREATED);
+                    if(groupRepository.existsById(groupId)){
+                        Group g = groupRepository.findById(groupId).get();
+                        g.getDevices().add(device);
+                        device.setGroup(g);
+                        groupRepository.save(g);
+                        Device d = deviceRepository.save(device);
+                        return new ResponseEntity(d, HttpStatus.CREATED);
+                    }
+                    else{
+                        return new ResponseEntity<String>("It's not possible create new Device", HttpStatus.NOT_FOUND);
+
+                    }
                 }
                 catch(Exception e){
                     return new ResponseEntity<String>("It's not possible create new Device", HttpStatus.NOT_FOUND);
@@ -89,6 +110,13 @@ public class DeviceController {
                         t.setDevice(null);
                         trackingRepository.save(t);
                     }
+                    
+                    for(GoApiResponse g:device.getGoApiResponses()){
+                        g.setDevice(null);
+                        goRepository.save(g);
+                    }
+                    device.getGroup().getDevices().remove(device);
+                    groupRepository.save(device.getGroup());
                     deviceRepository.delete(device);
                     return new ResponseEntity(HttpStatus.OK); 
                 }

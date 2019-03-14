@@ -21,11 +21,16 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import net.pacificsoft.microservices.favorita.models.application.Ruta;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table (name = "device")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@EnableAutoConfiguration(exclude = {
+        JpaRepositoriesAutoConfiguration.class
+})
 public class Device implements Serializable{
 
         @Id
@@ -41,7 +46,7 @@ public class Device implements Serializable{
         @JoinColumn(name = "groupID")
         private Group groupFamily;
 
-    @JsonIgnore
+        @JsonIgnore
         @OneToMany(fetch = FetchType.EAGER,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
@@ -70,6 +75,12 @@ public class Device implements Serializable{
             cascade =  CascadeType.ALL,
             mappedBy = "device")
         private Set<Telemetria> telemetrias = new HashSet<>();
+        
+        @JsonIgnore
+        @OneToMany(fetch = FetchType.EAGER,
+            cascade =  CascadeType.ALL,
+            mappedBy = "device")
+        private Set<GoApiResponse> goApiResponses = new HashSet<>();
         
         @JsonIgnore
         @OneToOne(fetch = FetchType.EAGER,
@@ -169,17 +180,31 @@ public class Device implements Serializable{
             this.groupFamily = group;
         }
 
-
-        /*public Features getFeatures() {
-            return features;
-        }
-
-        public void setFeatures(Features features) {
-            this.features = features;
-        }*/
         
-        @Override
-        public String toString(){
-            return "Bodega: "+id+" "+family+" "+name;
+        public Group getGroupFamily(){
+            return groupFamily;
         }
+
+    public void setGroupFamily(Group groupFamily) {
+        this.groupFamily = groupFamily;
+    }
+
+    public Set<GoApiResponse> getGoApiResponses() {
+        return goApiResponses;
+    }
+
+    /*public Features getFeatures() {
+    return features;
+    }
+    public void setFeatures(Features features) {
+    this.features = features;
+    }*/
+    public void setGoApiResponses(Set<GoApiResponse> goApiResponses) {
+        this.goApiResponses = goApiResponses;
+    }
+
+    @Override
+    public String toString() {
+        return "Bodega: "+id+" "+family+" "+name;
+    }
 }
