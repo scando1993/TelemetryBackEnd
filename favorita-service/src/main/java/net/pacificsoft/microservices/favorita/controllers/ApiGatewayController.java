@@ -2,22 +2,18 @@
 package net.pacificsoft.microservices.favorita.controllers;
 
 import net.pacificsoft.microservices.favorita.models.Device;
-import net.pacificsoft.microservices.favorita.repository.RawSensorDataRepository;
+import net.pacificsoft.microservices.favorita.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.Valid;
 import net.pacificsoft.microservices.favorita.models.RawSensorData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
+import org.springframework.web.bind.annotation.*;
 import net.pacificsoft.microservices.favorita.repository.RawSensorDataRepository;
 import org.springframework.http.HttpStatus;
+
+@RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ApiGatewayController {
     
     
@@ -33,11 +29,13 @@ public class ApiGatewayController {
             @PathVariable(value = "deviceid") Long deviceId,
             @Valid @RequestBody RawSensorData rawData) {
         try{
-            Device device = deviceRepository.findById(deviceId).get();
-            device.getRawSensorDatas().add(rawData);
-            rawData.setDevice(device);
+                Device device = deviceRepository.findById(deviceId).get();
+                device.getRawSensorDatas().add(rawData);
+                rawData.setDevice(device);
+
+
             RawSensorData rawSave = rawDataRepository.save(rawData);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity(rawData,HttpStatus.CREATED);
 
         }
         catch(Exception e){

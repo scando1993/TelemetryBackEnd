@@ -47,19 +47,26 @@ public class ApiGatewayControllerTest {
 
     @MockBean
     @Autowired
-    private RawSensorDataController repository;
+    private RawSensorDataRepository repository;
 
 
     @MockBean
     @Autowired
     private DeviceRepository repositoryD;
+    @MockBean
+    @Autowired
+    private FamilyRepository repositoryF;
+    @MockBean
+    @Autowired
+    private GroupRepository repositoryG;
+
 
     private RawSensorData rawSensorData;
     private Device device;
     private SimpleDateFormat dateFormat;
     @Before
     public void init(){
-        rawSensorData = new RawSensorData(2L, (float)45.12, new Date(213321), "loquesea");
+        rawSensorData = new RawSensorData(2L, (float)45.12, new Date(5435467), "loquesea");
         device = new Device("test1","2");
         Family family = new Family("test1");
         Group group = new Group("Super");
@@ -68,6 +75,7 @@ public class ApiGatewayControllerTest {
         device.setGroup(group);
         rawSensorData.setDevice(device);
         device.getRawSensorDatas().add(rawSensorData);
+        group.getDevices().add(device);
 
         dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
