@@ -48,6 +48,9 @@ public class Group implements Serializable{
             mappedBy = "groupFamily")
     private Set<Family> families = new HashSet<>();
 
+    public Group() {
+    }
+
     
     
     

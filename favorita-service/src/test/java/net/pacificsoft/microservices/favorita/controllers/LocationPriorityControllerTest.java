@@ -24,6 +24,7 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import net.pacificsoft.microservices.favorita.repository.LocationPriorityRepository;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasSize;
@@ -31,14 +32,14 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-public class LocationPriority {
+public class LocationPriorityControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
     @Autowired
-    private LocationPriority repository;
+    private LocationPriorityRepository repository;
 
     @MockBean
     @Autowired

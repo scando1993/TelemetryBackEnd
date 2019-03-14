@@ -29,8 +29,11 @@ public class WifiScan implements Serializable{
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
+        
         @Column(name = "RSSI", nullable = false)
         private int RSSI;
+        
         @Column(name = "formatoID", nullable = false)
 	private String MAC;
         
@@ -38,7 +41,16 @@ public class WifiScan implements Serializable{
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "rawSensorDataID")
         private RawSensorData rawSensorData;
+
+        public WifiScan() {
+        }
+
         
+        
+        public WifiScan(int RSSI, String MAC) {
+            this.RSSI = RSSI;
+            this.MAC = MAC;
+        }
         public long getId() {
             return id;
         }

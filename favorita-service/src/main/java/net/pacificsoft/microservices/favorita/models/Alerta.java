@@ -46,15 +46,20 @@ public class Alerta implements Serializable{
     @JoinColumn(name = "deviceID")
     private Device device;
 
-    public Alerta(){
-        this.type_alert = null;
-        this.message = null;
+    public Alerta() {
     }
+
     public Alerta(String type_alert, String message) {
         this.type_alert = type_alert;
         this.message = message;
-        this.device = null;
-        this.ruta = null;
+    }
+
+    public Alerta(long id, String type_alert, String message, Ruta ruta, Device device) {
+        this.id = id;
+        this.type_alert = type_alert;
+        this.message = message;
+        this.ruta = ruta;
+        this.device = device;
     }
 
 

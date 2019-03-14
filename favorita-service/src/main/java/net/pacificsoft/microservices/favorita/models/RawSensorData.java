@@ -36,7 +36,7 @@ public class RawSensorData implements Serializable{
         @Column(name = "temperature", nullable = false)
         private float temperature;
         
-        @JsonFormat(pattern = "dd-MM-yyyy'T'HH:mm")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "epochDateTime", nullable = false)
         private Date epochDateTime;
         @Column(name = "rawData", nullable = false)
@@ -57,6 +57,26 @@ public class RawSensorData implements Serializable{
             fetch = FetchType.EAGER,
             mappedBy = "rawSensorData")
         private Set<SigfoxMessage> sigfoxMessages = new HashSet<>();
+
+        public RawSensorData(long epoch, float temperature, Date epochDateTime, String rawData) {
+            this.epoch = epoch;
+            this.temperature = temperature;
+            this.epochDateTime = epochDateTime;
+            this.rawData = rawData;
+        }      
+
+    public RawSensorData(long id, long epoch, float temperature, Date epochDateTime, String rawData, Device device) {
+        this.id = id;
+        this.epoch = epoch;
+        this.temperature = temperature;
+        this.epochDateTime = epochDateTime;
+        this.rawData = rawData;
+        this.device = device;
+    }
+
+    public RawSensorData() {
+    }
+
         
         public long getId() {
             return id;
