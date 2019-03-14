@@ -56,34 +56,49 @@ public class ApiGatewayControllerTest {
 
     private RawSensorData rawSensorData;
     private Device device;
+    private SimpleDateFormat dateFormat;
     @Before
     public void init(){
-        rawSensorData = new RawSensorData(2L, (float)4512, new Date(213321), "loquesea");
+        rawSensorData = new RawSensorData(2L, (float)45.12, new Date(213321), "loquesea");
         device = new Device("test1","2");
+        Family family = new Family("test1");
+        Group group = new Group("Super");
+        group.getFamilies().add(family);
+        family.setGroup(group);
+        device.setGroup(group);
         rawSensorData.setDevice(device);
         device.getRawSensorDatas().add(rawSensorData);
+
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+
     }
-/*
+
     @Test
     public void added_expected_ok() throws Exception{
 
-        given(repositoryD.existsById(any())).willReturn(true);
-        given(repositoryLG.existsById(any())).willReturn(true);
+        given(repositoryD.existsById(device.getId())).willReturn(true);
+        //given(repositoryLG.existsById(any())).willReturn(true);
 
-        given(repositoryD.findById(any())).willReturn(Optional.of(new Device()));
-        given(repositoryLG.findById(any())).willReturn(Optional.of(new LocationGroup()));
+        given(repositoryD.findById(any())).willReturn(Optional.of(device));
+        //given(repositoryLG.findById(any())).willReturn(Optional.of(new LocationGroup()));
+
+
+        String formated = dateFormat.format(rawSensorData.getEpochDateTime());
 
         JSONObject json = new JSONObject();
-        json.put("location", "any");
-        json.put("dtm", a);
+        json.put("rawData", rawSensorData.getRawData());
+        json.put("epoch", rawSensorData.getEpoch());
+        json.put("temperature", rawSensorData.getTemperature());
+        json.put("epochDateTime", formated);
+        json.put("rawData", rawSensorData.getRawData());
 
 
-        mvc.perform(post("/tracking/{deviceid}/{locationid}", 1,2)
+        mvc.perform(post("/rawData/{deviceid}", device.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(json.toString())
         )
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
-    */
+
 }

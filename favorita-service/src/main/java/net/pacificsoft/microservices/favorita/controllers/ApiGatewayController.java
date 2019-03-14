@@ -1,6 +1,7 @@
 
 package net.pacificsoft.microservices.favorita.controllers;
 
+import net.pacificsoft.microservices.favorita.models.Device;
 import net.pacificsoft.microservices.favorita.repository.RawSensorDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.Valid;
@@ -20,23 +21,28 @@ import org.springframework.http.HttpStatus;
 public class ApiGatewayController {
     
     
-        @Autowired
+    @Autowired
 	private RawSensorDataRepository rawDataRepository;
         
 	@Autowired
 	private DeviceRepository deviceRepository;
-        
-        
-        @PostMapping("/rawData")
-	public ResponseEntity createCiudad(@Valid @RequestBody RawSensorData rawData) {
-            try{
-                RawSensorData rawSave = rawDataRepository.save(rawData);
-                return new ResponseEntity(HttpStatus.OK);
-                
-            }
-            catch(Exception e){
-                    return new ResponseEntity<String>("It's not possible create new Data", HttpStatus.NOT_FOUND);
-                
-            }
-	}
+
+
+    @PostMapping("/rawData/{deviceid}")
+    public ResponseEntity createCiudad(
+            @PathVariable(value = "deviceid") Long deviceId,
+            @Valid @RequestBody RawSensorData rawData) {
+        try{
+            Device device = deviceRepository.findById(deviceId).get();
+            device.getRawSensorDatas().add(rawData);
+            rawData.setDevice(device);
+            RawSensorData rawSave = rawDataRepository.save(rawData);
+            return new ResponseEntity(HttpStatus.OK);
+
+        }
+        catch(Exception e){
+            return new ResponseEntity<String>("It's not possible create new Data", HttpStatus.NOT_FOUND);
+
+        }
+    }
 }
