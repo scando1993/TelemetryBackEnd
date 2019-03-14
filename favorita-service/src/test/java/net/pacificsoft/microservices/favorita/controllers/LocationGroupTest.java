@@ -1,10 +1,12 @@
 package net.pacificsoft.microservices.favorita.controllers;
 
+import jdk.nashorn.internal.parser.JSONParser;
 import net.pacificsoft.microservices.favorita.Application;
 import net.pacificsoft.microservices.favorita.models.LocationGroup;
-import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
+import net.pacificsoft.microservices.favorita.models.Tracking;
 import net.pacificsoft.microservices.favorita.repository.LocationGroupRepository;
 import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,9 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasSize;
@@ -31,84 +31,87 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-public class LocationPriority {
 
+@RunWith(SpringRunner.class)
+@WebMvcTest(LocationGroupController.class)
+public class LocationGroupTest {
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private LocationPriority repository;
+    @Autowired
+    private LocationGroupRepository repository;
+
+    @MockBean
+    @Autowired
+    private TrackingRepository repositoryT;
+
 
     @Test
     public void added_expected_ok() throws Exception{
-        long locationPriorityID = 1;
-        long tarckingID = 1;
-        String name = "locationPriority1";
-        int priority = 1;
+        LocationGroup locationGroup = new LocationGroup("Favorita");
+
+        List<LocationGroup> locationGroups = Arrays.asList(locationGroup);
+
+        //given(repository.findAll()).willReturn(locationGroups);
 
         JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("priority", priority);
+        json.put("name", locationGroup.getName());
 
-
-        mvc.perform(post("/tracking/{tarckingid}",tarckingID)
+        mvc.perform(post("/locationGroup")
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(json.toString())
         )
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$.id", is(locationPriorityID)))
-                .andExpect(jsonPath("$.name", is(name)))
-                .andExpect(jsonPath("$.priority", is(priority)));
+                .andExpect(status().isCreated());
     }
 
     @Test
 
     public void givenLocationGroup_whenGetLocationGroup_thenReturnJSONArray() throws Exception{
-        long locationPriorityID = 1;
-        long tarckingID = 1;
-        String name = "locationPriority1";
-        int priority = 1;
+        LocationGroup locationGroup1 = new LocationGroup("Favorita");
+        Tracking tracking = new Tracking("k",new Date(21321));
+        Tracking tracking2 = new Tracking("allan",new Date(3244323));
+        locationGroup1.getTrackings().add(tracking);
+        locationGroup1.getTrackings().add(tracking2);
+        List<LocationGroup> alertList = Arrays.asList(locationGroup1);
 
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("priority", priority);
+        given(repository.findAll()).willReturn(alertList);
 
-
-        mvc.perform(get("/tracking")
+        mvc.perform(get("/locationGroup")
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(locationPriorityID)))
-                .andExpect(jsonPath("$[0].name", is(name)))
-                .andExpect(jsonPath("$[0].priority", is(priority)));
+                .andExpect(status().isOk());
+
     }
 
     @Test
     public void update_expected_ok() throws Exception{
-        long locationPriorityID = 1;
-        long tarckingID = 1;
-        String name = "locationPriorityUpdated";
-        int priority = 3;
+        LocationGroup locationGroup = new LocationGroup("FavoritaUpdated");
+
+        given(repository.existsById(any())).willReturn(true);
+        given(repository.findById(any())).willReturn(Optional.of(locationGroup));
 
         JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("priority", priority);
+        json.put("name", "FavoritaUpdated2");
 
-        mvc.perform(post("/locationPriority/{id}", locationPriorityID)
+        mvc.perform(put("/locationGroup/{id}", locationGroup.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(json.toString())
         )
                 .andDo(print())
                 .andExpect(status().isOk());
+
     }
 
     @Test
     public void delete_Expected_ok() throws Exception{
-        long locationPriorityID = 1;
-        mvc.perform(delete("/locationPriority/{id}", locationPriorityID)
+        LocationGroup locationGroup = new LocationGroup("FavoritaUpdated");
+
+        given(repository.existsById(any())).willReturn(true);
+        given(repository.findById(any())).willReturn(Optional.of(locationGroup));
+
+        mvc.perform(delete("/locationGroup/{id}", locationGroup.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
         )
                 .andDo(print())

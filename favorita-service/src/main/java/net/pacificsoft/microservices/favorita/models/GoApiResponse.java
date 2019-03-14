@@ -19,12 +19,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table (name = "goApiResponse")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@EnableAutoConfiguration(exclude = {
+        JpaRepositoriesAutoConfiguration.class
+})
 public class GoApiResponse implements Serializable{
 
     @Id
@@ -38,11 +43,10 @@ public class GoApiResponse implements Serializable{
     @JoinColumn(name = "messageID")
     private Message message;
 
-    /*
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "deviceID")
     private Device device;
-    */
+    
     
 
     /**
@@ -85,6 +89,14 @@ public class GoApiResponse implements Serializable{
      */
     public void setMessage(Message message) {
         this.message = message;
+    }
+
+    public Device getDevice() {
+        return device;
+    }
+
+    public void setDevice(Device device) {
+        this.device = device;
     }
 
     

@@ -47,6 +47,19 @@ public class FamilyController {
                     HttpStatus.NOT_FOUND);
         }
     }
+    
+    @GetMapping("/family/{id}")
+    public ResponseEntity getBodegasById(@PathVariable(value = "id") Long Id) {
+        try{
+            Family f = familyRepository.findById(Id).get();
+
+            return new ResponseEntity(f, HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<String>("Resources not available.",
+                    HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PostMapping("/family/{groupID}")
     public ResponseEntity createCiudad(@PathVariable(value = "groupID") Long groupID,
@@ -56,7 +69,7 @@ public class FamilyController {
                 Group group = groupRepository.findById(groupID).get();
 
                 family.setGroup(group);
-                group.getFamilies().add(family);;
+                group.getFamilies().add(family);
 
                 groupRepository.save(group);
                 Family posted = familyRepository.save(family);
@@ -100,6 +113,8 @@ public class FamilyController {
             @PathVariable(value = "id") Long familyID){
         if(familyRepository.existsById(familyID)){
             Family family = familyRepository.findById(familyID).get();
+            family.getGroup().getFamilies().remove(family);
+            groupRepository.save(family.getGroup());
             familyRepository.delete(family);
             return new ResponseEntity(HttpStatus.OK);
         }

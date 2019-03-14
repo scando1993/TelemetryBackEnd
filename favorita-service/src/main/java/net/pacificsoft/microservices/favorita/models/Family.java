@@ -46,6 +46,17 @@ public class Family implements Serializable{
         this.name = name;
     }
 
+    public Family() {
+    }
+
+    public Group getGroupFamily() {
+        return groupFamily;
+    }
+
+    public void setGroupFamily(Group groupFamily) {
+        this.groupFamily = groupFamily;
+    }
+
     public long getId() {
         return id;
     }

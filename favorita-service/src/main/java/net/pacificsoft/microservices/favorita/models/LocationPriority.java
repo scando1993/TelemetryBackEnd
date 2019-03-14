@@ -10,11 +10,16 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 
 @Entity
 @Table(name = "locationPriority")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@EnableAutoConfiguration(exclude = {
+        JpaRepositoriesAutoConfiguration.class
+})
 public class LocationPriority implements Serializable{
     
         @Id
@@ -29,8 +34,14 @@ public class LocationPriority implements Serializable{
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "trackingID")
         private Tracking tracking;
-        
-        public long getId() {
+
+    public LocationPriority(String name, int priority) {
+        this.name = name;
+        this.priority = priority;
+    }
+    public LocationPriority(){}
+
+    public long getId() {
             return id;
         }
 

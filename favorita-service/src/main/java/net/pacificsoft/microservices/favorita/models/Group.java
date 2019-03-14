@@ -55,6 +55,9 @@ public class Group implements Serializable{
         this.name = name;
     }
 
+    public Group() {
+    }
+
 
     
     
