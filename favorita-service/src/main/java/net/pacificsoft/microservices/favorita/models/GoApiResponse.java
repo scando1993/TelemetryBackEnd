@@ -46,8 +46,11 @@ public class GoApiResponse implements Serializable{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "deviceID")
     private Device device;
-    
-    
+
+    public GoApiResponse(int sucess) {
+        this.sucess = sucess;
+    }
+    public GoApiResponse(){}
 
     /**
      * @return the id
