@@ -11,34 +11,33 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import net.minidev.json.JSONObject;
-import net.pacificsoft.microservices.favorita.models.Device;
+import net.pacificsoft.microservices.favorita.models.Family;
 import net.pacificsoft.microservices.favorita.models.Group;
 import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
-import net.pacificsoft.microservices.favorita.repository.GoApiResponseRepository;
+import net.pacificsoft.microservices.favorita.repository.FamilyRepository;
 import net.pacificsoft.microservices.favorita.repository.GroupRepository;
-import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
+
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasSize;
+import org.json.JSONObject;
 import static org.mockito.BDDMockito.*;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(DeviceController.class)
-public class DeviceControllerTest {
+@WebMvcTest(GroupController.class)
+//@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+public class GroupControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
     @Autowired
-    private DeviceRepository repository;
-    
-    @MockBean
-    @Autowired
-    private TrackingRepository repositoryT;
+    private FamilyRepository repositoryF;
     
     @MockBean
     @Autowired
@@ -46,31 +45,31 @@ public class DeviceControllerTest {
     
     @MockBean
     @Autowired
-    private GoApiResponseRepository repositoryGo;
+    private DeviceRepository repositoryD;
 
     @Test
     public void getAll_test() throws Exception{
-        Device device1 = new Device("f1", "n1");
-        Device device2 = new Device("f2", "n2");
-        List<Device> deviceList = Arrays.asList(device1, device2);
+        Group g1 = new Group("g1");
+        Group g2 = new Group("g1");   
+        List<Group> deviceList = Arrays.asList(g1, g2);
 
-        given(repository.findAll()).willReturn(deviceList);
+        given(repositoryG.findAll()).willReturn(deviceList);
 
-        mvc.perform(get("/device")
+        mvc.perform(get("/group")
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].family", is(device1.getFamily())));
+                .andExpect(jsonPath("$[0].name", is(g1.getName())));
     }
     
     
     @Test
     public void getById_test() throws Exception{
-        Device device1 = new Device("f1", "n1");
-        given(repository.existsById(device1.getId())).willReturn(true);
-        given(repository.findById(any())).willReturn(Optional.of(device1));
-        mvc.perform(get("/device/"+device1.getId())
+        Group g1 = new Group("g1");
+        given(repositoryG.existsById(g1.getId())).willReturn(true);
+        given(repositoryG.findById(any())).willReturn(Optional.of(g1));
+        mvc.perform(get("/group/"+g1.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -78,18 +77,12 @@ public class DeviceControllerTest {
     
     @Test
     public void post_test() throws Exception {
-        Device device1 = new Device("f1", "n1");
         Group g1 = new Group("g1");
-        device1.setGroup(g1);
-        g1.getDevices().add(device1);
         JSONObject json = new JSONObject();
-        json.put("name", device1.getName());
-        json.put("family", device1.getFamily());
-        given(repositoryG.existsById(device1.getGroup().getId())).willReturn(true);
-        given(repositoryG.findById(any())).willReturn(Optional.of(g1));
-        mvc.perform(post("/device/"+device1.getGroup().getId())
+        json.put("name", g1.getName());
+        mvc.perform(post("/group")
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(json.toJSONString())
+                .content(json.toString())
         )
                 .andDo(print())
                 .andExpect(status().isCreated());
@@ -98,14 +91,11 @@ public class DeviceControllerTest {
     
     @Test
     public void delete_test() throws Exception{
-        Device device1 = new Device("f1", "n1");
         Group g1 = new Group("g1");
-        device1.setGroup(g1);
-        g1.getDevices().add(device1);
-        given(repository.existsById(any())).willReturn(true);
-        given(repository.findById(any())).willReturn(Optional.of(device1));
+        given(repositoryG.existsById(any())).willReturn(true);
+        given(repositoryG.findById(any())).willReturn(Optional.of(g1));
 
-        mvc.perform(delete("/device/{id}", device1.getId())
+        mvc.perform(delete("/group/{id}", g1.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
         )
                 .andDo(print())
@@ -115,16 +105,15 @@ public class DeviceControllerTest {
     
     @Test
     public void update_test() throws Exception{
-        Device device1 = new Device("f1","n1");
+        Group g1 = new Group("g1");
 
-        given(repository.existsById(any())).willReturn(true);
-        given(repository.findById(any())).willReturn(Optional.of(device1));
+        given(repositoryG.existsById(any())).willReturn(true);
+        given(repositoryG.findById(any())).willReturn(Optional.of(g1));
 
         JSONObject json = new JSONObject();
-        json.put("name", device1.getName());
-        json.put("family", device1.getFamily());
+        json.put("name", g1.getName());
 
-        mvc.perform(put("/device/{id}", device1.getId())
+        mvc.perform(put("/group/"+g1.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(json.toString())
         )
@@ -132,5 +121,4 @@ public class DeviceControllerTest {
                 .andExpect(status().isOk());
 
     }
-    
 }

@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(LocationGroupController.class)
-public class LocationGropTest {
+public class LocationGroupTest {
     @Autowired
     private MockMvc mvc;
 
