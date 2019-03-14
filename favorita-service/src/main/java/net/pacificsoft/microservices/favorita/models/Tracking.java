@@ -53,7 +53,13 @@ public class Tracking implements Serializable{
         @Column(name = "dtm")
         private Date dtm;
 
+    public Tracking(String location, Date dtm) {
+        this.location = location;
+        this.dtm = dtm;
+    }
+    public Tracking() {
 
+    }
 
     public long getId() {
             return id;

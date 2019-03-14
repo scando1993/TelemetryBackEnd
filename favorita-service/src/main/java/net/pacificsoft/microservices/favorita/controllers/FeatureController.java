@@ -25,10 +25,8 @@ public class FeatureController {
 	
 	@Autowired
 	private FeaturesRepository featuresRepository;
-        
-        @Autowired
-	private TrackingRepository trackingRepository;
-	
+
+
 	@GetMapping("/features")
 	public ResponseEntity getAllDevices() {
 		try{

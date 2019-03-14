@@ -81,13 +81,12 @@ public class Device implements Serializable{
         @JoinColumn(name = "featureID")
         private Features features;*/
 
-    public Device(String family, String name, Group groupFamily) {
+    public Device(String family, String name) {
         this.family = family;
         this.name = name;
-        this.groupFamily = groupFamily;
     }
-        
-        
+    public Device(){}
+
         
         
         public long getId() {
