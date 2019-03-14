@@ -54,7 +54,7 @@ public class FamilyControllerTest {
     @MockBean
     @Autowired
     private FamilyRepository repository;
-    
+
     @MockBean
     @Autowired
     private GroupRepository repositoryG;
@@ -62,17 +62,9 @@ public class FamilyControllerTest {
     @Test
     public void getAll_test() throws Exception{
         Family f1 = new Family("f1");
-        Group g1 = new Group("g1");
-        Group g2 = new Group("g1");        
+
         Family f2 = new Family("f2");
-        f1.setGroup(g1);
-        f2.setGroup(g2);
-        g1.getFamilies().add(f1);
-        g2.getFamilies().add(f1);
-        repositoryG.save(g1);
-        repositoryG.save(g2);
-        repository.save(f1);
-        repository.save(f2);
+
         List<Family> deviceList = Arrays.asList(f1, f2);
 
         given(repository.findAll()).willReturn(deviceList);
@@ -82,7 +74,7 @@ public class FamilyControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].name", is(f1.getName())));
+                .andExpect(jsonPath("$[1].name", is(f2.getName())));
     }
     
         @Test

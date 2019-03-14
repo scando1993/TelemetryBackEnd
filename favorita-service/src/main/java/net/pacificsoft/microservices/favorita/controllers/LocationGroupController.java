@@ -163,7 +163,7 @@ public class LocationGroupController {
                     return new ResponseEntity(HttpStatus.OK);
                 }
                 else{
-                    return new ResponseEntity<String>("LocationGroup#" + locationId + 
+                    return new ResponseEntity<String>("LocationGroup#" + locationId +
                             " does not exist.", HttpStatus.NOT_FOUND);
                 }
 	}

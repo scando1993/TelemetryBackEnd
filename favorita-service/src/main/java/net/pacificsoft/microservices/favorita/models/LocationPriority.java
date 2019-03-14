@@ -34,8 +34,14 @@ public class LocationPriority implements Serializable{
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "trackingID")
         private Tracking tracking;
-        
-        public long getId() {
+
+    public LocationPriority(String name, int priority) {
+        this.name = name;
+        this.priority = priority;
+    }
+    public LocationPriority(){}
+
+    public long getId() {
             return id;
         }
 

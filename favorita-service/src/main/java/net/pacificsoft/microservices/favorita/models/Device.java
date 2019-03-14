@@ -96,11 +96,8 @@ public class Device implements Serializable{
         this.family = family;
         this.name = name;
     }
+    public Device(){}
 
-    public Device() {
-    }
-        
-        
         
         
         public long getId() {
