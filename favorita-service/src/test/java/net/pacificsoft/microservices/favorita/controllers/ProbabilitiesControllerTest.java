@@ -106,8 +106,8 @@ public class ProbabilitiesControllerTest {
         probability.setPrediction(prediction);
         prediction.getProbabilitieses().add(probability);
        
-        given(repositoryM.existsById(any())).willReturn(true);
-        given(repositoryM.findById(any())).willReturn(Optional.of(p)); 
+        given(repositoryP.existsById(any())).willReturn(true);
+        given(repositoryP.findById(any())).willReturn(Optional.of(prediction)); 
         
         JSONObject json = new JSONObject();
         json.put("name", probability.getNameID());

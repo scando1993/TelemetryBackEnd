@@ -1,9 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: net.pacificsoft.microservices.favorita.controllers.ProbabilitiesControllerTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.785 s - in net.pacificsoft.microservices.favorita.controllers.ProbabilitiesControllerTest
-
-create_test(net.pacificsoft.microservices.favorita.controllers.ProbabilitiesControllerTest)  Time elapsed: 0.032 s  <<< FAILURE!
-java.lang.AssertionError: Status expected:<201> but was:<404>
-	at net.pacificsoft.microservices.favorita.controllers.ProbabilitiesControllerTest.create_test(ProbabilitiesControllerTest.java:121)
-
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.09 s - in net.pacificsoft.microservices.favorita.controllers.ProbabilitiesControllerTest
