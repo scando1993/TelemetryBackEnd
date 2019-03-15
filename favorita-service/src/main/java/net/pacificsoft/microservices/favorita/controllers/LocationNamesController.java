@@ -35,10 +35,9 @@ import net.pacificsoft.microservices.favorita.repository.LocationNamesRepository
 public class LocationNamesController {
     @Autowired
     private LocationNamesRepository locationNamesRepository;
-    //@Autowired
-    //private PredictionsRepository predictionsRepository;
+    
     @Autowired
-    private MessageRepository messageRepository;
+    private PredictionsRepository predictionsRepository;
 
     @GetMapping("/locationNames")
     public ResponseEntity getAllLocationNames() {
@@ -103,21 +102,8 @@ public class LocationNamesController {
             @PathVariable(value = "id") Long locationNameId){
         if(locationNamesRepository.existsById(locationNameId)){
             LocationNames locationName = locationNamesRepository.findById(locationNameId).get();
-            try {
-                if(locationName.getPrediction().size() != 0){
-                    Set<Prediction> p =locationName.getPrediction();
-                    for(Prediction i: p){
-                        i.setLocationNames(null);
-                    }
-                }
-                Message m = locationName.getMessage();
-                m.setLocationNames(null);
-                messageRepository.save(m);
-            }
-
-            catch (Exception e){
-
-            }
+            locationName.getPrediction().getLocationNames().remove(locationName);
+            predictionsRepository.save(locationName.getPrediction());
             locationNamesRepository.delete(locationName);
             return new ResponseEntity(HttpStatus.OK);
 

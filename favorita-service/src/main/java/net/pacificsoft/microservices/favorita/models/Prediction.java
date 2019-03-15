@@ -38,18 +38,20 @@ public class Prediction implements Serializable{
     
     @Column(name = "name", nullable = false)
     private String name;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "probabilitiesID")
-    private Probabilities probabilities;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "messageID")
     private Message message;
     
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name= "locationNamesID")
-    private LocationNames locationNames;
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "prediction")
+    private Set<LocationNames> locationNames = new HashSet<>();
+    
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "prediction")
+    private Set<Probabilities> probabilitieses = new HashSet<>();
+    
     /*
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
@@ -93,19 +95,7 @@ public class Prediction implements Serializable{
         this.name = name;
     }
 
-    /**
-     * @return the probabilities
-     */
-    public Probabilities getProbabilities() {
-        return probabilities;
-    }
 
-    /**
-     * @param probabilities the probabilities to set
-     */
-    public void setProbabilities(Probabilities probabilities) {
-        this.probabilities = probabilities;
-    }
 
     /**
      * @return the message
@@ -121,19 +111,22 @@ public class Prediction implements Serializable{
         this.message = message;
     }
 
-    /**
-     * @return the locationNames
-     */
-    public LocationNames getLocationNames() {
+    public Set<LocationNames> getLocationNames() {
         return locationNames;
     }
 
-    /**
-     * @param locationNames the locationNames to set
-     */
-    public void setLocationNames(LocationNames locationNames) {
+    public void setLocationNames(Set<LocationNames> locationNames) {
         this.locationNames = locationNames;
     }
+
+    public Set<Probabilities> getProbabilitieses() {
+        return probabilitieses;
+    }
+
+    public void setProbabilitieses(Set<Probabilities> probabilitieses) {
+        this.probabilitieses = probabilitieses;
+    }
+
 
     
 

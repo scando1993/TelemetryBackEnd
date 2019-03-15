@@ -38,38 +38,33 @@ public class LocationNames implements Serializable{
     private long id;
 
     @Column(name = "idName", nullable = false)
-    private long idname;
+    private Double idname;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    /*
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "predictionID")
     private Prediction prediction;
-    */
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            mappedBy = "locationNames")
-    private Set<Prediction> prediction = new HashSet<>();
-
-
-    @OneToOne(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            mappedBy = "locationNames")
-    private Message  message;
     
 
-    public LocationNames(long idname, String name) {
+   /* @OneToOne(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "locationNames")
+    private Message  message;*/
+    
+
+    public LocationNames(Double idname, String name) {
         this.idname = idname;
         this.name = name;
     }
 
-    public LocationNames(long id, long idname, String name, Message message) {
+    public LocationNames(long id, Double idname, String name) {
         this.id = id;
         this.idname = idname;
         this.name = name;
-        this.message = message;
+        //this.message = message;
     }
 
     public LocationNames() {
@@ -94,14 +89,14 @@ public class LocationNames implements Serializable{
     /**
      * @return the idname
      */
-    public long getIdname() {
+    public Double getIdname() {
         return idname;
     }
 
     /**
      * @param idname the idname to set
      */
-    public void setIdname(long idname) {
+    public void setIdname(Double idname) {
         this.idname = idname;
     }
 
@@ -119,32 +114,22 @@ public class LocationNames implements Serializable{
         this.name = name;
     }
 
-    /**
-     * @return the prediction
-     */
-    public Set<Prediction> getPrediction() {
-        return prediction;
-    }
-
-    /**
-     * @param prediction the prediction to set
-     */
-    public void setPrediction(Set<Prediction> prediction) {
-        this.prediction = prediction;
-    }
-
-    /**
-     * @return the message
-     */
+    /*
     public Message getMessage() {
         return message;
     }
 
-    /**
-     * @param message the message to set
-     */
+  
     public void setMessage(Message message) {
         this.message = message;
+    }*/
+
+    public Prediction getPrediction() {
+        return prediction;
+    }
+
+    public void setPrediction(Prediction prediction) {
+        this.prediction = prediction;
     }
 
     
