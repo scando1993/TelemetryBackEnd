@@ -33,8 +33,6 @@ public class MessageController {
     @Autowired
     private MessageGuessRepository messageGuessRepository;
     @Autowired
-    private LocationNamesRepository locationNamesRepository;
-    @Autowired
     private MessageRepository messageRepository;
 
     @GetMapping("/message")
@@ -62,34 +60,25 @@ public class MessageController {
         }
     }
 
-    @PostMapping("/message/{predictionID}/{guessID}/{locationNameID}")
-    public ResponseEntity createMessages(@PathVariable(value = "predictionID") Long predictionID,
-                                       @PathVariable(value = "locationNameID") Long locationNameId,
+    @PostMapping("/message/{guessID}")
+    public ResponseEntity createMessages(
                                        @PathVariable(value = "guessID") Long messageGuessID) {
         try{
-            if(predictionsRepository.existsById(predictionID) && locationNamesRepository.existsById(locationNameId) && messageGuessRepository.existsById(messageGuessID)){
-                Prediction prediction = predictionsRepository.findById(predictionID).get();
-                LocationNames locationName = locationNamesRepository.findById(locationNameId).get();
+            if(messageGuessRepository.existsById(messageGuessID)){
                 MessageGuess messageGuess = messageGuessRepository.findById(messageGuessID).get();
                 Message message = new Message();
-                message.getPredictions().add(prediction);
-                message.setLocationNames(locationName);
                 message.setMessageGuess(messageGuess);
 
-                prediction.setMessage(message);
-                locationName.setMessage(message);
                 messageGuess.getMessages().add(message);
 
-                predictionsRepository.save(prediction);
-                locationNamesRepository.save(locationName);
                 messageGuessRepository.save(messageGuess);
                 Message posted = messageRepository.save(message);
 
                 return new ResponseEntity(posted, HttpStatus.CREATED);
             }
             else{
-                return new ResponseEntity<String>("Prediction #" + predictionID + "or LocationName #" +locationNameId + "0r MessageGuess #" + messageGuessID +
-                        " does not exist, it's not possible create new Prediction", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<String>("It's not possible create new Prediction", HttpStatus.NOT_FOUND);
+
             }
         }
         catch(Exception e){
@@ -98,32 +87,20 @@ public class MessageController {
         }
     }
     
-    @PutMapping("/message/{id}/{predictionID}/{guessID}/{locationNameID}")
+    @PutMapping("/message/{id}/{guessID}")
 	public ResponseEntity updateMessages(
 			@PathVariable(value = "id") Long mId,
-                        @PathVariable(value = "predictionID") Long predictionID,
-                        @PathVariable(value = "locationNameID") Long locationNameId,
                         @PathVariable(value = "guessID") Long messageGuessID){
             try{
                 if(messageRepository.existsById(mId) &&
-                   predictionsRepository.existsById(predictionID) && 
-                   locationNamesRepository.existsById(locationNameId) &&
                    messageGuessRepository.existsById(messageGuessID)){
                     Message message = messageRepository.findById(mId).get();
-                    Prediction prediction = predictionsRepository.findById(predictionID).get();
-                    LocationNames locationName = locationNamesRepository.findById(locationNameId).get();
                     MessageGuess messageGuess = messageGuessRepository.findById(messageGuessID).get();
                     
-                    message.getPredictions().add(prediction);
-                    message.setLocationNames(locationName);
                     message.setMessageGuess(messageGuess);
 
-                    prediction.setMessage(message);
-                    locationName.setMessage(message);
                     messageGuess.getMessages().add(message);
 
-                    predictionsRepository.save(prediction);
-                    locationNamesRepository.save(locationName);
                     messageGuessRepository.save(messageGuess);
                     final Message posted = messageRepository.save(message);
                     return new ResponseEntity(HttpStatus.OK);
@@ -146,9 +123,7 @@ public class MessageController {
                         p.setMessage(null);
                         predictionsRepository.save(p);
                     }
-                    message.getLocationNames().setMessage(null);
                     message.getMessageGuess().getMessages().remove(message);
-                    locationNamesRepository.save(message.getLocationNames());
                     messageGuessRepository.save(message.getMessageGuess());
                     messageRepository.delete(message);
                     return new ResponseEntity(HttpStatus.OK);

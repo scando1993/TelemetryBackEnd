@@ -64,30 +64,22 @@ public class PredictionController {
         }
     }
 
-    @PostMapping("/prediction/{probabilityID}/{LocationNameID}")
-    public ResponseEntity createPrediction(@PathVariable(value = "probabilityID") Long probabilityId,
-                                       @PathVariable(value = "LocationNameID") Long locationNameId,
-                                       @Valid @RequestBody Prediction prediction) {
+    @PostMapping("/prediction/{messageId}")
+    public ResponseEntity createPrediction(@Valid @RequestBody Prediction prediction,
+                            @PathVariable(value = "messageId") Long messageId) {
         try{
-            if(probabilitiesRepository.existsById(probabilityId) && locationNamesRepository.existsById(locationNameId)){
-                Probabilities probability = probabilitiesRepository.findById(probabilityId).get();
-                LocationNames locationName = locationNamesRepository.findById(locationNameId).get();
-                prediction.setLocationNames(locationName);
-                prediction.setProbabilities(probability);
-
-                probability.getPrediction().add(prediction);
-                locationName.getPrediction().add(prediction);
-
-                probabilitiesRepository.save(probability);
-                locationNamesRepository.save(locationName);
+            if(messageRepository.existsById(messageId)){
+                Message message = messageRepository.findById(messageId).get();
+                message.getPredictions().add(prediction);
+                prediction.setMessage(message);
                 Prediction posted = predictionsRepository.save(prediction);
-
+                messageRepository.save(message);
                 return new ResponseEntity(posted, HttpStatus.CREATED);
             }
             else{
-                return new ResponseEntity<String>("Probability #" + probabilityId + "or LocationName #" +locationNameId +
-                        " does not exist, it's not possible create new Prediction", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<String>("It's not possible create new Prediction", HttpStatus.NOT_FOUND);
             }
+
         }
         catch(Exception e){
             return new ResponseEntity<String>("It's not possible create new Prediction", HttpStatus.NOT_FOUND);
@@ -122,6 +114,16 @@ public class PredictionController {
             @PathVariable(value = "id") Long predictionID){
         if(predictionsRepository.existsById(predictionID)){
             Prediction prediction = predictionsRepository.findById(predictionID).get();
+            for(LocationNames l: prediction.getLocationNames()){
+                l.setPrediction(null);
+                locationNamesRepository.save(l);
+            }
+            for(Probabilities p: prediction.getProbabilitieses()){
+                p.setPrediction(null);
+                probabilitiesRepository.save(p);
+            }
+            prediction.getMessage().getPredictions().remove(prediction);
+            messageRepository.save(prediction.getMessage());
             predictionsRepository.delete(prediction);
             return new ResponseEntity(HttpStatus.OK);
         }
