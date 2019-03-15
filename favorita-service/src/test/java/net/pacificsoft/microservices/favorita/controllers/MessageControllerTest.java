@@ -82,26 +82,20 @@ public class MessageControllerTest {
         Message message = new Message();
         Prediction prediction =new Prediction();
         MessageGuess mg= new MessageGuess();
-        LocationNames ln=new LocationNames();
         
-        message.setLocationNames(ln);
         message.setMessageGuess(mg);
         message.getPredictions().add(prediction);
         
         prediction.setMessage(message);
-        ln.setMessage(message);
         mg.getMessages().add(message);
-        
-        given(repositoryL.existsById(message.getLocationNames().getId())).willReturn(true);
-        given(repositoryL.findById(any())).willReturn(Optional.of(ln));
-        
+                
         given(repositoryP.existsById(prediction.getId())).willReturn(true);
         given(repositoryP.findById(any())).willReturn(Optional.of(prediction));
         
         given(repositoryG.existsById(message.getMessageGuess().getId())).willReturn(true);
         given(repositoryG.findById(any())).willReturn(Optional.of(mg));
         
-        mvc.perform(post("/message/"+prediction.getId()+"/"+mg.getId()+"/"+ln.getId())
+        mvc.perform(post("/message/"+prediction.getId()+"/"+mg.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
         )
                 .andDo(print())
@@ -116,12 +110,10 @@ public class MessageControllerTest {
         MessageGuess mg= new MessageGuess();
         LocationNames ln=new LocationNames();
         
-        message.setLocationNames(ln);
         message.setMessageGuess(mg);
         message.getPredictions().add(prediction);
         
         prediction.setMessage(message);
-        ln.setMessage(message);
         mg.getMessages().add(message);
         
         given(repository.existsById(any())).willReturn(true);

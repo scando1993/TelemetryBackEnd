@@ -69,8 +69,8 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void getAll_test() throws Exception{
-        Probabilities probability1= new Probabilities("w",1.2);
-        Probabilities probability2= new Probabilities("q",2.2);
+        Probabilities probability1= new Probabilities(1.1,1.2);
+        Probabilities probability2= new Probabilities(2.0,2.2);
 
         List<Probabilities> ProbabilitiesList = Arrays.asList(probability1, probability2);
 
@@ -85,7 +85,7 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void getById_test() throws Exception {
-        Probabilities probability= new Probabilities("w",1.2);
+        Probabilities probability= new Probabilities(2.3,1.2);
         Prediction p= new Prediction();
         probability.setPrediction(p);
         p.getProbabilitieses().add(probability);
@@ -101,7 +101,7 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void create_test() throws Exception{
-        Probabilities probability= new Probabilities("w",1.2);
+        Probabilities probability= new Probabilities(1.2,1.2);
         Prediction p= new Prediction();
         probability.setPrediction(p);
         p.getProbabilitieses().add(probability);
@@ -120,7 +120,7 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void delete_test() throws Exception{
-        Probabilities probability= new Probabilities("w",1.2);
+        Probabilities probability= new Probabilities(1.3,1.2);
         Prediction p= new Prediction();
         probability.setPrediction(p);
         p.getProbabilitieses().add(probability);
@@ -137,7 +137,7 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void update_test() throws Exception{
-        Probabilities probability= new Probabilities("w",1.2);
+        Probabilities probability= new Probabilities(2.6,1.2);
         Prediction p= new Prediction();
         probability.setPrediction(p);
         p.getProbabilitieses().add(probability);

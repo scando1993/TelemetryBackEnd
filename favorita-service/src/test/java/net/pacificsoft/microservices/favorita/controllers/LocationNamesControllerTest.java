@@ -65,8 +65,8 @@ public class LocationNamesControllerTest {
     @Test
     public void getAll_test() throws Exception{
         //Message ms=new Message();
-        LocationNames ln1 = new LocationNames(1,"m");
-        LocationNames ln2 = new LocationNames(2,"m");
+        LocationNames ln1 = new LocationNames(1.1,"m");
+        LocationNames ln2 = new LocationNames(2.2,"m");
 
         List<LocationNames> locationNamesList = Arrays.asList(ln1, ln2);
 
@@ -81,7 +81,7 @@ public class LocationNamesControllerTest {
     
     @Test
     public void getById_test() throws Exception {
-        LocationNames ln = new LocationNames(1,"m");
+        LocationNames ln = new LocationNames(1.1,"m");
         Prediction p= new Prediction();
         ln.setPrediction(p);
         p.getLocationNames().add(ln);
@@ -97,7 +97,7 @@ public class LocationNamesControllerTest {
     
     @Test
     public void create_test() throws Exception{
-        LocationNames ln = new LocationNames(1,"m");
+        LocationNames ln = new LocationNames(1.1,"m");
         Prediction p= new Prediction();
         ln.setPrediction(p);
         p.getLocationNames().add(ln);
@@ -116,7 +116,7 @@ public class LocationNamesControllerTest {
     
     @Test
     public void delete_test() throws Exception{
-        LocationNames ln = new LocationNames(1,"m");
+        LocationNames ln = new LocationNames(1.1,"m");
         Prediction p= new Prediction();
         ln.setPrediction(p);
         p.getLocationNames().add(ln);
@@ -133,7 +133,7 @@ public class LocationNamesControllerTest {
     
     @Test
     public void update_test() throws Exception{
-        LocationNames ln = new LocationNames(1,"m");
+        LocationNames ln = new LocationNames(1.1,"m");
         Prediction p= new Prediction();
         ln.setPrediction(p);
         p.getLocationNames().add(ln);
