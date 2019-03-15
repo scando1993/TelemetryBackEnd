@@ -70,7 +70,7 @@ public class ProbabilitiesController {
                         pre.getProbabilitieses().add(probability);
                         probability.setPrediction(pre);
                         Probabilities p = probabilitiesRepository.save(probability);
-                        predictionsRepository.save(pre); m
+                        predictionsRepository.save(pre); 
                         return new ResponseEntity(p, HttpStatus.CREATED);
                     }
                     else{
@@ -111,13 +111,9 @@ public class ProbabilitiesController {
 			@PathVariable(value = "id") Long probabilityId){
                 if(probabilitiesRepository.existsById(probabilityId)){
                     Probabilities probability = probabilitiesRepository.findById(probabilityId).get();
-                    if(probability.getPrediction().size()>0){
-                        Set<Prediction> ubFs = probability.getPrediction();
-                        for(Prediction r: ubFs){
-                            r.setProbabilities(null);
-                            predictionsRepository.save(r);
-                        }
-                    }
+                    probability.setPrediction(null);
+                    probability.getPrediction().getProbabilitieses().remove(null);
+                    predictionsRepository.save(probability.getPrediction());
                     probabilitiesRepository.delete(probability);
                     return new ResponseEntity(HttpStatus.OK);
                 }
