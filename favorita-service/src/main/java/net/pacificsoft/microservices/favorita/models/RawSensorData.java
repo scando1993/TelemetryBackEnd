@@ -92,8 +92,7 @@ public class RawSensorData implements Serializable{
             this.device = device;
         }
 
-        public RawSensorData() {
-        }
+        
 
         
         public long getId() {

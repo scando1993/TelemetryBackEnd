@@ -54,11 +54,11 @@ public class Features implements Serializable{
         @Column(name = "memoria", nullable = false)
         private boolean memoria;
         
-        @JsonIgnore
+        /*@JsonIgnore
         @OneToOne(fetch = FetchType.EAGER,
             cascade =  CascadeType.ALL,
             mappedBy = "features")
-        private Device device;
+        private Device device;*/
 
         public Features(boolean tracking, String tipo_sensores, 
                 String modos_transmision, String version, String firmware, 
@@ -94,7 +94,7 @@ public class Features implements Serializable{
             this.alimentacion = alimentacion;
             this.nivel_voltaje = nivel_voltaje;
             this.memoria = memoria;
-            this.device = device;
+            //this.device = device;
         }
  
         
@@ -180,12 +180,12 @@ public class Features implements Serializable{
             this.memoria = memoria;
         }
 
-        public Device getDevice() {
+        /*public Device getDevice() {
             return device;
         }
 
         public void setDevice(Device device) {
             this.device = device;
-        }
+        }*/
    
 }
