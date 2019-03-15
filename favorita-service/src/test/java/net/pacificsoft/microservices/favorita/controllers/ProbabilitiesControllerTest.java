@@ -25,6 +25,7 @@ import net.minidev.json.JSONObject;
 import net.pacificsoft.microservices.favorita.models.LocationNames;
 import net.pacificsoft.microservices.favorita.models.Message;
 import net.pacificsoft.microservices.favorita.models.MessageGuess;
+import net.pacificsoft.microservices.favorita.models.Prediction;
 import net.pacificsoft.microservices.favorita.models.Probabilities;
 import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
 import net.pacificsoft.microservices.favorita.repository.FeaturesRepository;
@@ -85,6 +86,9 @@ public class ProbabilitiesControllerTest {
     @Test
     public void getById_test() throws Exception {
         Probabilities probability= new Probabilities("w",1.2);
+        Prediction p= new Prediction();
+        probability.setPrediction(p);
+        p.getProbabilitieses().add(probability);
         
         given(repository.existsById(probability.getId())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));
@@ -98,6 +102,9 @@ public class ProbabilitiesControllerTest {
     @Test
     public void create_test() throws Exception{
         Probabilities probability= new Probabilities("w",1.2);
+        Prediction p= new Prediction();
+        probability.setPrediction(p);
+        p.getProbabilitieses().add(probability);
        
         JSONObject json = new JSONObject();
         json.put("name", probability.getName());
@@ -114,6 +121,9 @@ public class ProbabilitiesControllerTest {
     @Test
     public void delete_test() throws Exception{
         Probabilities probability= new Probabilities("w",1.2);
+        Prediction p= new Prediction();
+        probability.setPrediction(p);
+        p.getProbabilitieses().add(probability);
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));
@@ -128,6 +138,9 @@ public class ProbabilitiesControllerTest {
     @Test
     public void update_test() throws Exception{
         Probabilities probability= new Probabilities("w",1.2);
+        Prediction p= new Prediction();
+        probability.setPrediction(p);
+        p.getProbabilitieses().add(probability);
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));

@@ -24,6 +24,7 @@ import java.util.Optional;
 import net.minidev.json.JSONObject;
 import net.pacificsoft.microservices.favorita.models.LocationNames;
 import net.pacificsoft.microservices.favorita.models.Message;
+import net.pacificsoft.microservices.favorita.models.Prediction;
 import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
 import net.pacificsoft.microservices.favorita.repository.FeaturesRepository;
 import net.pacificsoft.microservices.favorita.repository.LocationNamesRepository;
@@ -81,6 +82,9 @@ public class LocationNamesControllerTest {
     @Test
     public void getById_test() throws Exception {
         LocationNames ln = new LocationNames(1,"m");
+        Prediction p= new Prediction();
+        ln.setPrediction(p);
+        p.getLocationNames().add(ln);
         
         given(repository.existsById(ln.getId())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(ln));
@@ -94,6 +98,9 @@ public class LocationNamesControllerTest {
     @Test
     public void create_test() throws Exception{
         LocationNames ln = new LocationNames(1,"m");
+        Prediction p= new Prediction();
+        ln.setPrediction(p);
+        p.getLocationNames().add(ln);
        
         JSONObject json = new JSONObject();
         json.put("idname", ln.getIdname());
@@ -110,6 +117,9 @@ public class LocationNamesControllerTest {
     @Test
     public void delete_test() throws Exception{
         LocationNames ln = new LocationNames(1,"m");
+        Prediction p= new Prediction();
+        ln.setPrediction(p);
+        p.getLocationNames().add(ln);
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(ln));
@@ -124,6 +134,9 @@ public class LocationNamesControllerTest {
     @Test
     public void update_test() throws Exception{
         LocationNames ln = new LocationNames(1,"m");
+        Prediction p= new Prediction();
+        ln.setPrediction(p);
+        p.getLocationNames().add(ln);
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(ln));

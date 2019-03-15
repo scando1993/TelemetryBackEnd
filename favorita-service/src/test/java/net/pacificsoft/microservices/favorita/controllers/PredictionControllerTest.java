@@ -72,12 +72,8 @@ public class PredictionControllerTest {
     @Test
     public void getById_test() throws Exception{
         Prediction prediction= new Prediction("n1");
-        Probabilities prob= new Probabilities();
-        LocationNames ln= new LocationNames();
-        prediction.setLocationNames(ln);
-        ln.getPrediction().add(prediction);
-        prediction.setProbabilities(prob);
-        prob.getPrediction().add(prediction);
+        //Probabilities prob= new Probabilities();
+        //LocationNames ln= new LocationNames();
         
         given(repository.existsById(prediction.getId())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(prediction));
@@ -90,24 +86,17 @@ public class PredictionControllerTest {
     @Test
     public void create_test() throws Exception {
         Prediction prediction= new Prediction("n1");
-        Probabilities prob= new Probabilities();
-        LocationNames ln= new LocationNames();
-        prediction.setLocationNames(ln);
-        ln.getPrediction().add(prediction);
-        prediction.setProbabilities(prob);
-        prob.getPrediction().add(prediction);
+//        Probabilities prob= new Probabilities();
+//        LocationNames ln= new LocationNames();
+//        prediction.setLocationNames(ln);
+//        ln.getPrediction().add(prediction);
+//        prediction.setProbabilities(prob);
+//        prob.getPrediction().add(prediction);
         
         JSONObject json = new JSONObject();
         json.put("name", prediction.getName());
         
-        given(repositoryP.existsById(prediction.getProbabilities().getId())).willReturn(true);
-        given(repositoryP.findById(any())).willReturn(Optional.of(prob));
-        
-        given(repositoryL.existsById(prediction.getLocationNames().getId())).willReturn(true);
-        given(repositoryL.findById(any())).willReturn(Optional.of(ln));
-        
-        mvc.perform(post("/prediction/"+prediction.getProbabilities().getId()+
-                '/'+prediction.getLocationNames().getId())
+        mvc.perform(post("/prediction")
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(json.toJSONString())
         )
@@ -119,12 +108,12 @@ public class PredictionControllerTest {
     @Test
     public void delete_test() throws Exception{
         Prediction prediction= new Prediction("n1");
-        Probabilities prob= new Probabilities();
-        LocationNames ln= new LocationNames();
-        prediction.setLocationNames(ln);
-        ln.getPrediction().add(prediction);
-        prediction.setProbabilities(prob);
-        prob.getPrediction().add(prediction);
+//        Probabilities prob= new Probabilities();
+//        LocationNames ln= new LocationNames();
+//        prediction.setLocationNames(ln);
+//        ln.getPrediction().add(prediction);
+//        prediction.setProbabilities(prob);
+//        prob.getPrediction().add(prediction);
         
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(prediction));
@@ -140,12 +129,12 @@ public class PredictionControllerTest {
     @Test
     public void update_test() throws Exception{
         Prediction prediction= new Prediction("n1");
-        Probabilities prob= new Probabilities();
-        LocationNames ln= new LocationNames();
-        prediction.setLocationNames(ln);
-        ln.getPrediction().add(prediction);
-        prediction.setProbabilities(prob);
-        prob.getPrediction().add(prediction);
+//        Probabilities prob= new Probabilities();
+//        LocationNames ln= new LocationNames();
+//        prediction.setLocationNames(ln);
+//        ln.getPrediction().add(prediction);
+//        prediction.setProbabilities(prob);
+//        prob.getPrediction().add(prediction);
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(prediction));
