@@ -44,6 +44,9 @@ public class ApiGatewayController {
             final String urlProbability = "http://localhost:2222/probability";
             final String urlLocationNames = "http://localhost:2222/locationNames";
             final String urlApiGoResponse = "http://localhost:2222/goApiResponse";
+            final String urlMessage = "http://localhost:2222/message";
+            final String urlMessaguess = "http://localhost:2222/messageGuess";
+
 
             final int defaultTrackingLocationGroup = 1;
             String endPoint;
@@ -95,7 +98,7 @@ public class ApiGatewayController {
 
             //Creating MessageGuess
             MessageGuess messageGuess = new MessageGuess(finalLocation, finalProbability);
-            JSONObject jsonResponseMessageGuess = new JSONObject(restTemplate.postForObject( urlLocationNames + endPoint, messageGuess, MessageGuess.class));
+            JSONObject jsonResponseMessageGuess = new JSONObject(restTemplate.postForObject( urlLocationNames, messageGuess, MessageGuess.class));
             long idMessageGuess = jsonResponseMessageGuess.getLong("id");
 
             //Creating Message

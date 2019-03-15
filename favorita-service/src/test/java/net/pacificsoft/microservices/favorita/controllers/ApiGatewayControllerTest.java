@@ -93,7 +93,7 @@ public class ApiGatewayControllerTest {
         locationGroup.getTrackings().add(tracking);
 
         
-        GoApiResponse goApiResponse = new GoApiResponse(expectedGoApiResponse);
+        GoApiResponse goApiResponse = new GoApiResponse(true);
 
         device.getGoApiResponses().add(goApiResponse);
         goApiResponse.setDevice(device);

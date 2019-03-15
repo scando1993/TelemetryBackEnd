@@ -67,9 +67,10 @@ public class ProbabilitiesControllerTest {
     private PredictionsRepository repositoryM;
     
     @Test
+
     public void getAll_test() throws Exception{
-        Probabilities probability1= new Probabilities("w",1.2);
-        Probabilities probability2= new Probabilities("q",2.2);
+        Probabilities probability1= new Probabilities(new Double(11), new Double(11));
+        Probabilities probability2= new Probabilities(new Double(11),new Double(11));
 
         List<Probabilities> ProbabilitiesList = Arrays.asList(probability1, probability2);
 
@@ -84,7 +85,7 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void getById_test() throws Exception {
-        Probabilities probability= new Probabilities("w",1.2);
+        Probabilities probability= new Probabilities(new Double(11),1.2);
         
         given(repository.existsById(probability.getId())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));
@@ -97,7 +98,7 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void create_test() throws Exception{
-        Probabilities probability= new Probabilities("w",1.2);
+        Probabilities probability= new Probabilities(new Double(11),1.2);
        
         JSONObject json = new JSONObject();
         json.put("name", probability.getNameID());
@@ -113,7 +114,7 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void delete_test() throws Exception{
-        Probabilities probability= new Probabilities("w",1.2);
+        Probabilities probability= new Probabilities(new Double(11),1.2);
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));
@@ -127,7 +128,7 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void update_test() throws Exception{
-        Probabilities probability= new Probabilities("w",1.2);
+        Probabilities probability= new Probabilities(new Double(11),1.2);
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));
