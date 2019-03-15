@@ -61,20 +61,22 @@ public class ProbabilitiesController {
         }
     }
 
-    @PostMapping("/probability")
-	public ResponseEntity createProbabilities(@Valid @RequestBody Probabilities probability) {
+    @PostMapping("/probability/{predictionId}")
+	public ResponseEntity createProbabilities(@Valid @RequestBody Probabilities probability,
+                                        @PathVariable(value = "predictionId") Long predictionId) {
                 try{
-                    Probabilities p = probabilitiesRepository.save(probability);
-                    return new ResponseEntity(p, HttpStatus.CREATED);
-                    /*
-                    JSONObject json = new JSONObject();
-                    Set<Map<String, Object>> ubs = new HashSet();
-                    json.put("id", p.getId());
-                    json.put("nameId", p.getNameId());
-                    json.put("probability", p.getProbability());
-                    return new ResponseEntity(json.toMap(), HttpStatus.CREATED);
-                    */
-
+                    if(predictionsRepository.existsById(predictionId)){
+                        Prediction pre = predictionsRepository.findById(predictionId).get();
+                        pre.getProbabilitieses().add(probability);
+                        probability.setPrediction(pre);
+                        Probabilities p = probabilitiesRepository.save(probability);
+                        predictionsRepository.save(pre); m
+                        return new ResponseEntity(p, HttpStatus.CREATED);
+                    }
+                    else{
+                        return new ResponseEntity<String>("New Probabilities not created.",
+                            HttpStatus.NOT_FOUND);
+                    }
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("New Probabilities not created.",
@@ -89,7 +91,7 @@ public class ProbabilitiesController {
             try{
                 if(probabilitiesRepository.existsById(probabilityId)){
                     Probabilities probability = probabilitiesRepository.findById(probabilityId).get();
-                    probability.setName(probabilityDetails.getName());
+                    probability.setNameID(probabilityDetails.getNameID());
                     probability.setProbability(probabilityDetails.getProbability());
                     final Probabilities updatedpProbability = probabilitiesRepository.save(probability);
                     return new ResponseEntity(HttpStatus.OK);

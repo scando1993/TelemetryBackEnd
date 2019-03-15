@@ -38,7 +38,7 @@ public class LocationNames implements Serializable{
     private long id;
 
     @Column(name = "idName", nullable = false)
-    private long idname;
+    private Double idname;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -55,12 +55,12 @@ public class LocationNames implements Serializable{
     private Message  message;
     
 
-    public LocationNames(long idname, String name) {
+    public LocationNames(Double idname, String name) {
         this.idname = idname;
         this.name = name;
     }
 
-    public LocationNames(long id, long idname, String name, Message message) {
+    public LocationNames(long id, Double idname, String name, Message message) {
         this.id = id;
         this.idname = idname;
         this.name = name;
@@ -89,14 +89,14 @@ public class LocationNames implements Serializable{
     /**
      * @return the idname
      */
-    public long getIdname() {
+    public Double getIdname() {
         return idname;
     }
 
     /**
      * @param idname the idname to set
      */
-    public void setIdname(long idname) {
+    public void setIdname(Double idname) {
         this.idname = idname;
     }
 

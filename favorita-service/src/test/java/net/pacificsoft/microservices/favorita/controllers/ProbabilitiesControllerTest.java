@@ -107,7 +107,7 @@ public class ProbabilitiesControllerTest {
         p.getProbabilitieses().add(probability);
        
         JSONObject json = new JSONObject();
-        json.put("name", probability.getName());
+        json.put("name", probability.getNameID());
         json.put("probability", probability.getProbability());
         
         mvc.perform(post("/probability")
@@ -146,7 +146,7 @@ public class ProbabilitiesControllerTest {
         given(repository.findById(any())).willReturn(Optional.of(probability));
 
         JSONObject json = new JSONObject();
-        json.put("name", probability.getName());
+        json.put("name", probability.getNameID());
         json.put("probability", probability.getProbability());
 
         mvc.perform(put("/probability/"+probability.getId())
