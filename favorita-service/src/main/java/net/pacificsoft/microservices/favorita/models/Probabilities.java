@@ -42,10 +42,9 @@ public class Probabilities implements Serializable{
     @Column(name = "probability", nullable = false)
     private Double probability;
 
-    @OneToMany(fetch = FetchType.EAGER,
-            cascade =  CascadeType.ALL,
-            mappedBy = "probabilities")
-    private Set<Prediction> prediction = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "probilityID")
+    private Prediction prediction;
 
     public Probabilities(String name, Double probability) {
         this.name = name;
@@ -99,19 +98,15 @@ public class Probabilities implements Serializable{
 		this.probability = probability;
 	}
 
-	/**
-	 * @return the prediction
-	 */
-	public Set<Prediction> getPrediction() {
-		return prediction;
-	}
+    public Prediction getPrediction() {
+        return prediction;
+    }
 
-	/**
-	 * @param prediction the prediction to set
-	 */
-	public void setPrediction(Set<Prediction> prediction) {
-		this.prediction = prediction;
-	}
+    public void setPrediction(Prediction prediction) {
+        this.prediction = prediction;
+    }
+
+
 
     
     
