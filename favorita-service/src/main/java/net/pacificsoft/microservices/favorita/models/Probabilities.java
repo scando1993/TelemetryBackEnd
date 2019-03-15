@@ -37,7 +37,7 @@ public class Probabilities implements Serializable{
     private long id;
     
     @Column(name = "nameID", nullable = false)
-    private String name;
+    private Double nameID;
 
     @Column(name = "probability", nullable = false)
     private Double probability;
@@ -46,8 +46,8 @@ public class Probabilities implements Serializable{
     @JoinColumn(name = "probilityID")
     private Prediction prediction;
 
-    public Probabilities(String name, Double probability) {
-        this.name = name;
+    public Probabilities(Double nameID, Double probability) {
+        this.nameID = nameID;
         this.probability = probability;
     }
 
@@ -73,15 +73,15 @@ public class Probabilities implements Serializable{
 	/**
 	 * @return the name
 	 */
-	public String getName() {
-		return name;
+	public Double getNameID() {
+		return nameID;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setNameID(Double nameID) {
+		this.nameID = nameID;
 	}
 
 	/**
