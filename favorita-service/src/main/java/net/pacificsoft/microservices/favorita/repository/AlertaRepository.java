@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AlertaRepository extends JpaRepository<Alerta, Long>{
-    public Alerta findByType_alert(String alert);
 
 }

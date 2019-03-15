@@ -33,7 +33,7 @@ spring:
     username: soporte
     password: Pacific12Pacific12
     tomcat:
-          test-while-idle: : true
+          test-while-idle: true
           validation-query: SELECT 1
           max-active: 50
           max-wait: 10000

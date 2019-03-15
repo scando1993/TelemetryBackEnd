@@ -66,18 +66,38 @@ public class ApiGatewayControllerTest {
     private SimpleDateFormat dateFormat;
     @Before
     public void init(){
-        rawSensorData = new RawSensorData(2L, (float)45.12, new Date(5435467), "loquesea");
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        Date generalDtm = new Date(5435467);
+        String trackingLocation = "someWhere";
+        int expectedGoApiResponse = 1;
+
+        //Before call goApi
+        rawSensorData = new RawSensorData(2L, (float)45.12, generalDtm, "loquesea");
         device = new Device("test1","2");
         Family family = new Family("test1");
         Group group = new Group("Super");
+
         group.getFamilies().add(family);
+        group.getDevices().add(device);
         family.setGroup(group);
         device.setGroup(group);
         rawSensorData.setDevice(device);
         device.getRawSensorDatas().add(rawSensorData);
-        group.getDevices().add(device);
 
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        //After consulting the goAPi
+        Tracking tracking = new Tracking(trackingLocation, generalDtm);
+        LocationGroup locationGroup = new LocationGroup("Test");
+
+        tracking.setDevice(device);
+        device.getTrackings().add(tracking);
+        locationGroup.getTrackings().add(tracking);
+
+        
+        GoApiResponse goApiResponse = new GoApiResponse(expectedGoApiResponse);
+
+        device.getGoApiResponses().add(goApiResponse);
+        goApiResponse.setDevice(device);
+
 
     }
 
