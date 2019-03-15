@@ -59,6 +59,12 @@ public class LocationNames implements Serializable{
             mappedBy = "locationNames")
     private Message  message;
 
+    public LocationNames(long idname, String name) {
+        this.idname = idname;
+        this.name = name;
+    }
+    public LocationNames(){};
+
     /**
      * @return the id
      */
