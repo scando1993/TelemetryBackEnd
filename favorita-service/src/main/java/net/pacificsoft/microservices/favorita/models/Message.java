@@ -55,6 +55,11 @@ public class Message implements Serializable{
     @JoinColumn(name = "locationNamesID")
     private LocationNames locationNames;
 
+    public Message() {
+    }
+
+    
+    
         /**
          * @return the id
          */

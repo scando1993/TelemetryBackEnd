@@ -74,7 +74,10 @@ public class Ruta implements Serializable{
             this.start_date = start_date;
             this.end_date = end_date;
         }
-    
+
+        public Ruta() {
+        }
+
         public long getId() {
             return id;
         }

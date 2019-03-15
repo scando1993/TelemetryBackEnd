@@ -50,8 +50,10 @@ public class GoApiResponse implements Serializable{
     public GoApiResponse(int sucess) {
         this.sucess = sucess;
     }
-    public GoApiResponse(){}
 
+    public GoApiResponse() {
+    }
+    
     /**
      * @return the id
      */

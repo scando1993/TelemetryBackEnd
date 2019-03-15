@@ -61,7 +61,7 @@ public class WifiScanController {
 	}
 
 	@PostMapping("/wifiScan/{rawdataId}")
-	public ResponseEntity createBodega(@PathVariable(value = "ciudadid") Long rawId,
+	public ResponseEntity createBodega(@PathVariable(value = "rawdataId") Long rawId,
                                  @Valid @RequestBody WifiScan wifi) {
             try{
                 if(rawSensorDataRepository.existsById(rawId)){

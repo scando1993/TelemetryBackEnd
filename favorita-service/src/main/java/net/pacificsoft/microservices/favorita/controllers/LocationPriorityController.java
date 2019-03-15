@@ -37,7 +37,7 @@ public class LocationPriorityController {
 	private TrackingRepository trackingRepository;
 	
 	@GetMapping("/locationPriority")
-	public ResponseEntity getAllBodegas() {
+	public ResponseEntity getAllLocationPriority() {
                 try{
                     
                     return new ResponseEntity(locationPriorityRepository.findAll(), HttpStatus.OK);
@@ -49,7 +49,7 @@ public class LocationPriorityController {
 	}
 
 	@GetMapping("/locationPriority/{id}")
-	public ResponseEntity getBodegaById(
+	public ResponseEntity getLocationPriorityById(
 			@PathVariable(value = "id") Long lPriorityiD){
                 if(locationPriorityRepository.existsById(lPriorityiD)){
                     LocationPriority lp = locationPriorityRepository.findById(lPriorityiD).get();
@@ -62,7 +62,7 @@ public class LocationPriorityController {
 	}
 
 	@PostMapping("/locationPriority/{trackingid}")
-	public ResponseEntity createBodega(@PathVariable(value = "trackingid") Long trackingId,
+	public ResponseEntity createLocationPriority(@PathVariable(value = "trackingid") Long trackingId,
                                  @Valid @RequestBody LocationPriority locationPriority) {
             try{
                 if(trackingRepository.existsById(trackingId)){
@@ -85,7 +85,7 @@ public class LocationPriorityController {
 	}
 
         @PutMapping("/locationPriority/{id}")
-	public ResponseEntity updateBodega(
+	public ResponseEntity updateLocationPriority(
 			@PathVariable(value = "id") Long lpId,
 			@Valid @RequestBody LocationPriority lpDetails){
             try{
@@ -108,7 +108,7 @@ public class LocationPriorityController {
 	}
 
         @DeleteMapping("/locationPriority/{id}")
-	public ResponseEntity deleteBodega(
+	public ResponseEntity deleteLocationPriority(
                                 @PathVariable(value = "id") Long lpId){
                 if(locationPriorityRepository.existsById(lpId)){
                     LocationPriority lp = locationPriorityRepository.findById(lpId).get();

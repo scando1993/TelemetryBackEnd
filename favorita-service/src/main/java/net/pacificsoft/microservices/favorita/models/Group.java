@@ -48,6 +48,9 @@ public class Group implements Serializable{
             mappedBy = "groupFamily")
     private Set<Family> families = new HashSet<>();
 
+    public Group() {
+    }
+
     
     
     
@@ -55,12 +58,6 @@ public class Group implements Serializable{
         this.name = name;
     }
 
-    public Group() {
-    }
-
-
-    
-    
     public long getId() {
         return id;
     }

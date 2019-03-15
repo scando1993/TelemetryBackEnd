@@ -33,7 +33,7 @@ public class RawSensorDataController {
 	private DeviceRepository deviceRepository;
         
 	@GetMapping("/rawSensorData")
-	public ResponseEntity getAllCiudad() {
+	public ResponseEntity getAllRawSensorData() {
                 try{
                     return new ResponseEntity(rawSensorDataRepository.findAll(), HttpStatus.OK);
                 }
@@ -44,7 +44,7 @@ public class RawSensorDataController {
 	}
 
 	@GetMapping("/rawSensorData/{id}")
-	public ResponseEntity getCiudadById(
+	public ResponseEntity getRawSensorDataById(
 			@PathVariable(value = "id") Long rawId){
                 if(rawSensorDataRepository.existsById(rawId)){
                     RawSensorData rawD = rawSensorDataRepository.findById(rawId).get();
@@ -57,7 +57,7 @@ public class RawSensorDataController {
 	}
 
 	@PostMapping("/rawSensorData/{deviceid}")
-	public ResponseEntity createCiudad(@PathVariable(value = "deviceid") Long deviceId,
+	public ResponseEntity createRawSensorData(@PathVariable(value = "deviceid") Long deviceId,
                                  @Valid @RequestBody RawSensorData rawData) {
             try{
                 if(deviceRepository.existsById(deviceId)){
@@ -80,7 +80,7 @@ public class RawSensorDataController {
 	}
 
         @PutMapping("/rawSensorData/{id}")
-	public ResponseEntity updateCiudad(
+	public ResponseEntity updateRawSensorData(
 			@PathVariable(value = "id") Long rawId,
 			@Valid @RequestBody RawSensorData rawDetails){
             try{
@@ -105,7 +105,7 @@ public class RawSensorDataController {
 	}
 
         @DeleteMapping("/rawSensorData/{id}")
-	public ResponseEntity deleteCiudad(
+	public ResponseEntity deleteRawSensorData(
                                 @PathVariable(value = "id") Long rawId){
                 if(rawSensorDataRepository.existsById(rawId)){
                     RawSensorData rawD = rawSensorDataRepository.findById(rawId).get();

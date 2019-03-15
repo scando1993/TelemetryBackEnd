@@ -57,7 +57,7 @@ public class ApiGoResponseController {
 
 
     @PostMapping("/goApiResponse/{messageID}/{deviceID}")
-    public ResponseEntity createCiudad(@PathVariable(value = "messageID") Long messageID,
+    public ResponseEntity createGoApiResponse(@PathVariable(value = "messageID") Long messageID,
                                        @PathVariable(value = "deviceID") Long deviceID,
                                        @Valid @RequestBody GoApiResponse goApiResponse) {
         try{
@@ -86,7 +86,7 @@ public class ApiGoResponseController {
     }
     
         @PutMapping("/goApiResponse/{id}")
-	public ResponseEntity updateDevice(
+	public ResponseEntity updateGoApiResponse(
 			@PathVariable(value = "id") Long goId,
 			@Valid @RequestBody GoApiResponse goDetails){
                 if(goRepository.existsById(goId)){
@@ -102,7 +102,7 @@ public class ApiGoResponseController {
 	}
 
 	@DeleteMapping("/goApiResponse/{id}")
-	public ResponseEntity deleteDevice(
+	public ResponseEntity deleteGoApiResponse(
 			@PathVariable(value = "id") Long goId){
                 if(goRepository.existsById(goId)){
                     GoApiResponse goApi = goRepository.findById(goId).get();

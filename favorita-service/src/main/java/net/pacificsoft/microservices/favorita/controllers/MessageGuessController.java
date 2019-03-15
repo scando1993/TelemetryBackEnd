@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
+import net.pacificsoft.microservices.favorita.models.LocationNames;
 
 import net.pacificsoft.microservices.favorita.models.Message;
 import net.pacificsoft.microservices.favorita.models.MessageGuess;
@@ -35,19 +36,29 @@ public class MessageGuessController {
     @GetMapping("/messageGuess")
     public ResponseEntity getAllMessageGuesses() {
         try{
-
-            List<MessageGuess> messageGuesses = messageGuessRepository.findAll();
-
-            return new ResponseEntity(messageGuesses, HttpStatus.OK);
+            return new ResponseEntity(messageGuessRepository.findAll(), HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<String>("Resources not available.",
                     HttpStatus.NOT_FOUND);
         }
     }
+    
+     @GetMapping("/messageGuess/{id}")
+    public ResponseEntity getMessageGuessesById(
+            @PathVariable(value = "id") Long MessageGuessId){
+        if(messageGuessRepository.existsById(MessageGuessId)){
+            MessageGuess a = messageGuessRepository.findById(MessageGuessId).get();
+            return new ResponseEntity(a, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<String>("Location Names #" + MessageGuessId +
+                    " does not exist.", HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PostMapping("/messageGuess")
-    public ResponseEntity createFurgon(@Valid @RequestBody MessageGuess messageGuess) {
+    public ResponseEntity createMessageGuesses(@Valid @RequestBody MessageGuess messageGuess) {
         try{
             MessageGuess p = messageGuessRepository.save(messageGuess);
             return new ResponseEntity(p, HttpStatus.CREATED);
@@ -59,7 +70,7 @@ public class MessageGuessController {
     }
 
     @PutMapping("/messageGuess/{id}")
-    public ResponseEntity updateFurgon(
+    public ResponseEntity updateMessageGuesses(
             @PathVariable(value = "id") Long messageGuessId,
             @Valid @RequestBody MessageGuess messageGuessDetails){
         try{
@@ -81,7 +92,7 @@ public class MessageGuessController {
     }
 
     @DeleteMapping("/messageGuess/{id}")
-    public ResponseEntity deletemessageGuess(
+    public ResponseEntity deleteMessageGuess(
             @PathVariable(value = "id") Long messageGuessId){
         if(messageGuessRepository.existsById(messageGuessId)){
             MessageGuess messageGuess = messageGuessRepository.findById(messageGuessId).get();

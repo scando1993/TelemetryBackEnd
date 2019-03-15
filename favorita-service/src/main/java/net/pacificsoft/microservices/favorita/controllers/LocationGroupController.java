@@ -20,6 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import net.pacificsoft.microservices.favorita.models.Device;
+import net.pacificsoft.microservices.favorita.models.Group;
 import net.pacificsoft.microservices.favorita.models.LocationGroup;
 import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import net.pacificsoft.microservices.favorita.models.Tracking;
@@ -44,55 +46,20 @@ public class LocationGroupController {
 	@GetMapping("/locationGroup")
 	public ResponseEntity getAllLocationsGroups() {
 		try{
-                    List<Map<String, Object>> result = new ArrayList();
-                    Set<Map<String, Object>> ubs;
-                    JSONObject json;
-                    JSONObject resp;
-                    List<LocationGroup> locations = locationGroupRepository.findAll();
-                    for (LocationGroup lg : locations){
-                        json = new JSONObject();
-                        ubs = new HashSet();
-                        json.put("id", lg.getId());
-                        json.put("name",lg.getName());
-                        Set<Tracking> trackings = lg.getTrackings();
-                        for (Tracking t: trackings){
-                            resp = new JSONObject();
-                            resp.put("id", t.getId());
-                            resp.put("Tracking_Dtm", t.getDtm());
-                            resp.put("Tracking_location", t.getLocation());
-                            ubs.add(resp.toMap());
-                        }
-                        json.put("Trackings", ubs.toArray());
-                        result.add(json.toMap());
-                    }
-                    return new ResponseEntity(result, HttpStatus.OK);
+                    return new ResponseEntity(locationGroupRepository.findAll(), HttpStatus.OK);
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("Resources not available.",
                             HttpStatus.NOT_FOUND);
                 } 
 	}
-
+        
 	@GetMapping("/locationGroup/{id}")
 	public ResponseEntity getLocationGroupById(
 			@PathVariable(value = "id") Long locationId) throws JSONException{
 		if(locationGroupRepository.existsById(locationId)){
-                    LocationGroup lg = locationGroupRepository.findById(locationId).get();
-                    JSONObject json = new JSONObject();
-                    JSONObject resp = new JSONObject();
-                    Set<Map<String, Object>> ubs = new HashSet();
-                    json.put("id", lg.getId());
-                    json.put("name",lg.getName());
-                    Set<Tracking> trackings = lg.getTrackings();
-                    for (Tracking t: trackings){
-                        resp = new JSONObject();
-                        resp.put("id", t.getId());
-                        resp.put("Tracking_Dtm", t.getDtm());
-                        resp.put("Tracking_location", t.getLocation());
-                        ubs.add(resp.toMap());
-                    }
-                    json.put("Trackings", ubs.toArray());
-                    return new ResponseEntity(json.toMap(), HttpStatus.OK);
+                    LocationGroup lg = locationGroupRepository.findById(locationId).get();                    
+                    return new ResponseEntity(lg, HttpStatus.OK);
                 }
 		else{
                     return new ResponseEntity<String>("LocationGroup #" + locationId + 
@@ -103,22 +70,8 @@ public class LocationGroupController {
 	@PostMapping("/locationGroup")
 	public ResponseEntity createLocationGroup(@Valid @RequestBody LocationGroup location) {
                 try{
-                    LocationGroup lg = locationGroupRepository.save(location);
-                    JSONObject json = new JSONObject();
-                    JSONObject resp = new JSONObject();
-                    Set<Map<String, Object>> ubs = new HashSet();
-                    json.put("id", lg.getId());
-                    json.put("name",lg.getName());
-                    Set<Tracking> trackings = lg.getTrackings();
-                    for (Tracking t: trackings){
-                        resp = new JSONObject();
-                        resp.put("id", t.getId());
-                        resp.put("Tracking_Dtm", t.getDtm());
-                        resp.put("Tracking_location", t.getLocation());
-                        ubs.add(resp.toMap());
-                    }
-                    json.put("Trackings", ubs.toArray());
-                    return new ResponseEntity(json.toMap(), HttpStatus.CREATED);
+                    LocationGroup d = locationGroupRepository.save(location);
+                    return new ResponseEntity(d, HttpStatus.CREATED);
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("New LocationGroup not created.",
