@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.validation.Valid;
+import net.pacificsoft.microservices.favorita.models.LocationNames;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,26 +40,29 @@ public class ProbabilitiesController {
     @GetMapping("/probability")
 	public ResponseEntity getAllProbabilities() {
         try{
-            List<Map<String, Object>> result = new ArrayList();
-            List<Probabilities> probabilities = probabilitiesRepository.findAll();
-            JSONObject json;
-            for(Probabilities p : probabilities){
-                json = new JSONObject();
-                json.put("id", p.getId());
-                json.put("nameId",p.getName());
-                json.put("probability", p.getProbability());
-                result.add(json.toMap());
-            }
-                return new ResponseEntity(result, HttpStatus.OK);
+                return new ResponseEntity(probabilitiesRepository.findAll(), HttpStatus.OK);
         }
 		catch(Exception e){
             return new ResponseEntity<String>("Resources not available.",
                 HttpStatus.NOT_FOUND);
         }  
     }
+        
+    @GetMapping("/probability/{id}")
+    public ResponseEntity getProbabilitiesById(
+            @PathVariable(value = "id") Long ProbabilitiesId){
+        if(probabilitiesRepository.existsById(ProbabilitiesId)){
+            Probabilities a = probabilitiesRepository.findById(ProbabilitiesId).get();
+            return new ResponseEntity(a, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<String>("Probabilities #" + ProbabilitiesId +
+                    " does not exist.", HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PostMapping("/probability")
-	public ResponseEntity createFurgon(@Valid @RequestBody Probabilities probability) {
+	public ResponseEntity createProbabilities(@Valid @RequestBody Probabilities probability) {
                 try{
                     Probabilities p = probabilitiesRepository.save(probability);
                     return new ResponseEntity(p, HttpStatus.CREATED);
@@ -79,7 +83,7 @@ public class ProbabilitiesController {
     }
     
     @PutMapping("/probability/{id}")
-	public ResponseEntity updateFurgon(
+	public ResponseEntity updateProbabilities(
 			@PathVariable(value = "id") Long probabilityId,
 			@Valid @RequestBody Probabilities probabilityDetails){
             try{
@@ -101,7 +105,7 @@ public class ProbabilitiesController {
 	}
     
     @DeleteMapping("/probability/{id}")
-	public ResponseEntity deleteFurgon(
+	public ResponseEntity deleteProbabilities(
 			@PathVariable(value = "id") Long probabilityId){
                 if(probabilitiesRepository.existsById(probabilityId)){
                     Probabilities probability = probabilitiesRepository.findById(probabilityId).get();

@@ -63,18 +63,10 @@ public class TrackingControllerTest {
 
 
     @Test
-    public void added_expected_ok() throws Exception{
-        //SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-        //Date a = DATE_FORMAT.parse("2019-09-12'T'12:21");
-
+    public void create_test() throws Exception{
         Date dsa = new Date(279132123);
         SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
         String a = as.format(dsa);
-
-        //String w = DateFormat.getDateInstance().format(a);
-        //Tracking tracking = new Tracking("locationP",date);
-        //Device device = new Device("family","device");
-        //LocationGroup locationGroup = new LocationGroup("locationG");
 
         given(repositoryD.existsById(any())).willReturn(true);
         given(repositoryLG.existsById(any())).willReturn(true);
@@ -96,7 +88,7 @@ public class TrackingControllerTest {
     }
 
     @Test
-    public void givenLocationGroup_whenGetLocationGroup_thenReturnJSONArray() throws Exception{
+    public void getAll_test() throws Exception{
         Tracking tracking = new Tracking("Location",new Date(213213));
         Tracking tracking2 = new Tracking("location2",new Date(2222123));
         List<Tracking> locationPriorities = Arrays.asList(tracking,tracking2);
@@ -110,9 +102,22 @@ public class TrackingControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[1].location", is(tracking2.getLocation())));
     }
+    
+    @Test
+    public void getById_test() throws Exception{
+        Tracking tracking = new Tracking("Location",new Date(213213));
+
+        given(repository.existsById(tracking.getId())).willReturn(true);
+        given(repository.findById(any())).willReturn(Optional.of(tracking));
+
+        mvc.perform(get("/tracking/"+tracking.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 
     @Test
-    public void update_expected_ok() throws Exception{
+    public void update_test() throws Exception{
         Tracking tracking = new Tracking("location", new Date(231321321));
 
         given(repositoryD.existsById(any())).willReturn(true);
@@ -142,7 +147,7 @@ public class TrackingControllerTest {
     }
 
     @Test
-    public void delete_Expected_ok() throws Exception{
+    public void delete_test() throws Exception{
         Tracking tracking = new Tracking("location", new Date(231321321));
         Device device = new Device("family","device");
         LocationGroup locationGroup = new LocationGroup("locationG");

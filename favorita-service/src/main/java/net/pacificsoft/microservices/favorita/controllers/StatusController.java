@@ -31,24 +31,11 @@ public class StatusController {
         
         @Autowired
 	private DeviceRepository deviceRepository;
+        
 	@GetMapping("/status")
 	public ResponseEntity getAllStatus() {
 		try{
-                    List<Map<String, Object>> result = new ArrayList();
-                    List<Status> status = statusRepository.findAll();
-                    JSONObject json;
-                    for(Status s : status){
-                        json = new JSONObject();
-                        json.put("id", s.getId());
-                        json.put("batery", s.getBatery());
-                        json.put("last_transmision", s.getLast_transmision());
-                        json.put("signal_level", s.getSignal_level());
-                        json.put("last_update", s.getLast_update());
-                        json.put("device_name", s.getDevice().getName());
-                        json.put("device_family", s.getDevice().getName());
-                        result.add(json.toMap());
-                    }
-                    return new ResponseEntity(result, HttpStatus.OK);
+                    return new ResponseEntity(statusRepository.findAll(), HttpStatus.OK);
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("Resources not available.",
@@ -61,15 +48,7 @@ public class StatusController {
 			@PathVariable(value = "id") Long statusId){
 		if(statusRepository.existsById(statusId)){
                     Status s = statusRepository.findById(statusId).get();
-                    JSONObject json = new JSONObject();
-                    json.put("id", s.getId());
-                    json.put("batery", s.getBatery());
-                    json.put("last_transmision", s.getLast_transmision());
-                    json.put("signal_level", s.getSignal_level());
-                    json.put("last_update", s.getLast_update());
-                    json.put("device_name", s.getDevice().getName());
-                    json.put("device_family", s.getDevice().getName());
-                    return new ResponseEntity(json.toMap(), HttpStatus.OK);
+                    return new ResponseEntity(s, HttpStatus.OK);
                 }
 		else{
                     return new ResponseEntity<String>("Status #" + statusId + 
@@ -87,15 +66,7 @@ public class StatusController {
                     status.setDevice(device);
                     Status s = statusRepository.save(status);
                     deviceRepository.save(device);
-                    JSONObject json = new JSONObject();
-                    json.put("id", s.getId());
-                    json.put("batery", s.getBatery());
-                    json.put("last_transmision", s.getLast_transmision());
-                    json.put("signal_level", s.getSignal_level());
-                    json.put("last_update", s.getLast_update());
-                    json.put("device_name", s.getDevice().getName());
-                    json.put("device_family", s.getDevice().getName());
-                    return new ResponseEntity(json.toMap(), HttpStatus.CREATED);
+                    return new ResponseEntity(s, HttpStatus.CREATED);
                 }
 		else{
                     return new ResponseEntity<String>("Device #" + deviceid + 

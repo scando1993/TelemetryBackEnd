@@ -4,7 +4,6 @@ import net.pacificsoft.microservices.favorita.models.Device;
 import javax.validation.Valid;
 
 import net.pacificsoft.microservices.favorita.models.application.Ruta;
-import net.pacificsoft.microservices.favorita.repository.application.RutaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import net.pacificsoft.microservices.favorita.models.Alerta;
 import net.pacificsoft.microservices.favorita.repository.AlertaRepository;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 

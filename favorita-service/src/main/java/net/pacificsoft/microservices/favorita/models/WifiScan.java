@@ -49,8 +49,6 @@ public class WifiScan implements Serializable{
 
         public WifiScan() {
         }
-
-        
         
         public WifiScan(int RSSI, String MAC) {
             this.RSSI = RSSI;

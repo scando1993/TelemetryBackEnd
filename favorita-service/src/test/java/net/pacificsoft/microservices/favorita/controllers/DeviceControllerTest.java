@@ -77,16 +77,19 @@ public class DeviceControllerTest {
     }
     
     @Test
-    public void post_test() throws Exception {
+    public void create_test() throws Exception {
         Device device1 = new Device("f1", "n1");
         Group g1 = new Group("g1");
         device1.setGroup(g1);
         g1.getDevices().add(device1);
+        
         JSONObject json = new JSONObject();
         json.put("name", device1.getName());
         json.put("family", device1.getFamily());
+        
         given(repositoryG.existsById(device1.getGroup().getId())).willReturn(true);
         given(repositoryG.findById(any())).willReturn(Optional.of(g1));
+        
         mvc.perform(post("/device/"+device1.getGroup().getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(json.toJSONString())

@@ -42,20 +42,30 @@ public class PredictionController {
     private LocationNamesRepository locationNamesRepository;
 
     @GetMapping("/prediction")
-    public ResponseEntity getAllProbabilities() {
+    public ResponseEntity getAllPredictions() {
         try{
-            List<Prediction> predictions = predictionsRepository.findAll();
-
-            return new ResponseEntity(predictions, HttpStatus.OK);
+            return new ResponseEntity(predictionsRepository.findAll(), HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<String>("Resources not available.",
                     HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/prediction/{id}")
+    public ResponseEntity getPredictionById(
+	@PathVariable(value = "id") Long predictionId){
+	if(predictionsRepository.existsById(predictionId)){
+            Prediction prediction = predictionsRepository.findById(predictionId).get();
+            return new ResponseEntity(prediction, HttpStatus.OK);
+        }
+	else{
+            return new ResponseEntity<String>("Prediction #" + predictionId + 
+                               " does not exist.", HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PostMapping("/prediction/{probabilityID}/{LocationNameID}")
-    public ResponseEntity createCiudad(@PathVariable(value = "probabilityID") Long probabilityId,
+    public ResponseEntity createPrediction(@PathVariable(value = "probabilityID") Long probabilityId,
                                        @PathVariable(value = "LocationNameID") Long locationNameId,
                                        @Valid @RequestBody Prediction prediction) {
         try{
@@ -86,7 +96,7 @@ public class PredictionController {
     }
 
     @PutMapping("/prediction/{id}")
-    public ResponseEntity updateCiudad(
+    public ResponseEntity updatePrediction(
             @PathVariable(value = "id") Long predictionID,
             @Valid @RequestBody Prediction predictionDetails){
         try{

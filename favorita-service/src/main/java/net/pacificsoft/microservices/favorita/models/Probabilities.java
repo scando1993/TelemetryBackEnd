@@ -47,6 +47,16 @@ public class Probabilities implements Serializable{
             mappedBy = "probabilities")
     private Set<Prediction> prediction = new HashSet<>();
 
+    public Probabilities(String name, Double probability) {
+        this.name = name;
+        this.probability = probability;
+    }
+
+    public Probabilities() {
+    }
+
+    
+    
 	/**
 	 * @return the id
 	 */

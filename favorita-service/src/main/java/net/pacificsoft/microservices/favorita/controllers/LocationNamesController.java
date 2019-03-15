@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.pacificsoft.microservices.favorita.models.Prediction;
-import net.pacificsoft.microservices.favorita.models.Probabilities;
 import net.pacificsoft.microservices.favorita.repository.PredictionsRepository;
 import net.pacificsoft.microservices.favorita.repository.LocationNamesRepository;
 
@@ -36,18 +35,15 @@ import net.pacificsoft.microservices.favorita.repository.LocationNamesRepository
 public class LocationNamesController {
     @Autowired
     private LocationNamesRepository locationNamesRepository;
-    @Autowired
-    private PredictionsRepository predictionsRepository;
+    //@Autowired
+    //private PredictionsRepository predictionsRepository;
     @Autowired
     private MessageRepository messageRepository;
 
     @GetMapping("/locationNames")
-    public ResponseEntity getAllProbabilities() {
+    public ResponseEntity getAllLocationNames() {
         try{
-
-            List<LocationNames> locationNames = locationNamesRepository.findAll();
-
-            return new ResponseEntity(locationNames, HttpStatus.OK);
+            return new ResponseEntity(locationNamesRepository.findAll(), HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<String>("Resources not available.",
@@ -55,20 +51,33 @@ public class LocationNamesController {
         }
     }
 
+     @GetMapping("/locationNames/{id}")
+    public ResponseEntity getLocationNamesById(
+            @PathVariable(value = "id") Long LocationNameId){
+        if(locationNamesRepository.existsById(LocationNameId)){
+            LocationNames a = locationNamesRepository.findById(LocationNameId).get();
+            return new ResponseEntity(a, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<String>("Location Names #" + LocationNameId +
+                    " does not exist.", HttpStatus.NOT_FOUND);
+        }
+    }
+    
     @PostMapping("/locationNames")
-    public ResponseEntity createFurgon(@Valid @RequestBody LocationNames locationNames) {
+    public ResponseEntity createLocationNames(@Valid @RequestBody LocationNames locationNames) {
         try{
             LocationNames p = locationNamesRepository.save(locationNames);
             return new ResponseEntity(p, HttpStatus.CREATED);
         }
         catch(Exception e){
-            return new ResponseEntity<String>("New Probabilities not created.",
+            return new ResponseEntity<String>("New Location Names not created.",
                     HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping("/locationNames/{id}")
-    public ResponseEntity updateFurgon(
+    public ResponseEntity updateLocationNames(
             @PathVariable(value = "id") Long locationNameId,
             @Valid @RequestBody LocationNames locationNameDetails){
         try{
@@ -90,7 +99,7 @@ public class LocationNamesController {
     }
 
     @DeleteMapping("/locationNames/{id}")
-    public ResponseEntity deleteLocationName(
+    public ResponseEntity deleteLocationNames(
             @PathVariable(value = "id") Long locationNameId){
         if(locationNamesRepository.existsById(locationNameId)){
             LocationNames locationName = locationNamesRepository.findById(locationNameId).get();

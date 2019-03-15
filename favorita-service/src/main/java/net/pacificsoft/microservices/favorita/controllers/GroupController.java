@@ -42,12 +42,12 @@ public class GroupController {
 	private DeviceRepository deviceRepository;
         
 	@GetMapping("/group")
-	public ResponseEntity getAllBodegas() {
+	public ResponseEntity getAllGroup() {
                 return new ResponseEntity(gRepository.findAll(), HttpStatus.OK); 
 	}
         
 	@GetMapping("/group/{id}")
-	public ResponseEntity getBodegaById(
+	public ResponseEntity getGroupById(
 			@PathVariable(value = "id") Long groupId){
                 if(gRepository.existsById(groupId)){
                     Group g = gRepository.findById(groupId).get();
@@ -60,7 +60,7 @@ public class GroupController {
 	}
 
 	@PostMapping("/group")
-	public ResponseEntity createBodega(@Valid @RequestBody Group group) {
+	public ResponseEntity createGroup(@Valid @RequestBody Group group) {
             try{
                     Group g = gRepository.save(group);
                     return new ResponseEntity(g, HttpStatus.CREATED);
@@ -72,7 +72,7 @@ public class GroupController {
 	}
 
         @PutMapping("/group/{id}")
-	public ResponseEntity updateBodega(
+	public ResponseEntity updateGroup(
 			@PathVariable(value = "id") Long groupId,
 			@Valid @RequestBody Group groupDetails){
             try{
@@ -94,7 +94,7 @@ public class GroupController {
 	}
 
         @DeleteMapping("/group/{id}")
-	public ResponseEntity deleteBodega(
+	public ResponseEntity deleteGroup(
                                 @PathVariable(value = "id") Long groupId){
                 if(gRepository.existsById(groupId)){
                     Group g = gRepository.findById(groupId).get();

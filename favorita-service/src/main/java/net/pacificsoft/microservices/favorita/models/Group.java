@@ -58,12 +58,6 @@ public class Group implements Serializable{
         this.name = name;
     }
 
-    public Group() {
-    }
-
-
-    
-    
     public long getId() {
         return id;
     }

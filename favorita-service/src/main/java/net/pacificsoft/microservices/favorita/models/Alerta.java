@@ -36,8 +36,10 @@ public class Alerta implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    
     @Column(name = "type_alert", nullable = false)
     private String type_alert;
+    
     @Column(name = "message", nullable = false)
     private String message;
 

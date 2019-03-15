@@ -23,8 +23,10 @@ import java.util.List;
 import java.util.Optional;
 import net.minidev.json.JSONObject;
 import net.pacificsoft.microservices.favorita.models.Alerta;
+import net.pacificsoft.microservices.favorita.models.Device;
 import net.pacificsoft.microservices.favorita.models.RawSensorData;
 import net.pacificsoft.microservices.favorita.models.WifiScan;
+import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import net.pacificsoft.microservices.favorita.repository.AlertaRepository;
 import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
 import net.pacificsoft.microservices.favorita.repository.RawSensorDataRepository;
@@ -84,81 +86,77 @@ public class AlertaControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].type_alert", is(alert1.getType_alert())));
     }
-    /*
-    //getById
+    
     @Test
-    public void findById_test() throws Exception {
-        WifiScan found = new WifiScan(1,"wf2");
+    public void getById_test() throws Exception {
+        Alerta alert = new Alerta("1", "Message 1");
         
-        given(repository.existsById(found.getId())).willReturn(true);
-        given(repository.findById(any())).willReturn(Optional.of(found));
+        given(repository.existsById(alert.getId())).willReturn(true);
+        given(repository.findById(any())).willReturn(Optional.of(alert));
  
-         mvc.perform(get("/wifiScan/"+found.getId())
+         mvc.perform(get("/alerta/"+alert.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
-    /*
-    //create
+    
     @Test
     public void create_test() throws Exception{
-        WifiScan found = new WifiScan(1,"wf2");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-	Date date1 = sdf.parse("1985-08-12T10:20");
-        RawSensorData rw=new RawSensorData(2, 12, date1, "rw1");
-        found.setRawSensorData(rw);
-        rw.getWifiScans().add(found);
-        List<WifiScan> wifiList = Arrays.asList(found);
+        Device device= new Device();
+        Ruta ruta= new Ruta();
+        Alerta alert = new Alerta(1,"1", "Message 1",ruta,device);
 
-        //given(repository.findAll()).willReturn(locationGroups);       
-
-        given(repositoryG.existsById(found.getRawSensorData().getId())).willReturn(true);
-        given(repositoryG.findById(any())).willReturn(Optional.of(rw));
+        given(repositoryD.existsById(alert.getDevice().getId())).willReturn(true);
+        given(repositoryD.findById(any())).willReturn(Optional.of(device));
+        given(repositoryR.existsById(alert.getRuta().getId())).willReturn(true);
+        given(repositoryR.findById(any())).willReturn(Optional.of(ruta));
 
         JSONObject json = new JSONObject();
-        json.put("mac", found.getMAC());
-        json.put("rssi", found.getRSSI());
-        mvc.perform(post("/wifiScan/"+found.getRawSensorData().getId())
+        json.put("message", alert.getMensaje());
+        json.put("type_alert", alert.getType_alert());
+        mvc.perform(post("/alerta/"+alert.getRuta().getId()+'/'+alert.getDevice().getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(json.toString())
         )
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
+     
     
-    //delete
     @Test
     public void delete_test() throws Exception{
-        WifiScan found = new WifiScan(1,"wf2");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-	Date date1 = sdf.parse("1985-08-12T10:20");
-        RawSensorData rw=new RawSensorData(2, 12, date1, "rw1");
-        found.setRawSensorData(rw);
-        rw.getWifiScans().add(found);
+        Alerta alert = new Alerta("1", "Message 1");
+        Device d= new Device();
+        Ruta r= new Ruta();
+        alert.setDevice(d);
+        alert.setRuta(r);
+        d.getAlertas().add(alert);
+        r.getAlertas().add(alert);
 
         given(repository.existsById(any())).willReturn(true);
-        given(repository.findById(any())).willReturn(Optional.of(found));
-        found.getRawSensorData().getWifiScans().remove(found);
-        mvc.perform(delete("/wifiScan/"+ found.getId())
+        given(repository.findById(any())).willReturn(Optional.of(alert));
+        
+        mvc.perform(delete("/alerta/"+ alert.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
         )
                 .andDo(print())
                 .andExpect(status().isOk());
     }
     
-    //update
     @Test
     public void update_test() throws Exception{
-        WifiScan found = new WifiScan(1,"wf2");
+        Device device= new Device();
+        Ruta ruta= new Ruta();
+        Alerta alert = new Alerta(1,"1", "Message 1",ruta,device);
 
         given(repository.existsById(any())).willReturn(true);
-        given(repository.findById(any())).willReturn(Optional.of(found));
+        given(repository.findById(any())).willReturn(Optional.of(alert));
 
         JSONObject json = new JSONObject();
-        json.put("mac", found.getMAC());
-        json.put("rssi", found.getRSSI());
+        json.put("message", alert.getMensaje());
+        json.put("type_alert", alert.getType_alert());
 
-        mvc.perform(put("/wifiScan/"+found.getId())
+        mvc.perform(put("/alerta/"+alert.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(json.toString())
         )
@@ -166,6 +164,6 @@ public class AlertaControllerTest {
                 .andExpect(status().isOk());
 
     }
-    */
+    
 }
  
