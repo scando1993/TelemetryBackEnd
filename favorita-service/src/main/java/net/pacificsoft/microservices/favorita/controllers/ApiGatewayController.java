@@ -15,6 +15,9 @@ import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ApiGatewayController {
@@ -32,12 +35,14 @@ public class ApiGatewayController {
             @PathVariable(value = "deviceid") Long deviceId,
             @Valid @RequestBody RawSensorData rawData) {
         try{
+            final String uri = "http://104.209.196.204:9090/track";
+            final String urlTracking = "http://localhost:2222/tracking";
+            final String urlApiGoResponse = "http://localhost:2222/goApiResponse";
+            final int defaultTrackingLocationGroup = 1;
+
             Device device = deviceRepository.findById(deviceId).get();
             device.getRawSensorDatas().add(rawData);
             rawData.setDevice(device);
-
-
-            final String uri = "http://104.209.196.204:9090/track";
 
 
             JSONObject json1 = new JSONObject();
@@ -55,15 +60,11 @@ public class ApiGatewayController {
             JSONObject asd = jData.getJSONObject("message").getJSONArray("guesses").getJSONObject(0);
             String location = (String) asd.get("location");
             String probability = (String) asd.get("probability");
-            //JSONObject jGuesses = jMessage.getJSONObject("predictions");
-            System.out.println("======================");
-            System.out.println(jData.toString());
-            System.out.println("----------------------");
-            System.out.println(asd);
-            System.out.println(asd.get("location"));
-            //System.out.println(asd.get(0));
-            System.out.println("NNNNNNNNNNNNNNNNNNNNNN");
-            //Tracking t = device.getTrackings()
+
+            String endPoint = "/" + device.getId() + "/" + defaultTrackingLocationGroup;
+            JSONObject jsonTracking = createTrackingJson(rawData.getEpochDateTime(), location);
+            JSONObject jsonTrackingResponse = new JSONObject(restTemplate.postForObject( urlTracking + endPoint, jsonTracking.toString(), String.class));
+
 
 
 
@@ -76,4 +77,41 @@ public class ApiGatewayController {
 
         }
     }
+    @PostMapping("/CreateDeviceFamily")
+    public ResponseEntity s(
+            @Valid @RequestBody String rawData) {
+        try{
+            final String urlDevice = "http://localhost:2222/device";
+            RestTemplate restTemplate = new RestTemplate();
+
+            JSONObject jsonRequest = new JSONObject(rawData);
+            int groupID = (int)jsonRequest.remove("groupId");
+
+            String endPoint = "/" + groupID;
+            JSONObject jsonResponse = new JSONObject(restTemplate.postForObject( urlDevice + endPoint, jsonRequest.toString(), String.class));
+            return new ResponseEntity(jsonResponse,HttpStatus.CREATED);
+
+        }
+        catch(Exception e){
+            return new ResponseEntity<String>("It's not possible create new Data", HttpStatus.NOT_FOUND);
+
+        }
+    }
+
+
+    private JSONObject createTrackingJson (Date dtm, String location){
+        SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        String dtmFormated = as.format(dtm);
+
+        JSONObject json = new JSONObject();
+        json.put("dtm", dtmFormated);
+        json.put("location", location);
+        return json;
+    };
+
+    private JSONObject createApiGoResponseJson (String success){
+        JSONObject json = new JSONObject();
+        json.put("success", success);
+        return json;
+    };
 }
