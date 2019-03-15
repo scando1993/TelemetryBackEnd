@@ -47,8 +47,8 @@ public class GoApiResponseControllerTest {
 
     @Test
     public void getAll_test() throws Exception{
-        GoApiResponse goApi1 = new GoApiResponse(1);
-        GoApiResponse goApi2 = new GoApiResponse(2);
+        GoApiResponse goApi1 = new GoApiResponse(true);
+        GoApiResponse goApi2 = new GoApiResponse(false);
         List<GoApiResponse> goApiList = Arrays.asList(goApi1, goApi2);
 
         given(repository.findAll()).willReturn(goApiList);
@@ -64,7 +64,7 @@ public class GoApiResponseControllerTest {
     
     @Test
     public void getById_test() throws Exception{
-        GoApiResponse goApi = new GoApiResponse(2);
+        GoApiResponse goApi = new GoApiResponse(true);
         given(repository.existsById(goApi.getId())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(goApi));
         
@@ -76,7 +76,7 @@ public class GoApiResponseControllerTest {
     
     @Test
     public void create_test() throws Exception {
-        GoApiResponse goApi = new GoApiResponse(2);
+        GoApiResponse goApi = new GoApiResponse(true);
         Message message=new Message();
         Device device =new Device();
         goApi.setMessage(message);
@@ -102,7 +102,7 @@ public class GoApiResponseControllerTest {
     
     @Test
     public void delete_test() throws Exception{
-        GoApiResponse goApi = new GoApiResponse(2);
+        GoApiResponse goApi = new GoApiResponse(true);
         Message message=new Message();
         Device device =new Device();
         goApi.setMessage(message);
@@ -121,7 +121,7 @@ public class GoApiResponseControllerTest {
     
     @Test
     public void update_test() throws Exception{
-        GoApiResponse goApi = new GoApiResponse(2);
+        GoApiResponse goApi = new GoApiResponse(true);
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(goApi));

@@ -29,6 +29,7 @@ import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
 import net.pacificsoft.microservices.favorita.repository.FeaturesRepository;
 import net.pacificsoft.microservices.favorita.repository.LocationNamesRepository;
 import net.pacificsoft.microservices.favorita.repository.MessageRepository;
+import net.pacificsoft.microservices.favorita.repository.PredictionsRepository;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasSize;
@@ -60,7 +61,7 @@ public class LocationNamesControllerTest {
     
     @MockBean
     @Autowired
-    private MessageRepository repositoryM;
+    private PredictionsRepository repositoryM;
     
     @Test
     public void getAll_test() throws Exception{

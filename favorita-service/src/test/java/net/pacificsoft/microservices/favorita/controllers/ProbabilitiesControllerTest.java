@@ -106,11 +106,14 @@ public class ProbabilitiesControllerTest {
         probability.setPrediction(p);
         p.getProbabilitieses().add(probability);
        
+        given(repositoryM.existsById(any())).willReturn(true);
+        given(repositoryM.findById(any())).willReturn(Optional.of(p)); 
+        
         JSONObject json = new JSONObject();
         json.put("name", probability.getNameID());
         json.put("probability", probability.getProbability());
         
-        mvc.perform(post("/probability")
+        mvc.perform(post("/probability"+probability.getPrediction().getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(json.toString())
         )
@@ -128,6 +131,7 @@ public class ProbabilitiesControllerTest {
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));
         
+        probability.getPrediction().getProbabilitieses().remove(probability);
         mvc.perform(delete("/probability/"+ probability.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
         )
