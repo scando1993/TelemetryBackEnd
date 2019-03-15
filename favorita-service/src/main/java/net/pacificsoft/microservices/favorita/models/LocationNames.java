@@ -43,16 +43,11 @@ public class LocationNames implements Serializable{
     @Column(name = "name", nullable = false)
     private String name;
 
-    /*
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "predictionID")
     private Prediction prediction;
-    */
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            mappedBy = "locationNames")
-    private Set<Prediction> prediction = new HashSet<>();
-
+    
 
     @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
@@ -120,20 +115,6 @@ public class LocationNames implements Serializable{
     }
 
     /**
-     * @return the prediction
-     */
-    public Set<Prediction> getPrediction() {
-        return prediction;
-    }
-
-    /**
-     * @param prediction the prediction to set
-     */
-    public void setPrediction(Set<Prediction> prediction) {
-        this.prediction = prediction;
-    }
-
-    /**
      * @return the message
      */
     public Message getMessage() {
@@ -145,6 +126,14 @@ public class LocationNames implements Serializable{
      */
     public void setMessage(Message message) {
         this.message = message;
+    }
+
+    public Prediction getPrediction() {
+        return prediction;
+    }
+
+    public void setPrediction(Prediction prediction) {
+        this.prediction = prediction;
     }
 
     
