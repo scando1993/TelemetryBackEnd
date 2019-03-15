@@ -37,7 +37,7 @@ public class GoApiResponse implements Serializable{
     private long id;
     
     @Column(name = "sucess", nullable = false)
-    private int sucess;
+    private boolean sucess;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "messageID")
@@ -47,7 +47,7 @@ public class GoApiResponse implements Serializable{
     @JoinColumn(name = "deviceID")
     private Device device;
 
-    public GoApiResponse(int sucess) {
+    public GoApiResponse(boolean sucess) {
         this.sucess = sucess;
     }
 
@@ -71,14 +71,14 @@ public class GoApiResponse implements Serializable{
     /**
      * @return the sucess
      */
-    public int getSucess() {
+    public boolean getSucess() {
         return sucess;
     }
 
     /**
      * @param sucess the sucess to set
      */
-    public void setSucess(int sucess) {
+    public void setSucess(boolean sucess) {
         this.sucess = sucess;
     }
 
