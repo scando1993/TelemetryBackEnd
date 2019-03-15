@@ -58,7 +58,25 @@ public class LocationNames implements Serializable{
             fetch = FetchType.EAGER,
             mappedBy = "locationNames")
     private Message  message;
+    
 
+    public LocationNames(long idname, String name) {
+        this.idname = idname;
+        this.name = name;
+    }
+
+    public LocationNames(long id, long idname, String name, Message message) {
+        this.id = id;
+        this.idname = idname;
+        this.name = name;
+        this.message = message;
+    }
+
+    public LocationNames() {
+    }
+
+    
+    
     /**
      * @return the id
      */

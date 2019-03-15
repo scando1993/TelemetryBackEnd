@@ -37,24 +37,35 @@ public class Status implements Serializable{
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-        @Column(name = "batery", nullable = false)
-        private float batery;
         
-        @JsonFormat(pattern = "dd-MM-yyyy'T'HH:mm")
+        @Column(name = "batery", nullable = false)
+        private double batery;
+        
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "last_transmision", nullable = false)
         private Date last_transmision;
         
         @Column(name = "signal_level", nullable = false)
-        private float signal_level;
+        private double signal_level;
         
-        @JsonFormat(pattern = "dd-MM-yyyy'T'HH:mm")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "last_update", nullable = false)
 	private Date last_update;
 
         @OneToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "deviceID")
         private Device device;
-        
+
+        public Status(double batery, Date last_transmision, double signal_level, Date last_update) {
+            this.batery = batery;
+            this.last_transmision = last_transmision;
+            this.signal_level = signal_level;
+            this.last_update = last_update;
+        }
+
+        public Status() {
+        }
+
         public long getId() {
             return id;
         }
@@ -63,11 +74,11 @@ public class Status implements Serializable{
             this.id = id;
         }
 
-        public float getBatery() {
+        public double getBatery() {
             return batery;
         }
 
-        public void setBatery(float batery) {
+        public void setBatery(double batery) {
             this.batery = batery;
         }
 
@@ -79,11 +90,11 @@ public class Status implements Serializable{
             this.last_transmision = last_transmision;
         }
 
-        public float getSignal_level() {
+        public double getSignal_level() {
             return signal_level;
         }
 
-        public void setSignal_level(float signal_level) {
+        public void setSignal_level(double signal_level) {
             this.signal_level = signal_level;
         }
 
@@ -101,5 +112,8 @@ public class Status implements Serializable{
 
         public void setDevice(Device device) {
             this.device = device;
-        }       
+        }
 }
+
+        
+        

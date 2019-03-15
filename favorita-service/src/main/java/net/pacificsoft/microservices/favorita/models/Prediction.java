@@ -57,6 +57,14 @@ public class Prediction implements Serializable{
     private Set<LocationNames> locationNames = new HashSet<>();
     */
 
+    public Prediction(String name) {
+        this.name = name;
+    }
+
+    public Prediction() {
+    }
+
+    
     /**
      * @return the id
      */

@@ -37,9 +37,7 @@ public class Features implements Serializable{
 	private long id;
         @Column(name = "tracking", nullable = false)
 	private boolean tracking;
-        @Column(name = "identificador", nullable = false)
-        private String mensaje;
-        /*@Column(name = "tipo_sensores", nullable = false)
+        @Column(name = "tipo_sensores", nullable = false)
         private String tipo_sensores;
         @Column(name = "modos_transmision", nullable = false)
         private String modos_transmision;
@@ -52,34 +50,59 @@ public class Features implements Serializable{
         @Column(name = "alimentacion", nullable = false)
         private String alimentacion;
         @Column(name = "nivel_voltaje", nullable = false)
-        private float nivel_voltaje;
+        private double nivel_voltaje;
         @Column(name = "memoria", nullable = false)
-        private boolean memoria;*/
+        private boolean memoria;
         
-        /*@JsonIgnore
+        @JsonIgnore
         @OneToOne(fetch = FetchType.EAGER,
             cascade =  CascadeType.ALL,
             mappedBy = "features")
-        private Device device;*/
-        
-        public Features() {
-            this.mensaje="m";
-            this.tracking=true;
-            this.mensaje="i1";
-            /*this.tipo_sensores="s1";
-            this.modos_transmision="t1";
-            this.version="v1";
-            this.firmware="f1";
-            this.modelo="m1";
-            this.alimentacion="no se";
-            this.nivel_voltaje=0;
-            this.memoria=true;*/
-            
+        private Device device;
+
+        public Features(boolean tracking, String tipo_sensores, 
+                String modos_transmision, String version, String firmware, 
+                String modelo, String alimentacion, double nivel_voltaje, 
+                boolean memoria) {
+            this.tracking = tracking;
+            this.tipo_sensores = tipo_sensores;
+            this.modos_transmision = modos_transmision;
+            this.version = version;
+            this.firmware = firmware;
+            this.modelo = modelo;
+            this.alimentacion = alimentacion;
+            this.nivel_voltaje = nivel_voltaje;
+            this.memoria = memoria;
         }
 
-    public long getId() {
-        return id;
-    }
+        public Features() {
+        }
+
+        public Features(long id, boolean tracking,String tipo_sensores,
+                String modos_transmision, 
+                String version, String firmware, String modelo, 
+                String alimentacion, double nivel_voltaje, 
+                boolean memoria, Device device) {
+            
+            this.id = id;
+            this.tracking = tracking;
+            this.tipo_sensores = tipo_sensores;
+            this.modos_transmision = modos_transmision;
+            this.version = version;
+            this.firmware = firmware;
+            this.modelo = modelo;
+            this.alimentacion = alimentacion;
+            this.nivel_voltaje = nivel_voltaje;
+            this.memoria = memoria;
+            this.device = device;
+        }
+ 
+        
+
+        
+        public long getId() {
+            return id;
+        }
 
         public void setId(long id) {
             this.id = id;
@@ -93,15 +116,7 @@ public class Features implements Serializable{
             this.tracking = tracking;
         }
 
-        public String getMensaje() {
-            return mensaje;
-        }
-
-        public void setMensaje(String mensaje) {
-            this.mensaje = mensaje;
-        }
-
-        /*public String getTipo_sensores() {
+        public String getTipo_sensores() {
             return tipo_sensores;
         }
 
@@ -149,11 +164,11 @@ public class Features implements Serializable{
             this.alimentacion = alimentacion;
         }
 
-        public float getNivel_voltaje() {
+        public double getNivel_voltaje() {
             return nivel_voltaje;
         }
 
-        public void setNivel_voltaje(float nivel_voltaje) {
+        public void setNivel_voltaje(double nivel_voltaje) {
             this.nivel_voltaje = nivel_voltaje;
         }
 
@@ -165,12 +180,12 @@ public class Features implements Serializable{
             this.memoria = memoria;
         }
 
-        /*public Device getDevice() {
+        public Device getDevice() {
             return device;
         }
 
         public void setDevice(Device device) {
             this.device = device;
-        }*/
-    
+        }
+   
 }

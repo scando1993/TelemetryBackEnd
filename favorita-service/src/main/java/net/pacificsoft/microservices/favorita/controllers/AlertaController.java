@@ -4,7 +4,6 @@ import net.pacificsoft.microservices.favorita.models.Device;
 import javax.validation.Valid;
 
 import net.pacificsoft.microservices.favorita.models.application.Ruta;
-import net.pacificsoft.microservices.favorita.repository.application.RutaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import net.pacificsoft.microservices.favorita.models.Alerta;
 import net.pacificsoft.microservices.favorita.repository.AlertaRepository;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -42,19 +40,7 @@ public class AlertaController {
     @GetMapping("/alerta")
     public ResponseEntity getAllAlerta() {
         try{
-            List<Map<String, Object>> result = new ArrayList();
-            List<Alerta> alertas = alertaRepository.findAll();
-            JSONObject json;
-            for(Alerta a:alertas){
-                json = new JSONObject();
-                json.put("id", a.getId());
-                json.put("type_alert", a.getTipoAlerta());
-                json.put("message", a.getMensaje());
-                json.put("rutaID", a.getRuta().getId());
-                json.put("deviceID", a.getDevice().getId());
-                result.add(json.toMap());
-            }
-            return new ResponseEntity(rutaRepository.findAll(), HttpStatus.OK);
+            return new ResponseEntity(alertaRepository.findAll(), HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<String>("Resources not available.",
@@ -65,15 +51,9 @@ public class AlertaController {
     @GetMapping("/alerta/{id}")
     public ResponseEntity getAlertaById(
             @PathVariable(value = "id") Long alertaId){
-        if(rutaRepository.existsById(alertaId)){
+        if(alertaRepository.existsById(alertaId)){
             Alerta a = alertaRepository.findById(alertaId).get();
-            JSONObject json = new JSONObject();
-            json.put("id", a.getId());
-            json.put("type_alert", a.getTipoAlerta());
-            json.put("message", a.getMensaje());
-            json.put("rutaID", a.getRuta().getId());
-            json.put("deviceID", a.getDevice().getId());
-            return new ResponseEntity(json.toMap(), HttpStatus.OK);
+            return new ResponseEntity(a, HttpStatus.OK);
         }
         else{
             return new ResponseEntity<String>("Alerta #" + alertaId +

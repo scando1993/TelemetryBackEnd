@@ -35,20 +35,7 @@ public class TelemetriaController {
 	@GetMapping("/telemetria")
 	public ResponseEntity getAllTelemetrias() {
 		try{
-                    List<Map<String, Object>> result = new ArrayList();
-                    List<Telemetria> telemetrias = telemetriaRepository.findAll();
-                    JSONObject json;
-                    for(Telemetria t: telemetrias){
-                        json = new JSONObject();
-                        json.put("id", t.getId());
-                        json.put("Dtm", t.getDtm());
-                        json.put("name", t.getName());
-                        json.put("value", t.getValue());
-                        json.put("device_name", t.getDevice().getName());
-                        json.put("device_family", t.getDevice().getName());
-                        result.add(json.toMap());
-                    }
-                    return new ResponseEntity(result, HttpStatus.OK);
+                    return new ResponseEntity(telemetriaRepository.findAll(), HttpStatus.OK);
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("Resources not available.",
@@ -61,14 +48,7 @@ public class TelemetriaController {
 			@PathVariable(value = "id") Long telemetriaId){
 		if(telemetriaRepository.existsById(telemetriaId)){
                     Telemetria t = telemetriaRepository.findById(telemetriaId).get();
-                    JSONObject json = new JSONObject();
-                    json.put("id", t.getId());
-                    json.put("Dtm", t.getDtm());
-                    json.put("name", t.getName());
-                    json.put("value", t.getValue());
-                    json.put("device_name", t.getDevice().getName());
-                    json.put("device_family", t.getDevice().getName());
-                    return new ResponseEntity(json.toMap(), HttpStatus.OK);
+                    return new ResponseEntity(t, HttpStatus.OK);
                 }
 		else{
                     return new ResponseEntity<String>("Telemetria #" + telemetriaId + 
@@ -85,14 +65,7 @@ public class TelemetriaController {
                         telemetria.setDevice(device);
                         Telemetria t = telemetriaRepository.save(telemetria);
                         deviceRepository.save(device);
-                        JSONObject json = new JSONObject();
-                        json.put("id", t.getId());
-                        json.put("Dtm", t.getDtm());
-                        json.put("name", t.getName());
-                        json.put("value", t.getValue());
-                        json.put("device_name", t.getDevice().getName());
-                        json.put("device_family", t.getDevice().getName());
-                        return new ResponseEntity(json.toMap(), HttpStatus.CREATED);
+                        return new ResponseEntity(t, HttpStatus.CREATED);
                 }
                 else{
                     return new ResponseEntity<String>("It's not possible create new Telemetria",

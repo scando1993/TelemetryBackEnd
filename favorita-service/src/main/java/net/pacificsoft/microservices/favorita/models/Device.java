@@ -36,8 +36,10 @@ public class Device implements Serializable{
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+        
         @Column(name = "family", nullable = false)
 	private String family;
+        
         @Column(name = "name", nullable = false)
         private String name;
 
@@ -92,13 +94,23 @@ public class Device implements Serializable{
         @JoinColumn(name = "featureID")
         private Features features;*/
 
-    public Device(String family, String name) {
-        this.family = family;
-        this.name = name;
-    }
-    public Device(){}
+        public Device(String family, String name) {
+            this.family = family;
+            this.name = name;
+        }
+        public Device(){
+        }
 
+        public Device(long id, String family, String name, Group groupFamily, Status status) {
+            this.id = id;
+            this.family = family;
+            this.name = name;
+            this.groupFamily = groupFamily;
+            this.status = status;
+        }
         
+        
+
         
         public long getId() {
             return id;

@@ -37,6 +37,7 @@ public class LocationGroup implements Serializable{
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+        
         @Column(name = "name", nullable = false)
 	private String name;
          
@@ -46,7 +47,6 @@ public class LocationGroup implements Serializable{
         private Set<Tracking> trackings = new HashSet<>();
 
         public LocationGroup(){
-            this.name= null;
         }
         public LocationGroup(String name) {
             this.name = name;

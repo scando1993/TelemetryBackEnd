@@ -47,6 +47,16 @@ public class MessageGuess implements Serializable{
             mappedBy = "messageGuess")
         private Set<Message> messages = new HashSet<>();
 
+    public MessageGuess(String location, Double probability) {
+        this.location = location;
+        this.probability = probability;
+    }
+
+    public MessageGuess() {
+    }
+
+    
+    
     /**
      * @return the id
      */
