@@ -49,10 +49,10 @@ public class LocationNames implements Serializable{
     private Prediction prediction;
     
 
-    @OneToOne(cascade = CascadeType.ALL,
+   /* @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "locationNames")
-    private Message  message;
+    private Message  message;*/
     
 
     public LocationNames(Double idname, String name) {
@@ -60,11 +60,11 @@ public class LocationNames implements Serializable{
         this.name = name;
     }
 
-    public LocationNames(long id, Double idname, String name, Message message) {
+    public LocationNames(long id, Double idname, String name) {
         this.id = id;
         this.idname = idname;
         this.name = name;
-        this.message = message;
+        //this.message = message;
     }
 
     public LocationNames() {
@@ -114,19 +114,15 @@ public class LocationNames implements Serializable{
         this.name = name;
     }
 
-    /**
-     * @return the message
-     */
+    /*
     public Message getMessage() {
         return message;
     }
 
-    /**
-     * @param message the message to set
-     */
+  
     public void setMessage(Message message) {
         this.message = message;
-    }
+    }*/
 
     public Prediction getPrediction() {
         return prediction;

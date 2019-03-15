@@ -51,9 +51,9 @@ public class Message implements Serializable{
            mappedBy = "message")
     private GoApiResponse goApiResponse;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    /*@OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "locationNamesID")
-    private LocationNames locationNames;
+    private LocationNames locationNames;*/
 
     public Message() {
     }
@@ -116,20 +116,16 @@ public class Message implements Serializable{
                 this.goApiResponse = goApiResponse;
         }
 
-        /**
-         * @return the locationNames
-         */
+        /*
         public LocationNames getLocationNames() {
                 return locationNames;
         }
 
-        /**
-         * @param locationNames the locationNames to set
-         */
+   
         public void setLocationNames(LocationNames locationNames) {
                 this.locationNames = locationNames;
         }
-
+*/
        
 
 }
