@@ -25,6 +25,7 @@ import net.minidev.json.JSONObject;
 import net.pacificsoft.microservices.favorita.models.LocationNames;
 import net.pacificsoft.microservices.favorita.models.Message;
 import net.pacificsoft.microservices.favorita.models.MessageGuess;
+import net.pacificsoft.microservices.favorita.models.Prediction;
 import net.pacificsoft.microservices.favorita.models.Probabilities;
 import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
 import net.pacificsoft.microservices.favorita.repository.FeaturesRepository;
@@ -64,12 +65,12 @@ public class ProbabilitiesControllerTest {
     
     @MockBean
     @Autowired
-    private PredictionsRepository repositoryM;
+    private PredictionsRepository repositoryP;
     
     @Test
     public void getAll_test() throws Exception{
-        Probabilities probability1= new Probabilities("w",1.2);
-        Probabilities probability2= new Probabilities("q",2.2);
+        Probabilities probability1= new Probabilities(1.1,1.2);
+        Probabilities probability2= new Probabilities(3.3,2.2);
 
         List<Probabilities> ProbabilitiesList = Arrays.asList(probability1, probability2);
 
@@ -84,7 +85,10 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void getById_test() throws Exception {
-        Probabilities probability= new Probabilities("w",1.2);
+        Probabilities probability= new Probabilities(3.3,1.2);
+        Prediction prediction = new Prediction("p");
+        probability.setPrediction(prediction);
+        prediction.getProbabilitieses().add(probability);
         
         given(repository.existsById(probability.getId())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));
@@ -97,13 +101,22 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void create_test() throws Exception{
-        Probabilities probability= new Probabilities("w",1.2);
+        Probabilities probability= new Probabilities(3.3,1.2);
+        Prediction prediction = new Prediction("p");
+        probability.setPrediction(prediction);
+        prediction.getProbabilitieses().add(probability);
        
         JSONObject json = new JSONObject();
         json.put("name", probability.getNameID());
         json.put("probability", probability.getProbability());
         
-        mvc.perform(post("/probability")
+        given(repository.existsById(probability.getId())).willReturn(true);
+        given(repository.findById(any())).willReturn(Optional.of(probability));
+        
+        given(repositoryP.existsById(probability.getPrediction().getId())).willReturn(true);
+        given(repositoryP.findById(any())).willReturn(Optional.of(prediction));
+        
+        mvc.perform(post("/probability/"+probability.getPrediction().getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(json.toString())
         )
@@ -113,7 +126,10 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void delete_test() throws Exception{
-        Probabilities probability= new Probabilities("w",1.2);
+        Probabilities probability= new Probabilities(3.3,1.2);
+        Prediction prediction = new Prediction("p");
+        probability.setPrediction(prediction);
+        prediction.getProbabilitieses().add(probability);
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));
@@ -127,7 +143,10 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void update_test() throws Exception{
-        Probabilities probability= new Probabilities("w",1.2);
+        Probabilities probability= new Probabilities(3.3,1.2);
+        Prediction prediction = new Prediction("p");
+        probability.setPrediction(prediction);
+        prediction.getProbabilitieses().add(probability);
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));
