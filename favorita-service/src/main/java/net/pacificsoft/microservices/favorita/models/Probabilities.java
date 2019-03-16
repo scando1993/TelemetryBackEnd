@@ -19,6 +19,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -53,7 +55,12 @@ public class Probabilities implements Serializable{
 
     public Probabilities() {
     }
-
+	public JSONObject toJson(){
+		JSONObject json = new JSONObject();
+		json.put("idname", this.nameID);
+		json.put("probability", this.probability);
+		return json;
+	}
     
     
 	/**

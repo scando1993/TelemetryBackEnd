@@ -19,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -53,7 +55,11 @@ public class GoApiResponse implements Serializable{
 
     public GoApiResponse() {
     }
-    
+    public JSONObject toJson(){
+        JSONObject json = new JSONObject();
+        json.put("success", this.sucess);
+        return json;
+    }
     /**
      * @return the id
      */

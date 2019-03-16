@@ -61,14 +61,16 @@ public class ApiGatewayController {
             JSONObject s = new JSONObject();
             JSONObject wifi = new JSONObject();
             json1.put("t", new Integer(1551981257));
-            //json1.put("f", "favorita");
-            //json1.put("d", "4836966");
-            json1.put("d",rawData.getEpoch());
+            json1.put("f", "favorita");
+            json1.put("d", "4836966");
+            //json1.put("d",rawData.getEpoch());
             wifi.put("4c:5e:8c:bc:86:0a", -56);
             wifi.put("4c:5e:8c:bc:86:0b", -60);
             s.put("wifi", wifi);
             json1.put("s", s);
             JSONObject jData = new JSONObject();
+            jData = new JSONObject(restTemplate.postForObject( uri, json1.toString(), String.class));
+            /*
             for(Family family:families){
                 json1.put("f",family.getName());
                 jData = new JSONObject(restTemplate.postForObject( uri, json1.toString(), String.class));
@@ -80,7 +82,7 @@ public class ApiGatewayController {
                     break;
                 }
             }
-
+            */
             //obtening Data
             Boolean status = jData.getBoolean("success");
             JSONObject location_Names = jData.getJSONObject("message").getJSONObject("location_names");
@@ -90,21 +92,24 @@ public class ApiGatewayController {
 
             JSONObject temp = guessess.getJSONObject(0);
             String finalLocation = (String) temp.get("location");
-            Double finalProbability = (Double) temp.get("probability");
+            Double finalProbability = temp.getDouble("probability");
 
-
-            //Creating ApiGoResponse
-            GoApiResponse goApiResponse = new GoApiResponse(status);
 
             //Creating MessageGuess
             MessageGuess messageGuess = new MessageGuess(finalLocation, finalProbability);
-            JSONObject jsonResponseMessageGuess = new JSONObject(restTemplate.postForObject( urlLocationNames, messageGuess, MessageGuess.class));
+            JSONObject jsonResponseMessageGuess = new JSONObject(restTemplate.postForObject( urlMessaguess, messageGuess, MessageGuess.class));
             long idMessageGuess = jsonResponseMessageGuess.getLong("id");
 
             //Creating Message
             endPoint = "/" + idMessageGuess;
-            JSONObject jsonResponseMessage = new JSONObject(restTemplate.postForObject( urlLocationNames + endPoint, location_Names, LocationNames.class));
+            JSONObject jsonResponseMessage = new JSONObject(restTemplate.postForObject( urlMessage + endPoint, new JSONObject(), JSONObject.class));
             long idMessage = jsonResponseMessage.getLong("id");
+
+            //Creating goApiResponse
+            endPoint = "/" +idMessage + "/" + device.getId();
+            GoApiResponse goApiResponse = new GoApiResponse(status);
+            JSONObject jsonResponseGoApiResponse = new JSONObject(restTemplate.postForObject( urlApiGoResponse + endPoint, goApiResponse, GoApiResponse.class));
+            long idGoApiResponse = jsonResponseGoApiResponse.getLong("id");
 
             //creating Predictions and Message
             jData.getJSONObject("message").getJSONObject("location_names");
@@ -145,7 +150,11 @@ public class ApiGatewayController {
 
         }
         catch(Exception e){
-            return new ResponseEntity<String>("It's not possible create new Data", HttpStatus.NOT_FOUND);
+            String a = e + "\n" + e.getCause() + "\n";
+
+            return new ResponseEntity<String>("It's not possible create new Data, the reason: \n" +
+                    a,
+                    HttpStatus.NOT_FOUND);
 
         }
     }
