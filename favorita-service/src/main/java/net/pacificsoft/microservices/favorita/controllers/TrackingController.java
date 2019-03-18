@@ -90,7 +90,7 @@ public class TrackingController {
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("New Tracking not created.",
-                            HttpStatus.NOT_FOUND);
+                            HttpStatus.BAD_REQUEST);
                 }
 	}
 

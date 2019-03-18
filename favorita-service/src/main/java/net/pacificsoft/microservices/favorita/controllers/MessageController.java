@@ -70,9 +70,9 @@ public class MessageController {
                 message.setMessageGuess(messageGuess);
 
                 messageGuess.getMessages().add(message);
+                Message posted = messageRepository.save(message);
 
                 messageGuessRepository.save(messageGuess);
-                Message posted = messageRepository.save(message);
 
                 return new ResponseEntity(posted, HttpStatus.CREATED);
             }
@@ -96,13 +96,11 @@ public class MessageController {
                    messageGuessRepository.existsById(messageGuessID)){
                     Message message = messageRepository.findById(mId).get();
                     MessageGuess messageGuess = messageGuessRepository.findById(messageGuessID).get();
-                    
                     message.setMessageGuess(messageGuess);
-
                     messageGuess.getMessages().add(message);
-
-                    messageGuessRepository.save(messageGuess);
                     final Message posted = messageRepository.save(message);
+                    messageGuessRepository.save(messageGuess);
+
                     return new ResponseEntity(HttpStatus.OK);
                 }
 		else{

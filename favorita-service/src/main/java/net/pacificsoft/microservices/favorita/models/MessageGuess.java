@@ -19,6 +19,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -42,6 +44,7 @@ public class MessageGuess implements Serializable{
     @Column(name = "probability", nullable = false)
     private Double probability;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "messageGuess")
@@ -56,7 +59,12 @@ public class MessageGuess implements Serializable{
     }
 
     
-    
+    public JSONObject toJson(){
+        JSONObject json = new JSONObject();
+        json.put("location", this.location);
+        json.put("probability", this.probability);
+        return json;
+    }
     /**
      * @return the id
      */

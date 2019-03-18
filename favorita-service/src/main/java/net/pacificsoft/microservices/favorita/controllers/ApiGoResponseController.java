@@ -68,9 +68,9 @@ public class ApiGoResponseController {
                 message.setGoApiResponse(goApiResponse);
                 goApiResponse.setDevice(device);
                 goApiResponse.setMessage(message);
+                GoApiResponse posted = goRepository.save(goApiResponse);
                 messageRepository.save(message);
                 deviceRepository.save(device);
-                GoApiResponse posted = goRepository.save(goApiResponse);
 
                 return new ResponseEntity(posted, HttpStatus.CREATED);
             }

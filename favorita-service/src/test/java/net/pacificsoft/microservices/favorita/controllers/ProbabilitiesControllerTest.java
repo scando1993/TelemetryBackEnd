@@ -68,9 +68,10 @@ public class ProbabilitiesControllerTest {
     private PredictionsRepository repositoryP;
     
     @Test
+
     public void getAll_test() throws Exception{
-        Probabilities probability1= new Probabilities(1.1,1.2);
-        Probabilities probability2= new Probabilities(3.3,2.2);
+        Probabilities probability1= new Probabilities(new Double(11), new Double(11));
+        Probabilities probability2= new Probabilities(new Double(11),new Double(11));
 
         List<Probabilities> ProbabilitiesList = Arrays.asList(probability1, probability2);
 
@@ -85,10 +86,7 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void getById_test() throws Exception {
-        Probabilities probability= new Probabilities(3.3,1.2);
-        Prediction prediction = new Prediction("p");
-        probability.setPrediction(prediction);
-        prediction.getProbabilitieses().add(probability);
+        Probabilities probability= new Probabilities(new Double(11),1.2);
         
         given(repository.existsById(probability.getId())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));
@@ -101,10 +99,7 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void create_test() throws Exception{
-        Probabilities probability= new Probabilities(3.3,1.2);
-        Prediction prediction = new Prediction("p");
-        probability.setPrediction(prediction);
-        prediction.getProbabilitieses().add(probability);
+        Probabilities probability= new Probabilities(new Double(11),1.2);
        
         given(repositoryP.existsById(any())).willReturn(true);
         given(repositoryP.findById(any())).willReturn(Optional.of(prediction)); 
@@ -129,10 +124,7 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void delete_test() throws Exception{
-        Probabilities probability= new Probabilities(3.3,1.2);
-        Prediction prediction = new Prediction("p");
-        probability.setPrediction(prediction);
-        prediction.getProbabilitieses().add(probability);
+        Probabilities probability= new Probabilities(new Double(11),1.2);
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));
@@ -147,10 +139,7 @@ public class ProbabilitiesControllerTest {
     
     @Test
     public void update_test() throws Exception{
-        Probabilities probability= new Probabilities(3.3,1.2);
-        Prediction prediction = new Prediction("p");
-        probability.setPrediction(prediction);
-        prediction.getProbabilitieses().add(probability);
+        Probabilities probability= new Probabilities(new Double(11),1.2);
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));

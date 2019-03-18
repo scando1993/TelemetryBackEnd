@@ -19,6 +19,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -41,12 +43,14 @@ public class Prediction implements Serializable{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "messageID")
     private Message message;
-    
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "prediction")
     private Set<LocationNames> locationNames = new HashSet<>();
-    
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "prediction")
@@ -66,7 +70,11 @@ public class Prediction implements Serializable{
     public Prediction() {
     }
 
-    
+    public JSONObject toJson(){
+        JSONObject json = new JSONObject();
+        json.put("name", this.name);
+        return json;
+    }
     /**
      * @return the id
      */

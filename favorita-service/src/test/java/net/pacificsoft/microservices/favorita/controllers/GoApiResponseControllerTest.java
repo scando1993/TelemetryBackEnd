@@ -44,7 +44,7 @@ public class GoApiResponseControllerTest {
     @MockBean
     @Autowired
     private DeviceRepository repositoryD;
-
+/*
     @Test
     public void getAll_test() throws Exception{
         GoApiResponse goApi1 = new GoApiResponse(true);
@@ -137,5 +137,5 @@ public class GoApiResponseControllerTest {
                 .andExpect(status().isOk());
 
     }
-    
+  */
 }

@@ -50,7 +50,7 @@ public class PredictionControllerTest {
     @Autowired
     private MessageRepository repositoryM;
     
-
+/*
     @Test
     public void getAll_test() throws Exception{
         Prediction prediction1= new Prediction("n1");
@@ -144,5 +144,5 @@ public class PredictionControllerTest {
                 .andExpect(status().isOk());
 
     }
-    
+    */
 }
