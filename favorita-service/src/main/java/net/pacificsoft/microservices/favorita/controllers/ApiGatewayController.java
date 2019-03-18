@@ -35,7 +35,8 @@ public class ApiGatewayController {
 
         @PostMapping("/rawData/{deviceid}")
     public ResponseEntity createCiudad(
-            @PathVariable(value = "deviceid") Long deviceId) {
+            @PathVariable(value = "deviceid") Long deviceId,
+            @Valid @RequestBody RawSensorData rawData) {
         try{
             final String uri = "http://104.209.196.204:9090/track";
             final String urlTracking = "http://localhost:2222/tracking";
@@ -47,15 +48,15 @@ public class ApiGatewayController {
             final String urlMessaguess = "http://localhost:2222/messageGuess";
 
 
-            final int defaultTrackingLocationGroup = 1;
+            final int defaultTrackingLocationGroup = 3;
             String endPoint;
             RestTemplate restTemplate = new RestTemplate();
 
             Device device = deviceRepository.findById(deviceId).get();
-            /*
+
             device.getRawSensorDatas().add(rawData);
             rawData.setDevice(device);
-            */
+
             Set<Family> families = device.getGroup().getFamilies();
             JSONObject json1 = new JSONObject();
             JSONObject s = new JSONObject();
@@ -93,6 +94,13 @@ public class ApiGatewayController {
             JSONObject temp = guessess.getJSONObject(0);
             String finalLocation = (String) temp.get("location");
             Double finalProbability = temp.getDouble("probability");
+
+            //creating Tracting
+            endPoint = "/" + device.getId() + "/" + defaultTrackingLocationGroup;
+            JSONObject jsonTracking = createTrackingJson(rawData.getEpochDateTime(), finalLocation);
+            JSONObject jsonTrackingResponse = new JSONObject(restTemplate.postForObject( urlTracking + endPoint, jsonTracking, Tracking.class));
+
+            RawSensorData rawSave = rawDataRepository.save(rawData);
 
 
             //Creating MessageGuess
@@ -151,16 +159,11 @@ public class ApiGatewayController {
             }
 
 
-            /*
-            //creating Tracting
-            endPoint = "/" + device.getId() + "/" + defaultTrackingLocationGroup;
-            JSONObject jsonTracking = createTrackingJson(rawData.getEpochDateTime(), finalLocation);
-            JSONObject jsonTrackingResponse = new JSONObject(restTemplate.postForObject( urlTracking + endPoint, jsonTracking.toString(), String.class));
 
-            RawSensorData rawSave = rawDataRepository.save(rawData);
+
             //final return
-            return new ResponseEntity(rawData,HttpStatus.CREATED);
-            */
+            //return new ResponseEntity(rawData,HttpStatus.CREATED);
+
             return new ResponseEntity(goApiResponse,HttpStatus.CREATED);
         }
         catch(Exception e){
@@ -199,8 +202,8 @@ public class ApiGatewayController {
         String dtmFormated = as.format(dtm);
 
         JSONObject json = new JSONObject();
-        json.put("dtm", dtmFormated);
         json.put("location", location);
+        json.put("dtm", dtmFormated);
         return json;
     };
 
