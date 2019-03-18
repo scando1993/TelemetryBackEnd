@@ -52,17 +52,25 @@ public class ApiGatewayController {
             String endPoint;
             RestTemplate restTemplate = new RestTemplate();
 
+            /*
+            if(!deviceRepository.existsById(rawData.getEpoch())){
+                return new ResponseEntity("No existe dispositivo asociado",HttpStatus.NOT_FOUND);
+            }
+            */
+
             Device device = deviceRepository.findById(deviceId).get();
 
             device.getRawSensorDatas().add(rawData);
             rawData.setDevice(device);
+            RawSensorData rawSave = rawDataRepository.save(rawData);
+            deviceRepository.save(device);
 
             Set<Family> families = device.getGroup().getFamilies();
             JSONObject json1 = new JSONObject();
             JSONObject s = new JSONObject();
             JSONObject wifi = new JSONObject();
             json1.put("t", new Integer(1551981257));
-            json1.put("f", "favorita");
+            //json1.put("f", "favorita");
             json1.put("d", "4836966");
             //json1.put("d",rawData.getEpoch());
             wifi.put("4c:5e:8c:bc:86:0a", -56);
@@ -71,7 +79,7 @@ public class ApiGatewayController {
             json1.put("s", s);
             JSONObject jData = new JSONObject();
             jData = new JSONObject(restTemplate.postForObject( uri, json1.toString(), String.class));
-            /*
+
             for(Family family:families){
                 json1.put("f",family.getName());
                 jData = new JSONObject(restTemplate.postForObject( uri, json1.toString(), String.class));
@@ -83,7 +91,7 @@ public class ApiGatewayController {
                     break;
                 }
             }
-            */
+
             //obtening Data
             Boolean status = jData.getBoolean("success");
             JSONObject location_Names = jData.getJSONObject("message").getJSONObject("location_names");
@@ -95,13 +103,12 @@ public class ApiGatewayController {
             String finalLocation = (String) temp.get("location");
             Double finalProbability = temp.getDouble("probability");
 
+            /*
             //creating Tracting
             endPoint = "/" + device.getId() + "/" + defaultTrackingLocationGroup;
             JSONObject jsonTracking = createTrackingJson(rawData.getEpochDateTime(), finalLocation);
             JSONObject jsonTrackingResponse = new JSONObject(restTemplate.postForObject( urlTracking + endPoint, jsonTracking, Tracking.class));
-
-            RawSensorData rawSave = rawDataRepository.save(rawData);
-
+            */
 
             //Creating MessageGuess
             MessageGuess messageGuess = new MessageGuess(finalLocation, finalProbability);

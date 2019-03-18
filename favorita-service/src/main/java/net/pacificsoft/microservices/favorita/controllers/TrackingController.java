@@ -85,7 +85,7 @@ public class TrackingController {
                     }
                     else{
                         return new ResponseEntity<String>("New Tracking not created.",
-                            HttpStatus.CONFLICT);
+                            HttpStatus.NOT_FOUND);
                     }
                 }
 		catch(Exception e){
