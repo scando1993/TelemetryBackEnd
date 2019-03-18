@@ -44,7 +44,8 @@ public class Probabilities implements Serializable{
     @Column(name = "probability", nullable = false)
     private Double probability;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "probilityID")
     private Prediction prediction;
 

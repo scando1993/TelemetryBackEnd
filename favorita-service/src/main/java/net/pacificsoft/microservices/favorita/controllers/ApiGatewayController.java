@@ -33,10 +33,9 @@ public class ApiGatewayController {
     private DeviceRepository deviceRepository;
 
 
-    @PostMapping("/rawData/{deviceid}")
+        @PostMapping("/rawData/{deviceid}")
     public ResponseEntity createCiudad(
-            @PathVariable(value = "deviceid") Long deviceId,
-            @Valid @RequestBody RawSensorData rawData) {
+            @PathVariable(value = "deviceid") Long deviceId) {
         try{
             final String uri = "http://104.209.196.204:9090/track";
             final String urlTracking = "http://localhost:2222/tracking";
@@ -53,9 +52,10 @@ public class ApiGatewayController {
             RestTemplate restTemplate = new RestTemplate();
 
             Device device = deviceRepository.findById(deviceId).get();
+            /*
             device.getRawSensorDatas().add(rawData);
             rawData.setDevice(device);
-
+            */
             Set<Family> families = device.getGroup().getFamilies();
             JSONObject json1 = new JSONObject();
             JSONObject s = new JSONObject();
@@ -98,11 +98,12 @@ public class ApiGatewayController {
             //Creating MessageGuess
             MessageGuess messageGuess = new MessageGuess(finalLocation, finalProbability);
             JSONObject jsonResponseMessageGuess = new JSONObject(restTemplate.postForObject( urlMessaguess, messageGuess, MessageGuess.class));
-            long idMessageGuess = jsonResponseMessageGuess.getLong("id");
+            long idMessageGuess = (long)jsonResponseMessageGuess.get("id");
 
             //Creating Message
             endPoint = "/" + idMessageGuess;
-            JSONObject jsonResponseMessage = new JSONObject(restTemplate.postForObject( urlMessage + endPoint, new JSONObject(), JSONObject.class));
+            Message temp1 = new Message();
+            JSONObject jsonResponseMessage = new JSONObject(restTemplate.postForObject( urlMessage + endPoint, temp1, Message.class));
             long idMessage = jsonResponseMessage.getLong("id");
 
             //Creating goApiResponse
@@ -116,12 +117,22 @@ public class ApiGatewayController {
             for(Object i: predictions){
                 List<Object> locations = (((JSONObject)i).getJSONArray("locations")).toList();
                 String predictionName = ((JSONObject)i).getString("name");
-                List<Object> probabilites = (((JSONObject)i).getJSONArray("probabilites")).toList();
+                List<Object> probabilites = (((JSONObject)i).getJSONArray("probabilities")).toList();
 
                 for(int n = 0; n < locations.size(); n++){
                     String idName = (String) locations.get(n);
                     String nameIndexed = (String)location_Names.get(idName);
-                    Double probabilityIndexed = (Double)probabilites.get(n);
+                    Double probabilityIndexed;
+                    try{
+                        probabilityIndexed = (Double)probabilites.get(n);
+                    }
+                    catch(Exception e){
+                        String convertedToDouble = Integer.toString((Integer)probabilites.get(n));
+                        convertedToDouble = convertedToDouble + ".0";
+                        probabilityIndexed = Double.parseDouble(convertedToDouble);
+                    }
+
+
 
                     Probabilities probability = new Probabilities(Double.parseDouble(idName), probabilityIndexed);
                     LocationNames locationNames = new LocationNames(Double.parseDouble(idName),nameIndexed);
@@ -134,11 +145,13 @@ public class ApiGatewayController {
 
                     //posting probability and locationNames
                     endPoint = "/" + idPrediction;
-                    JSONObject jsonResponseProbability = new JSONObject(restTemplate.postForObject( urlPrediction + endPoint, probability, Probabilities.class));
-                    JSONObject jsonResponseLocationNames = new JSONObject(restTemplate.postForObject( urlLocationNames + endPoint, locationNames, LocationNames.class));
+                    JSONObject jsonResponseProbability = new JSONObject(restTemplate.postForObject( urlProbability + endPoint, probability, Probabilities.class));
+                    JSONObject jsonResponseLocationNames = new JSONObject(restTemplate.postForObject( urlLocationNames, locationNames, LocationNames.class));
                 }
             }
 
+
+            /*
             //creating Tracting
             endPoint = "/" + device.getId() + "/" + defaultTrackingLocationGroup;
             JSONObject jsonTracking = createTrackingJson(rawData.getEpochDateTime(), finalLocation);
@@ -147,7 +160,8 @@ public class ApiGatewayController {
             RawSensorData rawSave = rawDataRepository.save(rawData);
             //final return
             return new ResponseEntity(rawData,HttpStatus.CREATED);
-
+            */
+            return new ResponseEntity(goApiResponse,HttpStatus.CREATED);
         }
         catch(Exception e){
             String a = e + "\n" + e.getCause() + "\n";

@@ -1,5 +1,6 @@
 package net.pacificsoft.microservices.favorita.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -37,7 +38,8 @@ public class Family implements Serializable{
     @Column(name = "name", nullable = false)
     private String name;
 
-    @JsonIgnore
+    //@JsonIgnore
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "groupid")
     private Group groupFamily;

@@ -113,6 +113,7 @@ public class ApiGatewayControllerTest {
 
         String formated = dateFormat.format(rawSensorData.getEpochDateTime());
 
+
         JSONObject json = new JSONObject();
         json.put("rawData", rawSensorData.getRawData());
         json.put("epoch", rawSensorData.getEpoch());

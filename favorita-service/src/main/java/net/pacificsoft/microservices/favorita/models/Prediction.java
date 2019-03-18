@@ -43,12 +43,14 @@ public class Prediction implements Serializable{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "messageID")
     private Message message;
-    
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "prediction")
     private Set<LocationNames> locationNames = new HashSet<>();
-    
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "prediction")

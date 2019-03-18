@@ -41,10 +41,12 @@ public class GoApiResponse implements Serializable{
     @Column(name = "sucess", nullable = false)
     private boolean sucess;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "messageID")
     private Message message;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "deviceID")
     private Device device;

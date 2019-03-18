@@ -44,6 +44,7 @@ public class MessageGuess implements Serializable{
     @Column(name = "probability", nullable = false)
     private Double probability;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "messageGuess")
