@@ -1,6 +1,7 @@
 
 package net.pacificsoft.microservices.favorita.controllers;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import net.pacificsoft.microservices.favorita.models.*;
 import net.pacificsoft.microservices.favorita.repository.*;
 import org.json.JSONArray;
@@ -46,7 +47,7 @@ public class ApiGatewayController {
             final String urlApiGoResponse = "http://localhost:2222/goApiResponse";
             final String urlMessage = "http://localhost:2222/message";
             final String urlMessaguess = "http://localhost:2222/messageGuess";
-
+            final String urlTelemetry = "http://localhost:2222/telemetria";
 
             final int defaultTrackingLocationGroup = 3;
             String endPoint;
@@ -103,12 +104,20 @@ public class ApiGatewayController {
             String finalLocation = (String) temp.get("location");
             Double finalProbability = temp.getDouble("probability");
 
-            /*
+
+            //creatinig Telemetry
+            //if(rawData.getTemperature() != null){
+                endPoint = "/" +deviceId;
+                JSONObject jsonTelemtry = createTelemetryJson(rawData.getEpochDateTime(),"temperature",rawData.getTemperature());
+                JSONObject jsonTelemtryResponse = new JSONObject(restTemplate.postForObject( urlTelemetry + endPoint, jsonTelemtry.toMap(), Telemetria.class));
+            //}
+
+
             //creating Tracting
             endPoint = "/" + device.getId() + "/" + defaultTrackingLocationGroup;
             JSONObject jsonTracking = createTrackingJson(rawData.getEpochDateTime(), finalLocation);
-            JSONObject jsonTrackingResponse = new JSONObject(restTemplate.postForObject( urlTracking + endPoint, jsonTracking, Tracking.class));
-            */
+            JSONObject jsonTrackingResponse = new JSONObject(restTemplate.postForObject( urlTracking + endPoint, jsonTracking.toMap(), Tracking.class));
+
 
             //Creating MessageGuess
             MessageGuess messageGuess = new MessageGuess(finalLocation, finalProbability);
@@ -147,8 +156,6 @@ public class ApiGatewayController {
                         probabilityIndexed = Double.parseDouble(convertedToDouble);
                     }
 
-
-
                     Probabilities probability = new Probabilities(Double.parseDouble(idName), probabilityIndexed);
                     LocationNames locationNames = new LocationNames(Double.parseDouble(idName),nameIndexed);
                     Prediction prediction = new Prediction(predictionName);
@@ -164,12 +171,6 @@ public class ApiGatewayController {
                     JSONObject jsonResponseLocationNames = new JSONObject(restTemplate.postForObject( urlLocationNames, locationNames, LocationNames.class));
                 }
             }
-
-
-
-
-            //final return
-            //return new ResponseEntity(rawData,HttpStatus.CREATED);
 
             return new ResponseEntity(goApiResponse,HttpStatus.CREATED);
         }
@@ -224,6 +225,17 @@ public class ApiGatewayController {
         JSONObject json = new JSONObject();
         json.put("idName", idName);
 
+        return json;
+    };
+
+    private JSONObject createTelemetryJson(Date dtm, String name, double value){
+        SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        String dtmFormated = as.format(dtm);
+
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("dtm", dtmFormated);
+        json.put("value", value);
         return json;
     };
 
