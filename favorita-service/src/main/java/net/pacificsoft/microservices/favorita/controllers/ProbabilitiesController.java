@@ -111,8 +111,7 @@ public class ProbabilitiesController {
 			@PathVariable(value = "id") Long probabilityId){
                 if(probabilitiesRepository.existsById(probabilityId)){
                     Probabilities probability = probabilitiesRepository.findById(probabilityId).get();
-                    probability.setPrediction(null);
-                    probability.getPrediction().getProbabilitieses().remove(null);
+                    probability.getPrediction().getProbabilitieses().remove(probability);
                     predictionsRepository.save(probability.getPrediction());
                     probabilitiesRepository.delete(probability);
                     return new ResponseEntity(HttpStatus.OK);
