@@ -25,7 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table (name = "telemetria")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = Telemetria.class)
 @EnableAutoConfiguration(exclude = {
         JpaRepositoriesAutoConfiguration.class
 })
@@ -44,7 +44,7 @@ public class Telemetria implements Serializable{
         
         @Column(name = "value", nullable = false)
 	private double value;
-        
+        @JsonIgnore
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "deviceID")
         private Device device;
