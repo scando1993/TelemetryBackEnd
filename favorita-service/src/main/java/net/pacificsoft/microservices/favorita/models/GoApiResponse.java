@@ -42,12 +42,12 @@ public class GoApiResponse implements Serializable{
     private boolean sucess;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "messageID")
     private Message message;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deviceID")
     private Device device;
 

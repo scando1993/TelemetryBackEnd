@@ -27,7 +27,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table (name = "device")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = Device.class)
 @EnableAutoConfiguration(exclude = {
         JpaRepositoriesAutoConfiguration.class
 })
@@ -49,37 +49,37 @@ public class Device implements Serializable{
         private Group groupFamily;
 
         @JsonIgnore
-        @OneToMany(fetch = FetchType.EAGER,
+        @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
         private Set<Ruta> rutas = new HashSet<>();
         
         @JsonIgnore
-        @OneToMany(fetch = FetchType.EAGER,
+        @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
         private Set<Tracking> trackings = new HashSet<>();
         
         @JsonIgnore
-        @OneToMany(fetch = FetchType.EAGER,
+        @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
         private Set<RawSensorData> rawSensorDatas = new HashSet<>();
         
         @JsonIgnore
-        @OneToMany(fetch = FetchType.EAGER,
+        @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
         private Set<Alerta> alertas = new HashSet<>();
         
         @JsonIgnore
-        @OneToMany(fetch = FetchType.EAGER,
+        @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
         private Set<Telemetria> telemetrias = new HashSet<>();
         
         @JsonIgnore
-        @OneToMany(fetch = FetchType.EAGER,
+        @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
         private Set<GoApiResponse> goApiResponses = new HashSet<>();
@@ -90,7 +90,7 @@ public class Device implements Serializable{
             mappedBy = "device")
         private Status status;
         
-        /*@OneToOne(fetch = FetchType.EAGER)
+        /*@OneToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "featureID")
         private Features features;*/
 

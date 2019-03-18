@@ -40,17 +40,17 @@ public class Tracking implements Serializable{
 	private String location;
         
         @JsonIgnore
-        @ManyToOne(fetch = FetchType.EAGER)
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "deviceID")
         private Device device;
 
         @JsonIgnore
-        @ManyToOne(fetch = FetchType.EAGER)
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "locationGroupID")
         private LocationGroup locationGroup;
         
         @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "tracking")
         private Set<LocationPriority> locationPrioritys = new HashSet<>();
         

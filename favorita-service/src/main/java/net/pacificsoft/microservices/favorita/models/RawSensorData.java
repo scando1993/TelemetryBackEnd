@@ -56,7 +56,7 @@ public class RawSensorData implements Serializable{
         
         @JsonIgnore
         @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "rawSensorData")
         private Set<WifiScan> wifiScans = new HashSet<>();
 
@@ -70,7 +70,7 @@ public class RawSensorData implements Serializable{
 
     @JsonIgnore
         @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "rawSensorData")
 
 

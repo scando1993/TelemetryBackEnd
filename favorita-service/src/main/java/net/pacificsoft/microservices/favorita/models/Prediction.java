@@ -46,19 +46,19 @@ public class Prediction implements Serializable{
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "prediction")
     private Set<LocationNames> locationNames = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "prediction")
     private Set<Probabilities> probabilitieses = new HashSet<>();
     
     /*
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "prediction")
     private Set<LocationNames> locationNames = new HashSet<>();
     */

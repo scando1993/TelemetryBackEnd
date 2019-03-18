@@ -42,7 +42,7 @@ public class LocationGroup implements Serializable{
 	private String name;
          
         @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "locationGroup")
         private Set<Tracking> trackings = new HashSet<>();
 

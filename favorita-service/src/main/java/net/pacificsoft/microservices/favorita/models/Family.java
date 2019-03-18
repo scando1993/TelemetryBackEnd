@@ -39,7 +39,7 @@ public class Family implements Serializable{
     private String name;
 
     //@JsonIgnore
-    @JsonBackReference
+    //@JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "groupid")
     private Group groupFamily;

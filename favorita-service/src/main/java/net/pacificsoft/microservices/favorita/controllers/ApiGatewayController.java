@@ -36,6 +36,8 @@ public class ApiGatewayController {
     private PredictionsRepository predictionsRepository;
     @Autowired
     private LocationNamesRepository locationNamesRepository;
+    @Autowired
+    private MessageRepository messageRepository;
 
 
         @PostMapping("/rawData/{deviceid}")
@@ -132,8 +134,9 @@ public class ApiGatewayController {
             //Creating Message
             endPoint = "/" + idMessageGuess;
             Message temp1 = new Message();
-            JSONObject jsonResponseMessage = new JSONObject(restTemplate.postForObject( urlMessage + endPoint, temp1, Message.class));
-            long idMessage = jsonResponseMessage.getLong("id");
+            Message jsonResponseMessage = (Message)(restTemplate.postForObject( urlMessage + endPoint, temp1, Message.class));
+            //long idMessage = jsonResponseMessage.getLong("id");
+            long idMessage = jsonResponseMessage.getId();
 
             //Creating goApiResponse
             endPoint = "/" +idMessage + "/" + device.getId();
@@ -156,7 +159,13 @@ public class ApiGatewayController {
                 endPoint = "/" + idMessage;
                 JSONObject jsonResponsePrediction = new JSONObject(restTemplate.postForObject( urlPrediction + endPoint, prediction, Prediction.class));
                 long idPrediction = jsonResponsePrediction.getLong("id");
-
+               /*
+                prediction.setMessage(jsonResponseMessage);
+                jsonResponseMessage.getPredictions().add(prediction);
+                prediction = predictionsRepository.save(prediction);
+                messageRepository.save(jsonResponseMessage);
+                long idPrediction = prediction.getId();
+                */
                 for(int n = 0; n < locations.size(); n++){
                     String idName = (String) locations.get(n);
                     String nameIndexed = (String)location_Names.get(idName);
@@ -186,12 +195,12 @@ public class ApiGatewayController {
                     listProbabilities.add(probability);
                     listLocationNames.add(locationNames);
 
-
                 }
                 predictionsRepository.save(prediction);
                 probabilitiesRepository.saveAll(listProbabilities);
                 locationNamesRepository.saveAll(listLocationNames);
             }
+            System.gc();
 
             return new ResponseEntity(goApiResponse,HttpStatus.CREATED);
         }

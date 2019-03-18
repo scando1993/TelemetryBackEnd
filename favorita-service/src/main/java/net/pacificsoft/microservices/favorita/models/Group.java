@@ -40,13 +40,13 @@ public class Group implements Serializable{
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "groupFamily")
     //@JsonManagedReference
     private Set<Device> devices = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "groupFamily")
     private Set<Family> families = new HashSet<>();
 

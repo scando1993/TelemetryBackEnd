@@ -46,13 +46,13 @@ public class LocationNames implements Serializable{
     private String name;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "predictionID")
     private Prediction prediction;
     
 
    /* @OneToOne(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "locationNames")
     private Message  message;*/
     

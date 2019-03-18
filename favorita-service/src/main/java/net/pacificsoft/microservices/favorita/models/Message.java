@@ -39,22 +39,22 @@ public class Message implements Serializable{
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "message")
     private Set<Prediction> predictions = new HashSet<>();
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "guessesID")
     private MessageGuess messageGuess;
 
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL,
-           fetch = FetchType.EAGER,
+           fetch = FetchType.LAZY,
            mappedBy = "message")
     private GoApiResponse goApiResponse;
 
-    /*@OneToOne(fetch = FetchType.EAGER)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "locationNamesID")
     private LocationNames locationNames;*/
 

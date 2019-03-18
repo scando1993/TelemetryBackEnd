@@ -51,7 +51,7 @@ public class SigfoxMessage implements Serializable{
 	private String payload2;
         
         @JsonIgnore
-        @ManyToOne(fetch = FetchType.EAGER)
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "rawSensorDataID")
         private RawSensorData rawSensorData;
         

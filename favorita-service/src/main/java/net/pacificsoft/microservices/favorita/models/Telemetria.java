@@ -45,7 +45,7 @@ public class Telemetria implements Serializable{
         @Column(name = "value", nullable = false)
 	private double value;
         @JsonIgnore
-        @ManyToOne(fetch = FetchType.EAGER)
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "deviceID")
         private Device device;
 
