@@ -25,6 +25,7 @@ import net.minidev.json.JSONObject;
 import net.pacificsoft.microservices.favorita.models.LocationNames;
 import net.pacificsoft.microservices.favorita.models.Message;
 import net.pacificsoft.microservices.favorita.models.MessageGuess;
+import net.pacificsoft.microservices.favorita.models.Prediction;
 import net.pacificsoft.microservices.favorita.models.Probabilities;
 import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
 import net.pacificsoft.microservices.favorita.repository.FeaturesRepository;
@@ -64,7 +65,7 @@ public class ProbabilitiesControllerTest {
     
     @MockBean
     @Autowired
-    private PredictionsRepository repositoryM;
+    private PredictionsRepository repositoryP;
     
     @Test
 
@@ -100,11 +101,20 @@ public class ProbabilitiesControllerTest {
     public void create_test() throws Exception{
         Probabilities probability= new Probabilities(new Double(11),1.2);
        
+        given(repositoryP.existsById(any())).willReturn(true);
+        given(repositoryP.findById(any())).willReturn(Optional.of(prediction)); 
+        
         JSONObject json = new JSONObject();
         json.put("name", probability.getNameID());
         json.put("probability", probability.getProbability());
         
-        mvc.perform(post("/probability")
+        given(repository.existsById(probability.getId())).willReturn(true);
+        given(repository.findById(any())).willReturn(Optional.of(probability));
+        
+        given(repositoryP.existsById(probability.getPrediction().getId())).willReturn(true);
+        given(repositoryP.findById(any())).willReturn(Optional.of(prediction));
+        
+        mvc.perform(post("/probability/"+probability.getPrediction().getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(json.toString())
         )
@@ -119,6 +129,7 @@ public class ProbabilitiesControllerTest {
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(probability));
         
+        probability.getPrediction().getProbabilitieses().remove(probability);
         mvc.perform(delete("/probability/"+ probability.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
         )

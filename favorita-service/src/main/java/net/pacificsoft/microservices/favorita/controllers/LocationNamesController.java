@@ -63,11 +63,21 @@ public class LocationNamesController {
         }
     }
     
-    @PostMapping("/locationNames")
-    public ResponseEntity createLocationNames(@Valid @RequestBody LocationNames locationNames) {
+    @PostMapping("/locationNames/{predictionId}")
+    public ResponseEntity createLocationNames(@Valid @RequestBody LocationNames locationNames,
+                        @PathVariable(value = "predictionId") Long predictionId) {
         try{
-            LocationNames p = locationNamesRepository.save(locationNames);
-            return new ResponseEntity(p, HttpStatus.CREATED);
+            if(predictionsRepository.existsById(predictionId)){
+                Prediction prediction = predictionsRepository.findById(predictionId).get();
+                prediction.getLocationNames().add(locationNames);
+                locationNames.setPrediction(prediction);
+                LocationNames p = locationNamesRepository.save(locationNames);
+                predictionsRepository.save(prediction);
+                return new ResponseEntity(p, HttpStatus.CREATED);}
+            else{
+                return new ResponseEntity<String>("New Location Names not created, prediction not found.",
+                    HttpStatus.NOT_FOUND);
+            }
         }
         catch(Exception e){
             return new ResponseEntity<String>("New Location Names not created.",

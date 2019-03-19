@@ -86,7 +86,7 @@ public class Probabilities implements Serializable{
 	}
 
 	/**
-	 * @param name the name to set
+        * @param nameID
 	 */
 	public void setNameID(Double nameID) {
 		this.nameID = nameID;
