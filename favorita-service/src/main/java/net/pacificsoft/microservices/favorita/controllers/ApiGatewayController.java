@@ -58,6 +58,7 @@ public class ApiGatewayController {
     final String urlTelemetry = "http://localhost:2222/telemetria";
     final String urlWifiSensor = "http://localhost:2222/wifiScan";
     final String urlAlert = "http://localhost:2222/alerta";
+    final String urlFamily = "http://localhost:2222/family";
     private static final Logger logger = LoggerFactory.getLogger(ApiGatewayController.class);
     private RestTemplate restTemplate = new RestTemplate();
     private SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
@@ -484,7 +485,7 @@ public class ApiGatewayController {
     }
      */
 
-    @PostMapping("/getTrackingInnerDate")
+    @GetMapping("/getTrackingInnerDate")
     public ResponseEntity getTrackingInnerDate(
             @Valid @RequestBody String data) {
         try{
@@ -528,6 +529,17 @@ public class ApiGatewayController {
         }
 
     }
+    @GetMapping("/getAllFamilies")
+        public ResponseEntity getAllFamilies(){
+        try{
+            JSONObject families = new JSONObject(restTemplate.postForObject(urlFamily,new Family(),JSONObject.class));
+            return new ResponseEntity(families, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Internal error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 /*
