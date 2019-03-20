@@ -70,8 +70,8 @@ public class DeviceController {
                         Group g = groupRepository.findById(groupId).get();
                         g.getDevices().add(device);
                         device.setGroup(g);
-                        groupRepository.save(g);
                         Device d = deviceRepository.save(device);
+                        groupRepository.save(g);
                         return new ResponseEntity(d, HttpStatus.CREATED);
                     }
                     else{

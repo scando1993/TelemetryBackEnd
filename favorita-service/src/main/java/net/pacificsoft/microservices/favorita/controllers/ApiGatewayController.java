@@ -41,6 +41,8 @@ public class ApiGatewayController {
     private LocationNamesRepository locationNamesRepository;
     @Autowired
     private MessageRepository messageRepository;
+    @Autowired
+    private TrackingRepository trackingRepository;
 
 
     final String uri = "http://104.209.196.204:9090/track";
@@ -57,8 +59,14 @@ public class ApiGatewayController {
     final String urlWifiSensor = "http://localhost:2222/wifiScan";
     final String urlAlert = "http://localhost:2222/alerta";
     private static final Logger logger = LoggerFactory.getLogger(ApiGatewayController.class);
+    private RestTemplate restTemplate = new RestTemplate();
     private SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+    final int defaultTrackingLocationGroup = 3;
+    private String endPoint;
 
+    final String formatApiInnerDate = "{\"device\": String,\n" +
+            "        \"startDate\": \"yyyy-MM-ddTHH:MM\" or \"beginning\",\n" +
+            "        \"endDate\": \"yyyy-MM-ddTHH:MM\" or \"now\"}";
 
     @PostMapping("/rawData/{deviceid}")
     public ResponseEntity createCiudad(
@@ -238,10 +246,6 @@ public class ApiGatewayController {
             @Valid @RequestBody String dataBody) {
         try{
 
-            final int defaultTrackingLocationGroup = 3;
-            String endPoint;
-            RestTemplate restTemplate = new RestTemplate();
-
             dataBody = "[" + dataBody + "]";
             JSONArray j = new JSONArray(dataBody);
             JSONObject jDataBody = j.getJSONObject(0);
@@ -293,18 +297,18 @@ public class ApiGatewayController {
             JSONObject jRawSensorData = jDataBody;
             endPoint = "/" + deviceId;
             RawSensorData rawData = (restTemplate.postForObject( urlRawSensorData + endPoint, jRawSensorData.toMap(), RawSensorData.class));
-            logger.info("Raw data have been created");
+            logger.info("Raw data have been storaged");
 
             //-----------creating wifiSensor
             endPoint = "/" + rawData.getId();
             postWifiScan(wifiList,urlWifiSensor + endPoint,restTemplate);
-            logger.info("WifiSensor have been created");
+            logger.info("WifiSensor have been storaged");
 
             //-----creatinig Telemetry
             endPoint = "/" +deviceId;
             JSONObject jsonTelemtry = createTelemetryJson(epochDateTime,"temperature",temperature);
             JSONObject jsonTelemtryResponse = new JSONObject(restTemplate.postForObject( urlTelemetry + endPoint, jsonTelemtry.toMap(), Telemetria.class));
-            logger.info("Telemetry have been creaed");
+            logger.info("Telemetry have been storaged");
 
 
             //-------creating request to send Go server
@@ -356,13 +360,13 @@ public class ApiGatewayController {
             endPoint = "/" + device.getId() + "/" + defaultTrackingLocationGroup;
             JSONObject jsonTracking = createTrackingJson(epochDateTime, finalLocation);
             JSONObject jsonTrackingResponse = new JSONObject(restTemplate.postForObject( urlTracking + endPoint, jsonTracking.toMap(), Tracking.class));
-            logger.info("Tracking have been creaed");
+            logger.info("Tracking have been storaged");
 
             //-------Creating MessageGuess
             MessageGuess messageGuess = new MessageGuess(finalLocation, finalProbability);
             JSONObject jsonResponseMessageGuess = new JSONObject(restTemplate.postForObject( urlMessaguess, messageGuess, MessageGuess.class));
             long idMessageGuess = (long)jsonResponseMessageGuess.get("id");
-            logger.info("MessageGuess have been creaed");
+            logger.info("MessageGuess have been storaged");
 
             //---------Creating Message
             endPoint = "/" + idMessageGuess;
@@ -370,14 +374,14 @@ public class ApiGatewayController {
             Message jsonResponseMessage = (Message)(restTemplate.postForObject( urlMessage + endPoint, temp1, Message.class));
             //long idMessage = jsonResponseMessage.getLong("id");
             long idMessage = jsonResponseMessage.getId();
-            logger.info("Message have been creaed");
+            logger.info("Message have been storaged");
 
             //--------Creating goApiResponse
             endPoint = "/" +idMessage + "/" + device.getId();
             GoApiResponse goApiResponse = new GoApiResponse(status);
             JSONObject jsonResponseGoApiResponse = new JSONObject(restTemplate.postForObject( urlApiGoResponse + endPoint, goApiResponse, GoApiResponse.class));
             long idGoApiResponse = jsonResponseGoApiResponse.getLong("id");
-            logger.info("goApiResponse have been creaed");
+            logger.info("goApiResponse have been storaged");
 
             //------------creating Predictions, LocationNames and Probabilities
             jData.getJSONObject("message").getJSONObject("location_names");
@@ -435,7 +439,8 @@ public class ApiGatewayController {
                 probabilitiesRepository.saveAll(listProbabilities);
                 locationNamesRepository.saveAll(listLocationNames);
             }
-            logger.info("All predictions,, locationNames and probabilities have been creaed");
+            logger.info("All predictions,, locationNames and probabilities have been storaged");
+            logger.info("All data have been Successfully storaged");
             System.gc();
 
             return new ResponseEntity(goApiResponse,HttpStatus.CREATED);
@@ -474,11 +479,11 @@ public class ApiGatewayController {
     Structure of getTrackingInnerDate json
     {
         "device": String,
-        "startDate": "yyyy-MM-ddTHH:MM",
-        "endDate": "yyyy-MM-ddTHH:MM"
+        "startDate": "yyyy-MM-ddTHH:MM" or "beginning",
+        "endDate": "yyyy-MM-ddTHH:MM" or "now"
     }
      */
-    /*
+
     @PostMapping("/getTrackingInnerDate")
     public ResponseEntity getTrackingInnerDate(
             @Valid @RequestBody String data) {
@@ -486,30 +491,44 @@ public class ApiGatewayController {
             JSONObject jData = new JSONObject(data);
             String deviceName = jData.getString("device");
             String startDate = jData.getString("startDate");
-            String endDate = jData.getString("endtDate");
-            Date star = new Date();
-            Date end = new Date();
+            String endDate = jData.getString("endDate");
+            Device device = new Device();
+            if(deviceRepository.existsByName(deviceName)){
+                device = deviceRepository.findByName(deviceName).get(0);
+            }
+            else{
+                return new ResponseEntity("No device Found", HttpStatus.NOT_FOUND);
+            }
+            Date start;
+            Date end;
             try {
-                if (startDate != "now")
-                    star = as.parse(startDate);
-                if (endDate != "now")
+                if (startDate.compareTo("beginning") != 0)
+                    start = as.parse(startDate);
+                else
+                    start = new Date();
+                if (endDate.compareTo("now") != 0)
                     end = as.parse(endDate);
+                else
+                    end = new Date();
             }
             catch (Exception e){
                 logger.error("Bad Date");
-                return new ResponseEntity<String>("Make sure that you had sent the correct JSON ", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<String>("Make sure that you had sent the Date Format\n" + formatApiInnerDate, HttpStatus.BAD_REQUEST);
             }
-            List<Tracking> trackings = new A
-
-
+            ArrayList<Tracking> trackings;
+            if (startDate.compareTo("beginning") != 0)
+                 trackings = (ArrayList<Tracking>) trackingRepository.findByDtmBetweenAndDevice(start,end,device);
+            else
+                trackings = (ArrayList<Tracking>)trackingRepository.findByDtmLessThanEqualAndDevice(end, device);
+            return new ResponseEntity(trackings,HttpStatus.OK);
         }
         catch(Exception e){
             logger.error("Could not parse data. Bad request");
-            return new ResponseEntity<String>("Make sure that you had sent the correct JSON ", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Make sure that you had sent the correct JSON \n" + formatApiInnerDate, HttpStatus.BAD_REQUEST);
         }
 
     }
-    */
+
 
 /*
 --------------------Axiliar Functions------------------------------------
