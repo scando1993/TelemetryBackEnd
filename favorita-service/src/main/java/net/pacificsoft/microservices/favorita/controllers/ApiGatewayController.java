@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import net.pacificsoft.microservices.favorita.models.*;
 import net.pacificsoft.microservices.favorita.repository.*;
 import org.json.JSONArray;
+import org.slf4j.Marker;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.Valid;
 
@@ -19,6 +20,8 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -40,23 +43,28 @@ public class ApiGatewayController {
     private MessageRepository messageRepository;
 
 
+    final String uri = "http://104.209.196.204:9090/track";
+    //final String uri = "http://172.16.2.130:8005/track";
+    final String urlTracking = "http://localhost:2222/tracking";
+    final String urlRawSensorData = "http://localhost:2222/rawSensorData";
+    final String urlPrediction = "http://localhost:2222/prediction";
+    final String urlProbability = "http://localhost:2222/probability";
+    final String urlLocationNames = "http://localhost:2222/locationNames";
+    final String urlApiGoResponse = "http://localhost:2222/goApiResponse";
+    final String urlMessage = "http://localhost:2222/message";
+    final String urlMessaguess = "http://localhost:2222/messageGuess";
+    final String urlTelemetry = "http://localhost:2222/telemetria";
+    final String urlWifiSensor = "http://localhost:2222/wifiScan";
+    private static final Logger logger = LoggerFactory.getLogger(ApiGatewayController.class);
+
+
     @PostMapping("/rawData/{deviceid}")
     public ResponseEntity createCiudad(
             @PathVariable(value = "deviceid") Long deviceId,
             @Valid @RequestBody RawSensorData rawData) {
         try{
 
-            //final String uri = "http://104.209.196.204:9090/track";
-            final String uri = "http://172.16.2.130:8005/track";
-            final String urlTracking = "http://localhost:2222/tracking";
-            final String urlPrediction = "http://localhost:2222/prediction";
-            final String urlProbability = "http://localhost:2222/probability";
-            final String urlLocationNames = "http://localhost:2222/locationNames";
-            final String urlApiGoResponse = "http://localhost:2222/goApiResponse";
-            final String urlMessage = "http://localhost:2222/message";
-            final String urlMessaguess = "http://localhost:2222/messageGuess";
-            final String urlTelemetry = "http://localhost:2222/telemetria";
-
+            logger.info("Ya en el post");
             final int defaultTrackingLocationGroup = 3;
             String endPoint;
             RestTemplate restTemplate = new RestTemplate();
@@ -73,6 +81,14 @@ public class ApiGatewayController {
             rawData.setDevice(device);
             RawSensorData rawSave = rawDataRepository.save(rawData);
             deviceRepository.save(device);
+
+            /*
+            RawSensorData rawSensorData = new RawSensorData(111,11,new Date(123213),"something");
+            JSONObject jRawSensorData = rawSensorData.toJSON();
+            endPoint = "/" + deviceId;
+            RawSensorData rawDatas = (restTemplate.postForObject( urlRawSensorData + endPoint, jRawSensorData.toMap(), RawSensorData.class));
+            long a = rawDatas.getId();
+            */
 
             Set<Family> families = device.getGroup().getFamilies();
             JSONObject json1 = new JSONObject();
@@ -207,7 +223,7 @@ public class ApiGatewayController {
         }
         catch(Exception e){
             String a = e + "\n" + e.getCause() + "\n";
-
+            logger.error("Error faltal");
             return new ResponseEntity<String>("It's not possible create new Data, the reason: \n" +
                     a,
                     HttpStatus.NOT_FOUND);
@@ -220,16 +236,7 @@ public class ApiGatewayController {
             @Valid @RequestBody String dataBody) {
         try{
 
-            final String uri = "http://104.209.196.204:9090/track";
-            final String urlTracking = "http://localhost:2222/tracking";
-            final String urlRawSensorData = "http://localhost:2222/rawSensorData";
-            final String urlPrediction = "http://localhost:2222/prediction";
-            final String urlProbability = "http://localhost:2222/probability";
-            final String urlLocationNames = "http://localhost:2222/locationNames";
-            final String urlApiGoResponse = "http://localhost:2222/goApiResponse";
-            final String urlMessage = "http://localhost:2222/message";
-            final String urlMessaguess = "http://localhost:2222/messageGuess";
-            final String urlTelemetry = "http://localhost:2222/telemetria";
+
 
             final int defaultTrackingLocationGroup = 3;
             String endPoint;
@@ -258,32 +265,32 @@ public class ApiGatewayController {
             SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
             Date epochDateTime = as.parse(dtmS);
-            //long al = epochDateTime.getTime();
-            //epochDateTime = new Date(al);
-            //jDataBody.put("epochDateTime", epochDateTime);
-            //Date epochDateTime = new Date(dtmS);
             double temperature = jDataBody.getDouble("temperature");
 
+            //------log
+            logger.info("All data have been parsed correctly");
+            //-------
+
+            //getting Device
             Device device = new Device();
             if(deviceRepository.existsByName(deviceName)){
+                logger.info("Device found");
                 device= (deviceRepository.findByName(deviceName)).get(0);
 
             }
             else {
+                logger.warn("Device no found in database, setting relations to device = 'unknown'");
                 device = (deviceRepository.findByName("unknown")).get(0);
             }
-            long deviceId = device.getId();
-            JSONObject jRawSensorData = jDataBody;
-
-            //creating rawsSensorData
-            endPoint = "/" + deviceId;
-            JSONObject rawData = new JSONObject(restTemplate.postForObject( urlRawSensorData + endPoint, jRawSensorData.toMap(), JSONObject.class));
-            //RawSensorData rawData = (RawSensorData)(restTemplate.postForObject( urlRawSensorData + endPoint, jRawSensorData.toMap(), RawSensorData.class));
-
-            //Device device = deviceRepository.findById(deviceId).get();
-
-
             Set<Family> families = device.getGroup().getFamilies();
+            if(families.size() == 0){
+                logger.error("Device is not associated with any family");
+            }
+            long deviceId = device.getId();
+
+
+
+            //creating request to send Go server
             JSONObject json1 = new JSONObject();
             JSONObject s = new JSONObject();
             json1.put("t", jDataBody.getInt("epoch"));
@@ -304,6 +311,9 @@ public class ApiGatewayController {
                     break;
                 }
             }
+            if(jData.getJSONObject("message").getJSONObject("location_names").isEmpty()){
+                logger.error("Have not found a succesful data response from Go Server, maybe invalid family");
+            }
 
             //obtening Data
             Boolean status = jData.getBoolean("success");
@@ -311,30 +321,44 @@ public class ApiGatewayController {
             JSONArray guessess = jData.getJSONObject("message").getJSONArray("guesses");
             JSONArray predictions = jData.getJSONObject("message").getJSONArray("predictions");
 
-
             JSONObject temp = guessess.getJSONObject(0);
             String finalLocation = (String) temp.get("location");
             Double finalProbability = temp.getDouble("probability");
 
+            logger.info("Go response successfully parse");
+
+            //creating rawsSensorData
+            JSONObject jRawSensorData = jDataBody;
+            endPoint = "/" + deviceId;
+            //JSONObject rawData = new JSONObject(restTemplate.postForObject( urlRawSensorData + endPoint, jRawSensorData.toMap(), RawSensorData.class));
+            RawSensorData rawData = (restTemplate.postForObject( urlRawSensorData + endPoint, jRawSensorData.toMap(), RawSensorData.class));
+            //RawSensorData rawData = (RawSensorData)(restTemplate.postForObject( urlRawSensorData + endPoint, jRawSensorData.toMap(), RawSensorData.class));
+            logger.info("Raw data have been created");
+
+            //creating wifiSensor
+            endPoint = "/" + rawData.getId();
+            //endPoint = "/" + rawData.getLong("id");
+            postWifiScan(wifiList,urlWifiSensor + endPoint,restTemplate);
+            logger.info("WifiSensor have been created");
 
             //creatinig Telemetry
-            //if(rawData.getTemperature() != null){
             endPoint = "/" +deviceId;
             JSONObject jsonTelemtry = createTelemetryJson(epochDateTime,"temperature",temperature);
             JSONObject jsonTelemtryResponse = new JSONObject(restTemplate.postForObject( urlTelemetry + endPoint, jsonTelemtry.toMap(), Telemetria.class));
-            //}
+            logger.info("Telemetry have been creaed");
 
 
             //creating Tracting
             endPoint = "/" + device.getId() + "/" + defaultTrackingLocationGroup;
             JSONObject jsonTracking = createTrackingJson(epochDateTime, finalLocation);
             JSONObject jsonTrackingResponse = new JSONObject(restTemplate.postForObject( urlTracking + endPoint, jsonTracking.toMap(), Tracking.class));
-
+            logger.info("Tracking have been creaed");
 
             //Creating MessageGuess
             MessageGuess messageGuess = new MessageGuess(finalLocation, finalProbability);
             JSONObject jsonResponseMessageGuess = new JSONObject(restTemplate.postForObject( urlMessaguess, messageGuess, MessageGuess.class));
             long idMessageGuess = (long)jsonResponseMessageGuess.get("id");
+            logger.info("MessageGuess have been creaed");
 
             //Creating Message
             endPoint = "/" + idMessageGuess;
@@ -342,12 +366,14 @@ public class ApiGatewayController {
             Message jsonResponseMessage = (Message)(restTemplate.postForObject( urlMessage + endPoint, temp1, Message.class));
             //long idMessage = jsonResponseMessage.getLong("id");
             long idMessage = jsonResponseMessage.getId();
+            logger.info("Message have been creaed");
 
             //Creating goApiResponse
             endPoint = "/" +idMessage + "/" + device.getId();
             GoApiResponse goApiResponse = new GoApiResponse(status);
             JSONObject jsonResponseGoApiResponse = new JSONObject(restTemplate.postForObject( urlApiGoResponse + endPoint, goApiResponse, GoApiResponse.class));
             long idGoApiResponse = jsonResponseGoApiResponse.getLong("id");
+            logger.info("goApiResponse have been creaed");
 
             //creating Predictions and Message
             jData.getJSONObject("message").getJSONObject("location_names");
@@ -405,6 +431,7 @@ public class ApiGatewayController {
                 probabilitiesRepository.saveAll(listProbabilities);
                 locationNamesRepository.saveAll(listLocationNames);
             }
+            logger.info("All predictions,, locationNames and probabilities have been creaed");
             System.gc();
 
             return new ResponseEntity(goApiResponse,HttpStatus.CREATED);
@@ -482,14 +509,13 @@ public class ApiGatewayController {
         return json;
     }
 
-    private void postWifiScan (JSONObject wifiList, long rawId, String url, RestTemplate restTemplate) throws Exception{
+    private void postWifiScan (JSONObject wifiList, String url, RestTemplate restTemplate) throws Exception{
         Iterator<String> iterator = wifiList.keys();
         while(iterator.hasNext()){
             String key = (String)iterator.next();
             int rssi = wifiList.getInt(key);
             WifiScan wifiScan = new WifiScan(rssi,key);
-            WifiScan wifiScan1  = (WifiScan)(restTemplate.postForObject(url, wifiScan, WifiScan.class));
-
+            WifiScan wifiScan1  = restTemplate.postForObject(url, wifiScan, WifiScan.class);
         }
     }
     private JSONObject getWifiMACs(JSONArray wifi){
