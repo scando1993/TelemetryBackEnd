@@ -70,9 +70,9 @@ public class FamilyController {
 
                 family.setGroup(group);
                 group.getFamilies().add(family);
-
-                groupRepository.save(group);
                 Family posted = familyRepository.save(family);
+                groupRepository.save(group);
+
 
                 return new ResponseEntity(posted, HttpStatus.CREATED);
             }

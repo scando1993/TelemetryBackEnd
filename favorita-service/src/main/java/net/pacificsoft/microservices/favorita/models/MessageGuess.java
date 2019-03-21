@@ -46,7 +46,7 @@ public class MessageGuess implements Serializable{
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "messageGuess")
         private Set<Message> messages = new HashSet<>();
 

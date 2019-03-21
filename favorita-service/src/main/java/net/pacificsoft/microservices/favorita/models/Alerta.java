@@ -20,6 +20,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import net.pacificsoft.microservices.favorita.models.application.Ruta;
+import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -68,7 +69,12 @@ public class Alerta implements Serializable{
         this.ruta = ruta;
         this.device = device;
     }
-
+    public JSONObject toJson(){
+        JSONObject json = new JSONObject();
+        json.put("type_alert", this.type_alert);
+        json.put("message",message);
+        return json;
+    }
 
     public long getId() {
         return id;
@@ -77,15 +83,13 @@ public class Alerta implements Serializable{
     public void setId(long id) {
         this.id = id;
     }
-
+/*
     public String getTipoAlerta() {
         return type_alert;
     }
 
-    public void setTipoAlerta(String tipo_Alerta) {
-        this.type_alert = tipo_Alerta;
-    }
-
+    public void setTipoAlerta(String tipo_Alerta) { this.type_alert = tipo_Alerta; }
+*/
     public String getMensaje() {
         return message;
     }
