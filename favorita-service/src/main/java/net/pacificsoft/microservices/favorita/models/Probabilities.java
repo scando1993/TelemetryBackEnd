@@ -19,6 +19,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -37,16 +39,31 @@ public class Probabilities implements Serializable{
     private long id;
     
     @Column(name = "nameID", nullable = false)
-    private String name;
+    private Double nameID;
 
     @Column(name = "probability", nullable = false)
     private Double probability;
 
-    @OneToMany(fetch = FetchType.EAGER,
-            cascade =  CascadeType.ALL,
-            mappedBy = "probabilities")
-    private Set<Prediction> prediction = new HashSet<>();
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "probilityID")
+    private Prediction prediction;
 
+    public Probabilities(Double nameID, Double probability) {
+        this.nameID = nameID;
+        this.probability = probability;
+    }
+
+    public Probabilities() {
+    }
+	public JSONObject toJson(){
+		JSONObject json = new JSONObject();
+		json.put("idname", this.nameID);
+		json.put("probability", this.probability);
+		return json;
+	}
+    
+    
 	/**
 	 * @return the id
 	 */
@@ -64,15 +81,15 @@ public class Probabilities implements Serializable{
 	/**
 	 * @return the name
 	 */
-	public String getName() {
-		return name;
+	public Double getNameID() {
+		return nameID;
 	}
 
 	/**
-	 * @param name the name to set
+        * @param nameID
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setNameID(Double nameID) {
+		this.nameID = nameID;
 	}
 
 	/**
@@ -89,19 +106,15 @@ public class Probabilities implements Serializable{
 		this.probability = probability;
 	}
 
-	/**
-	 * @return the prediction
-	 */
-	public Set<Prediction> getPrediction() {
-		return prediction;
-	}
+    public Prediction getPrediction() {
+        return prediction;
+    }
 
-	/**
-	 * @param prediction the prediction to set
-	 */
-	public void setPrediction(Set<Prediction> prediction) {
-		this.prediction = prediction;
-	}
+    public void setPrediction(Prediction prediction) {
+        this.prediction = prediction;
+    }
+
+
 
     
     

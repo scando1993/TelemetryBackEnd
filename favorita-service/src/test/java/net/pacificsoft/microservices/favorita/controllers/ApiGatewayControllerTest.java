@@ -93,7 +93,7 @@ public class ApiGatewayControllerTest {
         locationGroup.getTrackings().add(tracking);
 
         
-        GoApiResponse goApiResponse = new GoApiResponse(expectedGoApiResponse);
+        GoApiResponse goApiResponse = new GoApiResponse(true);
 
         device.getGoApiResponses().add(goApiResponse);
         goApiResponse.setDevice(device);
@@ -112,6 +112,7 @@ public class ApiGatewayControllerTest {
 
 
         String formated = dateFormat.format(rawSensorData.getEpochDateTime());
+
 
         JSONObject json = new JSONObject();
         json.put("rawData", rawSensorData.getRawData());

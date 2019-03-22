@@ -46,14 +46,12 @@ public class LocationGroupTest {
     @Autowired
     private TrackingRepository repositoryT;
 
-
+    //ok
     @Test
-    public void added_expected_ok() throws Exception{
+    public void create_test() throws Exception{
         LocationGroup locationGroup = new LocationGroup("Favorita");
 
         List<LocationGroup> locationGroups = Arrays.asList(locationGroup);
-
-        //given(repository.findAll()).willReturn(locationGroups);
 
         JSONObject json = new JSONObject();
         json.put("name", locationGroup.getName());
@@ -66,9 +64,9 @@ public class LocationGroupTest {
                 .andExpect(status().isCreated());
     }
 
+    //ok
     @Test
-
-    public void givenLocationGroup_whenGetLocationGroup_thenReturnJSONArray() throws Exception{
+    public void getAll_test() throws Exception{
         LocationGroup locationGroup1 = new LocationGroup("Favorita");
         Tracking tracking = new Tracking("k",new Date(21321));
         Tracking tracking2 = new Tracking("allan",new Date(3244323));
@@ -84,9 +82,27 @@ public class LocationGroupTest {
                 .andExpect(status().isOk());
 
     }
-
+    //ok
     @Test
-    public void update_expected_ok() throws Exception{
+    public void getById_test() throws Exception{
+        LocationGroup locationGroup1 = new LocationGroup("Favorita");
+        Tracking tracking = new Tracking("k",new Date(21321));
+        Tracking tracking2 = new Tracking("allan",new Date(3244323));
+        locationGroup1.getTrackings().add(tracking);
+        locationGroup1.getTrackings().add(tracking2);
+
+        given(repository.existsById(locationGroup1.getId())).willReturn(true);
+        given(repository.findById(any())).willReturn(Optional.of(locationGroup1));
+
+        mvc.perform(get("/locationGroup/"+locationGroup1.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
+    //ok
+    @Test
+    public void update_test() throws Exception{
         LocationGroup locationGroup = new LocationGroup("FavoritaUpdated");
 
         given(repository.existsById(any())).willReturn(true);
@@ -103,9 +119,9 @@ public class LocationGroupTest {
                 .andExpect(status().isOk());
 
     }
-
+    //ok
     @Test
-    public void delete_Expected_ok() throws Exception{
+    public void delete_test() throws Exception{
         LocationGroup locationGroup = new LocationGroup("FavoritaUpdated");
 
         given(repository.existsById(any())).willReturn(true);

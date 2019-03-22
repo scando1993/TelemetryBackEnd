@@ -20,6 +20,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -27,7 +29,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table (name = "rawSensorData")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = RawSensorData.class)
 @EnableAutoConfiguration(exclude = {
         JpaRepositoriesAutoConfiguration.class
 })
@@ -36,14 +38,17 @@ public class RawSensorData implements Serializable{
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+        
         @Column(name = "epoch", nullable = false)
         private long epoch;
+        
         @Column(name = "temperature", nullable = false)
-        private float temperature;
+        private double temperature;
         
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "epochDateTime", nullable = false)
         private Date epochDateTime;
+        
         @Column(name = "rawData", nullable = false)
         private String rawData;
         
@@ -53,25 +58,51 @@ public class RawSensorData implements Serializable{
         
         @JsonIgnore
         @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "rawSensorData")
         private Set<WifiScan> wifiScans = new HashSet<>();
 
+        @JsonIgnore
+        @OneToMany(cascade = CascadeType.ALL,
+                fetch = FetchType.LAZY,
+                mappedBy = "rawSensorData")
+        private Set<SigfoxMessage> sigfoxMessages = new HashSet<>();
+    /*
     public RawSensorData(long epoch, float temperature, Date epochDateTime, String rawData) {
         this.epoch = epoch;
         this.temperature = temperature;
         this.epochDateTime = epochDateTime;
         this.rawData = rawData;
     }
-    public RawSensorData(){}
+    */
+        public RawSensorData(){}
 
-    @JsonIgnore
-        @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            mappedBy = "rawSensorData")
+        public RawSensorData(long epoch, double temperature, Date epochDateTime, String rawData) {
+            this.epoch = epoch;
+            this.temperature = temperature;
+            this.epochDateTime = epochDateTime;
+            this.rawData = rawData;
+        }      
 
+        public RawSensorData(long id, long epoch, double temperature, Date epochDateTime, String rawData, Device device) {
+            this.id = id;
+            this.epoch = epoch;
+            this.temperature = temperature;
+            this.epochDateTime = epochDateTime;
+            this.rawData = rawData;
+            this.device = device;
+        }
+        public JSONObject toJSON(){
+            JSONObject json = new JSONObject();
+            json.put("epoch", this.epoch);
+            json.put("epochDateTime", this.epochDateTime);
+            json.put("rawData", this.rawData);
+            json.put("temperature",this.temperature);
+            return json;
+        }
 
-        private Set<SigfoxMessage> sigfoxMessages = new HashSet<>();
+        
+
         
         public long getId() {
             return id;
@@ -89,11 +120,11 @@ public class RawSensorData implements Serializable{
             this.epoch = epoch;
         }
 
-        public float getTemperature() {
+        public double getTemperature() {
             return temperature;
         }
 
-        public void setTemperature(float temperature) {
+        public void setTemperature(double temperature) {
             this.temperature = temperature;
         }
 

@@ -33,12 +33,10 @@ public class MessageController {
     @Autowired
     private MessageGuessRepository messageGuessRepository;
     @Autowired
-    private LocationNamesRepository locationNamesRepository;
-    @Autowired
     private MessageRepository messageRepository;
 
     @GetMapping("/message")
-    public ResponseEntity getAllmessages() {
+    public ResponseEntity getAllMessages() {
         try{
 
             List<Message> messages = messageRepository.findAll();
@@ -50,36 +48,37 @@ public class MessageController {
                     HttpStatus.NOT_FOUND);
         }
     }
-
-    @PostMapping("/message/{predictionID}/{guessID}/{locationNameID}")
-    public ResponseEntity createCiudad(@PathVariable(value = "predictionID") Long predictionID,
-                                       @PathVariable(value = "locationNameID") Long locationNameId,
-                                       @PathVariable(value = "guessID") Long messageGuessID,
-                                       @Valid @RequestBody Message message) {
+    
+    @GetMapping("/message/{id}")
+    public ResponseEntity getAllMessages(@PathVariable(value = "id") Long idM) {
         try{
-            if(predictionsRepository.existsById(predictionID) && locationNamesRepository.existsById(locationNameId) && messageGuessRepository.existsById(messageGuessID)){
-                Prediction prediction = predictionsRepository.findById(predictionID).get();
-                LocationNames locationName = locationNamesRepository.findById(locationNameId).get();
-                MessageGuess messageGuess = messageGuessRepository.findById(messageGuessID).get();
+            return new ResponseEntity(messageRepository.findById(idM).get(), HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<String>("Resources not available.",
+                    HttpStatus.NOT_FOUND);
+        }
+    }
 
-                message.getPredictions().add(prediction);
-                message.setLocationNames(locationName);
+    @PostMapping("/message/{guessID}")
+    public ResponseEntity createMessages(
+                                       @PathVariable(value = "guessID") Long messageGuessID) {
+        try{
+            if(messageGuessRepository.existsById(messageGuessID)){
+                MessageGuess messageGuess = messageGuessRepository.findById(messageGuessID).get();
+                Message message = new Message();
                 message.setMessageGuess(messageGuess);
 
-                prediction.setMessage(message);
-                locationName.setMessage(message);
                 messageGuess.getMessages().add(message);
-
-                predictionsRepository.save(prediction);
-                locationNamesRepository.save(locationName);
-                messageGuessRepository.save(messageGuess);
                 Message posted = messageRepository.save(message);
+
+                messageGuessRepository.save(messageGuess);
 
                 return new ResponseEntity(posted, HttpStatus.CREATED);
             }
             else{
-                return new ResponseEntity<String>("Prediction #" + predictionID + "or LocationName #" +locationNameId + "0r MessageGuess #" + messageGuessID +
-                        " does not exist, it's not possible create new Prediction", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<String>("It's not possible create new Prediction", HttpStatus.NOT_FOUND);
+
             }
         }
         catch(Exception e){
@@ -87,5 +86,50 @@ public class MessageController {
 
         }
     }
+    
+    @PutMapping("/message/{id}/{guessID}")
+	public ResponseEntity updateMessages(
+			@PathVariable(value = "id") Long mId,
+                        @PathVariable(value = "guessID") Long messageGuessID){
+            try{
+                if(messageRepository.existsById(mId) &&
+                   messageGuessRepository.existsById(messageGuessID)){
+                    Message message = messageRepository.findById(mId).get();
+                    MessageGuess messageGuess = messageGuessRepository.findById(messageGuessID).get();
+                    message.setMessageGuess(messageGuess);
+                    messageGuess.getMessages().add(message);
+                    final Message posted = messageRepository.save(message);
+                    messageGuessRepository.save(messageGuess);
+
+                    return new ResponseEntity(HttpStatus.OK);
+                }
+		else{
+                    return new ResponseEntity<String>("It's not possible update Message #"+mId, HttpStatus.NOT_FOUND);
+                }
+            }
+            catch(Exception e){
+                return new ResponseEntity<String>("It's not possible update Message #" + mId, HttpStatus.NOT_FOUND);
+            }
+	}
+
+	@DeleteMapping("/message/{id}")
+	public ResponseEntity deleteMessages(
+			@PathVariable(value = "id") Long mId){
+                if(messageRepository.existsById(mId)){
+                    Message message = messageRepository.findById(mId).get();
+                    for(Prediction p: message.getPredictions()){
+                        p.setMessage(null);
+                        predictionsRepository.save(p);
+                    }
+                    message.getMessageGuess().getMessages().remove(message);
+                    messageGuessRepository.save(message.getMessageGuess());
+                    messageRepository.delete(message);
+                    return new ResponseEntity(HttpStatus.OK);
+                }
+		else{
+                    return new ResponseEntity<String>("Message #" + mId + 
+                            " does not exist.", HttpStatus.NOT_FOUND);
+                }
+	}
 
 }

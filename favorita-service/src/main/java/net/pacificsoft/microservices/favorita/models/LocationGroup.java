@@ -37,16 +37,16 @@ public class LocationGroup implements Serializable{
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+        
         @Column(name = "name", nullable = false)
 	private String name;
          
         @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "locationGroup")
         private Set<Tracking> trackings = new HashSet<>();
 
         public LocationGroup(){
-            this.name= null;
         }
         public LocationGroup(String name) {
             this.name = name;

@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: net.pacificsoft.microservices.favorita.controllers.RutaControllerTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 7.491 s <<< FAILURE! - in net.pacificsoft.microservices.favorita.controllers.RutaControllerTest
-givenAlertas_whenGetAlertas_thenReturnJSONArray(net.pacificsoft.microservices.favorita.controllers.RutaControllerTest)  Time elapsed: 0.015 s  <<< ERROR!
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 4.164 s <<< FAILURE! - in net.pacificsoft.microservices.favorita.controllers.RutaControllerTest
+givenAlertas_whenGetAlertas_thenReturnJSONArray(net.pacificsoft.microservices.favorita.controllers.RutaControllerTest)  Time elapsed: 0.009 s  <<< ERROR!
 java.lang.IllegalStateException: Failed to load ApplicationContext
 Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'rutaController': Unsatisfied dependency expressed through field 'furgonRepository'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'net.pacificsoft.microservices.favorita.repository.application.FurgonRepository' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
 Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'net.pacificsoft.microservices.favorita.repository.application.FurgonRepository' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}

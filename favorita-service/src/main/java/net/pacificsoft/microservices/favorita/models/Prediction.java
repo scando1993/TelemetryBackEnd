@@ -19,6 +19,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -38,25 +40,41 @@ public class Prediction implements Serializable{
     
     @Column(name = "name", nullable = false)
     private String name;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "probabilitiesID")
-    private Probabilities probabilities;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "messageID")
     private Message message;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "prediction")
+    private Set<LocationNames> locationNames = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "prediction")
+    private Set<Probabilities> probabilitieses = new HashSet<>();
     
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name= "locationNamesID")
-    private LocationNames locationNames;
     /*
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "prediction")
     private Set<LocationNames> locationNames = new HashSet<>();
     */
 
+    public Prediction(String name) {
+        this.name = name;
+    }
+
+    public Prediction() {
+    }
+
+    public JSONObject toJson(){
+        JSONObject json = new JSONObject();
+        json.put("name", this.name);
+        return json;
+    }
     /**
      * @return the id
      */
@@ -85,19 +103,7 @@ public class Prediction implements Serializable{
         this.name = name;
     }
 
-    /**
-     * @return the probabilities
-     */
-    public Probabilities getProbabilities() {
-        return probabilities;
-    }
 
-    /**
-     * @param probabilities the probabilities to set
-     */
-    public void setProbabilities(Probabilities probabilities) {
-        this.probabilities = probabilities;
-    }
 
     /**
      * @return the message
@@ -113,19 +119,22 @@ public class Prediction implements Serializable{
         this.message = message;
     }
 
-    /**
-     * @return the locationNames
-     */
-    public LocationNames getLocationNames() {
+    public Set<LocationNames> getLocationNames() {
         return locationNames;
     }
 
-    /**
-     * @param locationNames the locationNames to set
-     */
-    public void setLocationNames(LocationNames locationNames) {
+    public void setLocationNames(Set<LocationNames> locationNames) {
         this.locationNames = locationNames;
     }
+
+    public Set<Probabilities> getProbabilitieses() {
+        return probabilitieses;
+    }
+
+    public void setProbabilitieses(Set<Probabilities> probabilitieses) {
+        this.probabilitieses = probabilitieses;
+    }
+
 
     
 

@@ -25,6 +25,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import net.pacificsoft.microservices.favorita.repository.LocationPriorityRepository;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -50,7 +54,7 @@ public class LocationPriorityControllerTest {
 
 
     @Test
-    public void added_expected_ok() throws Exception{
+    public void create_test() throws Exception{
         LocationPriority locationPriority = new LocationPriority("locationP",1);
         Tracking t = new Tracking("a",new Date(2132));
 
@@ -72,7 +76,7 @@ public class LocationPriorityControllerTest {
     }
 
     @Test
-    public void givenLocationGroup_whenGetLocationGroup_thenReturnJSONArray() throws Exception{
+    public void getAll_test() throws Exception{
         LocationPriority locationPriority = new LocationPriority("LocationPrioruty1",2);
         LocationPriority locationPriority2 = new LocationPriority("LocationPrioruty2",22);
         Tracking tracking = new Tracking("track1",new Date(21321));
@@ -92,7 +96,24 @@ public class LocationPriorityControllerTest {
     }
 
     @Test
-    public void update_expected_ok() throws Exception{
+    public void getById_test() throws Exception{
+        LocationPriority locationPriority = new LocationPriority("LocationPrioruty1",2);
+        Tracking tracking = new Tracking("track1",new Date(21321));
+        Tracking tracking2 = new Tracking("track2",new Date(3244323));
+        tracking.getLocationPrioritys().add(locationPriority);
+        locationPriority.setTracking(tracking);
+
+        given(repository.existsById(locationPriority.getId())).willReturn(true);
+        given(repository.findById(any())).willReturn(Optional.of(locationPriority));
+
+        mvc.perform(get("/locationPriority/"+locationPriority.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+    
+    @Test
+    public void update_test() throws Exception{
         LocationPriority locationPriority = new LocationPriority("locationPriority", 212);
 
         given(repository.existsById(any())).willReturn(true);
@@ -112,7 +133,7 @@ public class LocationPriorityControllerTest {
     }
 
     @Test
-    public void delete_Expected_ok() throws Exception{
+    public void delete_test() throws Exception{
         LocationPriority locationPriority = new LocationPriority("LocationPriority", 99);
         Tracking tracking = new Tracking("track1",new Date(21321));
         tracking.getLocationPrioritys().add(locationPriority);

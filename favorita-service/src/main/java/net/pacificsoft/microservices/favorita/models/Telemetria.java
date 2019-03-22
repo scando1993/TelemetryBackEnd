@@ -25,7 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table (name = "telemetria")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = Telemetria.class)
 @EnableAutoConfiguration(exclude = {
         JpaRepositoriesAutoConfiguration.class
 })
@@ -35,7 +35,7 @@ public class Telemetria implements Serializable{
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
         
-        @JsonFormat(pattern = "dd-MM-yyyy'T'HH:mm")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "Dtm", nullable = false)
 	private Date Dtm;
         
@@ -43,12 +43,22 @@ public class Telemetria implements Serializable{
 	private String name;
         
         @Column(name = "value", nullable = false)
-	private float value;
-        
-        @ManyToOne(fetch = FetchType.EAGER)
+	private double value;
+        @JsonIgnore
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "deviceID")
         private Device device;
 
+        public Telemetria(Date Dtm, String name, double value) {
+            this.Dtm = Dtm;
+            this.name = name;
+            this.value = value;
+        }
+
+        public Telemetria() {
+        }
+
+        
         public long getId() {
             return id;
         }
@@ -73,11 +83,11 @@ public class Telemetria implements Serializable{
             this.name = name;
         }
 
-        public float getValue() {
+        public double getValue() {
             return value;
         }
 
-        public void setValue(float value) {
+        public void setValue(double value) {
             this.value = value;
         }
 

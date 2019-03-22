@@ -19,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -37,21 +39,29 @@ public class GoApiResponse implements Serializable{
     private long id;
     
     @Column(name = "sucess", nullable = false)
-    private int sucess;
+    private boolean sucess;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "messageID")
     private Message message;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deviceID")
     private Device device;
 
-    public GoApiResponse(int sucess) {
+    public GoApiResponse(boolean sucess) {
         this.sucess = sucess;
     }
-    public GoApiResponse(){}
 
+    public GoApiResponse() {
+    }
+    public JSONObject toJson(){
+        JSONObject json = new JSONObject();
+        json.put("success", this.sucess);
+        return json;
+    }
     /**
      * @return the id
      */
@@ -69,14 +79,14 @@ public class GoApiResponse implements Serializable{
     /**
      * @return the sucess
      */
-    public int getSucess() {
+    public boolean getSucess() {
         return sucess;
     }
 
     /**
      * @param sucess the sucess to set
      */
-    public void setSucess(int sucess) {
+    public void setSucess(boolean sucess) {
         this.sucess = sucess;
     }
 

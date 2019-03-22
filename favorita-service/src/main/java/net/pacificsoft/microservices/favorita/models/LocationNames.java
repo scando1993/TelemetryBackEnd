@@ -20,6 +20,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -38,27 +40,46 @@ public class LocationNames implements Serializable{
     private long id;
 
     @Column(name = "idName", nullable = false)
-    private long idname;
+    private Double idname;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    /*
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "predictionID")
     private Prediction prediction;
-    */
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+    
+
+   /* @OneToOne(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
             mappedBy = "locationNames")
-    private Set<Prediction> prediction = new HashSet<>();
+    private Message  message;*/
+    
 
+    public LocationNames(Double idname, String name) {
+        this.idname = idname;
+        this.name = name;
+    }
 
-    @OneToOne(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            mappedBy = "locationNames")
-    private Message  message;
+    public LocationNames(long id, Double idname, String name) {
+        this.id = id;
+        this.idname = idname;
+        this.name = name;
+        //this.message = message;
+    }
+    public JSONObject toJson(){
+        JSONObject json = new JSONObject();
+        json.put("idname", this.idname);
+        json.put("name", this.name);
+        return json;
+    }
 
+    public LocationNames() {
+    }
+
+    
+    
     /**
      * @return the id
      */
@@ -76,14 +97,14 @@ public class LocationNames implements Serializable{
     /**
      * @return the idname
      */
-    public long getIdname() {
+    public Double getIdname() {
         return idname;
     }
 
     /**
      * @param idname the idname to set
      */
-    public void setIdname(long idname) {
+    public void setIdname(Double idname) {
         this.idname = idname;
     }
 
@@ -101,32 +122,22 @@ public class LocationNames implements Serializable{
         this.name = name;
     }
 
-    /**
-     * @return the prediction
-     */
-    public Set<Prediction> getPrediction() {
-        return prediction;
-    }
-
-    /**
-     * @param prediction the prediction to set
-     */
-    public void setPrediction(Set<Prediction> prediction) {
-        this.prediction = prediction;
-    }
-
-    /**
-     * @return the message
-     */
+    /*
     public Message getMessage() {
         return message;
     }
 
-    /**
-     * @param message the message to set
-     */
+  
     public void setMessage(Message message) {
         this.message = message;
+    }*/
+
+    public Prediction getPrediction() {
+        return prediction;
+    }
+
+    public void setPrediction(Prediction prediction) {
+        this.prediction = prediction;
     }
 
     

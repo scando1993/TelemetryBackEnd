@@ -27,7 +27,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "message")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = Message.class)
 @EnableAutoConfiguration(exclude = {
         JpaRepositoriesAutoConfiguration.class
 })
@@ -37,24 +37,32 @@ public class Message implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "message")
     private Set<Prediction> predictions = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "guessesID")
     private MessageGuess messageGuess;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL,
-           fetch = FetchType.EAGER,
+           fetch = FetchType.LAZY,
            mappedBy = "message")
     private GoApiResponse goApiResponse;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "locationNamesID")
-    private LocationNames locationNames;
+    private LocationNames locationNames;*/
 
+    public Message() {
+    }
+
+    
+    
         /**
          * @return the id
          */
@@ -111,20 +119,16 @@ public class Message implements Serializable{
                 this.goApiResponse = goApiResponse;
         }
 
-        /**
-         * @return the locationNames
-         */
+        /*
         public LocationNames getLocationNames() {
                 return locationNames;
         }
 
-        /**
-         * @param locationNames the locationNames to set
-         */
+   
         public void setLocationNames(LocationNames locationNames) {
                 this.locationNames = locationNames;
         }
-
+*/
        
 
 }

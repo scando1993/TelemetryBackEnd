@@ -20,6 +20,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import net.pacificsoft.microservices.favorita.models.application.Ruta;
+import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -36,8 +37,10 @@ public class Alerta implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    
     @Column(name = "type_alert", nullable = false)
     private String type_alert;
+    
     @Column(name = "message", nullable = false)
     private String message;
 
@@ -51,17 +54,27 @@ public class Alerta implements Serializable{
     @JoinColumn(name = "deviceID")
     private Device device;
 
-    public Alerta(){
-        this.type_alert = null;
-        this.message = null;
+    public Alerta() {
     }
+
     public Alerta(String type_alert, String message) {
         this.type_alert = type_alert;
         this.message = message;
-        this.device = null;
-        this.ruta = null;
     }
 
+    public Alerta(long id, String type_alert, String message, Ruta ruta, Device device) {
+        this.id = id;
+        this.type_alert = type_alert;
+        this.message = message;
+        this.ruta = ruta;
+        this.device = device;
+    }
+    public JSONObject toJson(){
+        JSONObject json = new JSONObject();
+        json.put("type_alert", this.type_alert);
+        json.put("message",message);
+        return json;
+    }
 
     public long getId() {
         return id;
@@ -70,15 +83,13 @@ public class Alerta implements Serializable{
     public void setId(long id) {
         this.id = id;
     }
-
+/*
     public String getTipoAlerta() {
         return type_alert;
     }
 
-    public void setTipoAlerta(String tipo_Alerta) {
-        this.type_alert = tipo_Alerta;
-    }
-
+    public void setTipoAlerta(String tipo_Alerta) { this.type_alert = tipo_Alerta; }
+*/
     public String getMensaje() {
         return message;
     }

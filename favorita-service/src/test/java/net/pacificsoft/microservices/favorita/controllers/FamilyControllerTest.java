@@ -1,8 +1,6 @@
 package net.pacificsoft.microservices.favorita.controllers;
 
 import net.pacificsoft.microservices.favorita.Application;
-import net.pacificsoft.microservices.favorita.models.Alerta;
-import net.pacificsoft.microservices.favorita.repository.AlertaRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

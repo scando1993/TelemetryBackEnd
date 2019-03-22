@@ -36,7 +36,7 @@ public class FamilyController {
     private GroupRepository groupRepository;
 
     @GetMapping("/family")
-    public ResponseEntity getAllBodegas() {
+    public ResponseEntity getAllFamily() {
         try{
             List<Family> families = familyRepository.findAll();
 
@@ -49,7 +49,7 @@ public class FamilyController {
     }
     
     @GetMapping("/family/{id}")
-    public ResponseEntity getBodegasById(@PathVariable(value = "id") Long Id) {
+    public ResponseEntity getFamilyById(@PathVariable(value = "id") Long Id) {
         try{
             Family f = familyRepository.findById(Id).get();
 
@@ -62,7 +62,7 @@ public class FamilyController {
     }
 
     @PostMapping("/family/{groupID}")
-    public ResponseEntity createCiudad(@PathVariable(value = "groupID") Long groupID,
+    public ResponseEntity createFamily(@PathVariable(value = "groupID") Long groupID,
                                        @Valid @RequestBody Family family) {
         try{
             if(groupRepository.existsById(groupID)){
@@ -70,9 +70,9 @@ public class FamilyController {
 
                 family.setGroup(group);
                 group.getFamilies().add(family);
-
-                groupRepository.save(group);
                 Family posted = familyRepository.save(family);
+                groupRepository.save(group);
+
 
                 return new ResponseEntity(posted, HttpStatus.CREATED);
             }
@@ -88,7 +88,7 @@ public class FamilyController {
     }
 
     @PutMapping("/family/{id}")
-    public ResponseEntity updateCiudad(
+    public ResponseEntity updateFamily(
             @PathVariable(value = "id") Long familyID,
             @Valid @RequestBody Family familyDetails){
         try{
@@ -109,7 +109,7 @@ public class FamilyController {
         }
     }
     @DeleteMapping("/family/{id}")
-    public ResponseEntity deleteCiudad(
+    public ResponseEntity deleteFamily(
             @PathVariable(value = "id") Long familyID){
         if(familyRepository.existsById(familyID)){
             Family family = familyRepository.findById(familyID).get();
