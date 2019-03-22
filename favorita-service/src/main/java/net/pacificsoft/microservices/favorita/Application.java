@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 //@EnableDiscoveryClient
-//ASDddd
+//ASDddddddda
 public class Application {
     private static final Logger logger = LogManager.getLogger(Application.class);
 
