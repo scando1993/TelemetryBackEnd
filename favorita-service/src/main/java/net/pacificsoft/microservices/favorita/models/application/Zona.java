@@ -41,6 +41,10 @@ public class Zona implements Serializable{
         this.name = name;
     }
 
+    public Zona() {
+        super();
+    }
+
         public long getId() {
             return id;
         }
