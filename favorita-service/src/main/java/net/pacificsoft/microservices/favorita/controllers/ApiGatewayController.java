@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 
 //HOLA
-//Allan
+//Allan2
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ApiGatewayController {
