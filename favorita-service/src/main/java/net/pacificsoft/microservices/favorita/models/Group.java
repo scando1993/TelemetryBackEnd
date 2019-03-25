@@ -1,6 +1,7 @@
 package net.pacificsoft.microservices.favorita.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -42,12 +43,13 @@ public class Group implements Serializable{
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "groupFamily")
-    //@JsonManagedReference
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<Device> devices = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "groupFamily")
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<Family> families = new HashSet<>();
 
     public Group() {

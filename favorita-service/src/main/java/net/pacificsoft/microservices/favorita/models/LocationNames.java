@@ -54,6 +54,7 @@ public class LocationNames implements Serializable{
    /* @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "locationNames")
+    @JsonIdentityReference(alwaysAsId = true)
     private Message  message;*/
     
 

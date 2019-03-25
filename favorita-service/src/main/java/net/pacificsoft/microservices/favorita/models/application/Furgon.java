@@ -1,6 +1,7 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
@@ -36,9 +37,10 @@ public class Furgon implements Serializable{
 	private String name;
         
         @JsonIgnore
-        @OneToMany(fetch = FetchType.EAGER,
+        @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "furgon")
+        @JsonIdentityReference(alwaysAsId = true)
         private Set<Ruta> rutas = new HashSet<>();
 
         public long getId() {

@@ -49,7 +49,7 @@ public class BodegaController {
                             json.put("zoneName", c.getProvincia().getZona().getName());
                         result.add(json.toMap());
                     }
-                    return new ResponseEntity(result, HttpStatus.OK);
+                    return new ResponseEntity(bodegaRepository.findAll(), HttpStatus.OK);
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("Resources not available.",

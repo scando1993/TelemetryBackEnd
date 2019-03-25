@@ -1,6 +1,7 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
@@ -19,7 +20,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "bodega")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = Bodega.class)
 public class Bodega implements Serializable{
     
         @Id
@@ -27,8 +28,7 @@ public class Bodega implements Serializable{
 	private long id;
         @Column(name = "name", nullable = false)
 	private String name;
-        
-        @JsonIgnore
+
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "ciudadID")
         private Ciudad ciudad;

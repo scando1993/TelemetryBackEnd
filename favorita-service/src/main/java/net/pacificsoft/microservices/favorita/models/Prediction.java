@@ -1,6 +1,7 @@
 package net.pacificsoft.microservices.favorita.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
@@ -48,18 +49,21 @@ public class Prediction implements Serializable{
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "prediction")
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<LocationNames> locationNames = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "prediction")
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<Probabilities> probabilitieses = new HashSet<>();
     
     /*
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "prediction")
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<LocationNames> locationNames = new HashSet<>();
     */
 

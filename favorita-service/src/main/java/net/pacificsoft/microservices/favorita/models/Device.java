@@ -1,6 +1,7 @@
 package net.pacificsoft.microservices.favorita.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
@@ -52,42 +53,49 @@ public class Device implements Serializable{
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
+        @JsonIdentityReference(alwaysAsId = true)
         private Set<Ruta> rutas = new HashSet<>();
         
         @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
+        @JsonIdentityReference(alwaysAsId = true)
         private Set<Tracking> trackings = new HashSet<>();
         
         @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
+        @JsonIdentityReference(alwaysAsId = true)
         private Set<RawSensorData> rawSensorDatas = new HashSet<>();
         
         @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
+        @JsonIdentityReference(alwaysAsId = true)
         private Set<Alerta> alertas = new HashSet<>();
         
         @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
+        @JsonIdentityReference(alwaysAsId = true)
         private Set<Telemetria> telemetrias = new HashSet<>();
         
         @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
+        @JsonIdentityReference(alwaysAsId = true)
         private Set<GoApiResponse> goApiResponses = new HashSet<>();
         
         @JsonIgnore
         @OneToOne(fetch = FetchType.EAGER,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
+        @JsonIdentityReference(alwaysAsId = true)
         private Status status;
         
         /*@OneToOne(fetch = FetchType.LAZY)

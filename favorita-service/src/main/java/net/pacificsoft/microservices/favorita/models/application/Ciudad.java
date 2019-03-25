@@ -1,6 +1,7 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
@@ -36,15 +37,18 @@ public class Ciudad implements Serializable{
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "provinciaID")
         private Provincia provincia;
-
+        
+        
         @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "ciudad")
+        @JsonIdentityReference(alwaysAsId = true)
         private Set<Bodega> bodegas = new HashSet<>();
         
         @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "ciudad")
+        @JsonIdentityReference(alwaysAsId = true)
         private Set<Locales> locales = new HashSet<>();
         
         public long getId() {

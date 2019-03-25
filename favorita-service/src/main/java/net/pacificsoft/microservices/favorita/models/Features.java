@@ -58,6 +58,7 @@ public class Features implements Serializable{
         @OneToOne(fetch = FetchType.EAGER,
             cascade =  CascadeType.ALL,
             mappedBy = "features")
+        @JsonIdentityReference(alwaysAsId = true)
         private Device device;*/
 
         public Features(boolean tracking, String tipo_sensores, 

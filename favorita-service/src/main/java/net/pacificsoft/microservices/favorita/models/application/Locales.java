@@ -1,6 +1,7 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
@@ -24,7 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table (name = "locales")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Locales implements Serializable{
 
 	@Id
@@ -48,18 +49,21 @@ public class Locales implements Serializable{
         private Ciudad ciudad;
         
         @OneToOne(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "localInicio")
+        @JsonIdentityReference(alwaysAsId = true)
         private Ruta rutaInicio;
         
         @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "localFin")
+        @JsonIdentityReference(alwaysAsId = true)
         private Ruta rutaFin;
         
         @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "locales")
+        @JsonIdentityReference(alwaysAsId = true)
         private Formato formato;
 
         public long getId() {
