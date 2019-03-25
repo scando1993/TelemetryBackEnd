@@ -92,6 +92,7 @@ public class DeviceController {
                     Device device = deviceRepository.findById(deviceId).get();
                     device.setFamily(deviceDetails.getFamily());
                     device.setName(deviceDetails.getName());
+                    //device.setUuid(deviceDetails.getUuid());
                     final Device updatedDevice = deviceRepository.save(device);
                     return new ResponseEntity(HttpStatus.OK);
                 }
