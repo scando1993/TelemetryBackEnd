@@ -38,20 +38,10 @@ public class ProductoController {
 	@GetMapping("/producto")
 	public ResponseEntity getAllProductos() {
 		try{
-                    List<Map<String, Object>> result = new ArrayList();
-                    JSONObject json;
+                    
                     List<Producto> productos = productoRepository.findAll();
-                    for (Producto p : productos){
-                        json = new JSONObject();
-                        json.put("id", p.getId());
-                        json.put("name", p.getName());
-                        json.put("temp_max", p.getTemp_max());
-                        json.put("temp_min", p.getTemp_min());
-                        json.put("temp_max_ideal", p.getTemp_max_ideal());
-                        json.put("temp_min_ideal", p.getTemp_min_ideal());
-                        result.add(json.toMap());
-                    }
-                    return new ResponseEntity(result, HttpStatus.OK);
+                    
+                    return new ResponseEntity(productos, HttpStatus.OK);
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("Resources not available.",
@@ -64,14 +54,7 @@ public class ProductoController {
 			@PathVariable(value = "id") Long productoId){
 		if(productoRepository.existsById(productoId)){
                     Producto p = productoRepository.findById(productoId).get();
-                    JSONObject json = new JSONObject();
-                    json.put("id", p.getId());
-                    json.put("name", p.getName());
-                    json.put("temp_max", p.getTemp_max());
-                    json.put("temp_min", p.getTemp_min());
-                    json.put("temp_max_ideal", p.getTemp_max_ideal());
-                    json.put("temp_min_ideal", p.getTemp_min_ideal());
-                    return new ResponseEntity(json.toMap(), HttpStatus.OK);
+                    return new ResponseEntity(p, HttpStatus.OK);
                 }
 		else{
                     return new ResponseEntity<String>("Producto #" + productoId + 
@@ -83,14 +66,8 @@ public class ProductoController {
 	public ResponseEntity createProducto(@Valid @RequestBody Producto producto) {
                 try{
                     Producto p = productoRepository.save(producto);
-                    JSONObject json = new JSONObject();
-                    json.put("id", p.getId());
-                    json.put("name", p.getName());
-                    json.put("temp_max", p.getTemp_max());
-                    json.put("temp_min", p.getTemp_min());
-                    json.put("temp_max_ideal", p.getTemp_max_ideal());
-                    json.put("temp_min_ideal", p.getTemp_min_ideal());
-                    return new ResponseEntity(json.toMap(), HttpStatus.OK);
+                    
+                    return new ResponseEntity(p, HttpStatus.OK);
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("New Furgon not created.",

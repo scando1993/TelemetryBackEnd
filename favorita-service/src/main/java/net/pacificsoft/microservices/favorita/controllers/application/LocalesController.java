@@ -36,25 +36,8 @@ public class LocalesController {
 	@GetMapping("/locales")
 	public ResponseEntity getAllLocales() {
 		try{
-                    List<Map<String, Object>> result = new ArrayList();
-                    List<Locales> locales = localesRepository.findAll();
-                    JSONObject json;
-                    for(Locales l : locales){
-                        json = new JSONObject();
-                        Ciudad c = l.getCiudad();
-                        json.put("id", l.getId());
-                        json.put("numLoc",l.getNumLoc());
-                        json.put("name",l.getName());
-                        json.put("length",l.getLength());
-                        json.put("latitude",l.getLatitude());
-                        json.put("cityName", c.getName());
-                        json.put("family",l.getFamily());
-                        json.put("provinceName",c.getProvincia().getName());
-                        if(c.getProvincia().getZona()!=null)
-                            json.put("zoneName",c.getProvincia().getZona().getName());
-                        result.add(json.toMap());
-                    }
-                    return new ResponseEntity(result, HttpStatus.OK);
+                    List<Locales> locales = localesRepository.findAll();                    
+                    return new ResponseEntity(locales, HttpStatus.OK);
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("Resources not available.",
@@ -67,19 +50,8 @@ public class LocalesController {
 			@PathVariable(value = "id") Long localesId){
 		if(localesRepository.existsById(localesId)){
                     Locales l = localesRepository.findById(localesId).get();
-                    JSONObject json = new JSONObject();
-                    Ciudad c = l.getCiudad();
-                    json.put("id", l.getId());
-                    json.put("numLoc",l.getNumLoc());
-                    json.put("name",l.getName());
-                    json.put("length",l.getLength());
-                    json.put("latitude",l.getLatitude());
-                    json.put("cityName", c.getName());
-                    json.put("family",l.getFamily());
-                    json.put("provinceName",c.getProvincia().getName());
-                    if(c.getProvincia().getZona()!=null)
-                        json.put("zoneName",c.getProvincia().getZona().getName());
-                    return new ResponseEntity(json.toMap(), HttpStatus.OK);
+                    
+                    return new ResponseEntity(l, HttpStatus.OK);
                 }
 		else{
                     return new ResponseEntity<String>("Locales #" + localesId + 
@@ -97,19 +69,8 @@ public class LocalesController {
                     locales.setCiudad(ciudad);
                     Locales l = localesRepository.save(locales);
                     ciudadRepository.save(ciudad);
-                    JSONObject json = new JSONObject();
-                    Ciudad c = l.getCiudad();
-                    json.put("id", l.getId());
-                    json.put("numLoc",l.getNumLoc());
-                    json.put("name",l.getName());
-                    json.put("length",l.getLength());
-                    json.put("latitude",l.getLatitude());
-                    json.put("cityName", c.getName());
-                    json.put("family",l.getFamily());
-                    json.put("provinceName",c.getProvincia().getName());
-                    if(c.getProvincia().getZona()!=null)
-                        json.put("zoneName",c.getProvincia().getZona().getName());
-                    return new ResponseEntity(json.toMap(), HttpStatus.CREATED);
+                    
+                    return new ResponseEntity(l, HttpStatus.CREATED);
                 }
                 else{
                     return new ResponseEntity<String>("Ciudad #" + ciudadid + 

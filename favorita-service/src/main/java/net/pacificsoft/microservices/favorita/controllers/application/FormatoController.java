@@ -36,18 +36,9 @@ public class FormatoController {
 	@GetMapping("/formato")
 	public ResponseEntity getAllFormatos() {
 		try{
-                    List<Map<String, Object>> result = new ArrayList();
                     List<Formato> formatos = formatoRepository.findAll();
-                    JSONObject json;
-                    for(Formato f : formatos){
-                        json = new JSONObject();
-                        json.put("id", f.getId());
-                        json.put("name",f.getName());
-                        json.put("code",f.getCode());
-                        json.put("localName",f.getLocales().getName());
-                        result.add(json.toMap());
-                    }
-                    return new ResponseEntity(result, HttpStatus.OK);
+                
+                    return new ResponseEntity(formatos, HttpStatus.OK);
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("Resources not available.",
@@ -60,12 +51,8 @@ public class FormatoController {
 			@PathVariable(value = "id") Long formatoId){
 		if(formatoRepository.existsById(formatoId)){
                     Formato f = formatoRepository.findById(formatoId).get();
-                    JSONObject json = new JSONObject();
-                    json.put("id", f.getId());
-                    json.put("name",f.getName());
-                    json.put("code",f.getCode());
-                    json.put("localName",f.getLocales().getName());
-                    return new ResponseEntity(json.toMap(), HttpStatus.OK);
+                
+                    return new ResponseEntity(f, HttpStatus.OK);
                 }
 		else{
                     return new ResponseEntity<String>("Formato #" + formatoId + 
@@ -84,11 +71,7 @@ public class FormatoController {
                         formato.setLocales(locales);
                         Formato f = formatoRepository.save(formato);
                         localesRepository.save(locales);
-                        JSONObject json = new JSONObject();
-                        json.put("id", f.getId());
-                        json.put("name",f.getName());
-                        json.put("code",f.getCode());
-                        json.put("localName",f.getLocales().getName());
+                        
                         return new ResponseEntity(f, HttpStatus.CREATED);}
                     else{
                         return new ResponseEntity<String>("It's not possible create new Formato", HttpStatus.NOT_FOUND);

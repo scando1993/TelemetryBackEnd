@@ -58,29 +58,9 @@ public class RutaController {
 	@GetMapping("/ruta")
 	public ResponseEntity getAllRutas() {
 		try{
-                    List<Map<String, Object>> result = new ArrayList();
+                    
                     List<Ruta> rutas = rutaRepository.findAll();
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-                    JSONObject json;
-                    for(Ruta r:rutas){
-                        json = new JSONObject();
-                        json.put("id", r.getId());
-                        json.put("startDate",format.format(r.getStart_date()));
-                        json.put("endDate",format.format(r.getEnd_date()));
-                        json.put("nameProduct",r.getProducto().getName());
-                        json.put("nameFurgon",r.getFurgon().getName());
-                        json.put("nameDevice",r.getDevice().getName());
-                        /*if(r.getLocalInicio().getCiudad().getProvincia().getZona() != null)
-                            json.put("nameStartZone", r.getLocalInicio().getCiudad().
-                                                getProvincia().getZona().getName());
-                        if(r.getLocalFin().getCiudad().getProvincia().getZona() != null)
-                            json.put("nameEndZone",r.getLocalFin().getCiudad().
-                                                getProvincia().getZona().getName());  */                      
-                        json.put("nameStartLocal",r.getLocalInicio().getName());
-                        json.put("nameEndLocal",r.getLocalFin().getName());
-                        result.add(json.toMap());
-                    }
-                    return new ResponseEntity(result, HttpStatus.OK);
+                    return new ResponseEntity(rutas, HttpStatus.OK);
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("Resources not available.",
@@ -93,23 +73,8 @@ public class RutaController {
 			@PathVariable(value = "id") Long rutaId){
 		if(rutaRepository.existsById(rutaId)){
                     Ruta r = rutaRepository.findById(rutaId).get();
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-                    JSONObject json = new JSONObject();
-                    json.put("id", r.getId());
-                    json.put("startDate",format.format(r.getStart_date()));
-                    json.put("endDate", format.format(r.getEnd_date()));
-                    json.put("nameProduct",r.getProducto().getName());
-                    json.put("nameFurgon",r.getFurgon().getName());
-                    json.put("nameDevice",r.getDevice().getName());                        
-                    /*if(r.getLocalInicio().getCiudad().getProvincia().getZona() != null)
-                        json.put("nameStartZone",r.getLocalInicio().getCiudad().
-                                            getProvincia().getZona().getName());
-                    if(r.getLocalFin().getCiudad().getProvincia().getZona() != null)
-                        json.put("nameEndZone",r.getLocalFin().getCiudad().
-                                            getProvincia().getZona().getName()); */                       
-                    json.put("nameStartLocal",r.getLocalInicio().getName());
-                    json.put("nameEndLocal",r.getLocalFin().getName());
-                    return new ResponseEntity(json.toMap(), HttpStatus.OK);
+                    
+                    return new ResponseEntity(r, HttpStatus.OK);
                 }
 		else{
                     return new ResponseEntity<String>("Ruta #" + rutaId + 
@@ -150,23 +115,8 @@ public class RutaController {
                     localesRepository.save(localInicio);
                     localesRepository.save(localFin);
                     productoRepository.save(producto);
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-                    JSONObject json = new JSONObject();
-                    json.put("id", r.getId());
-                    json.put("startDate",format.format(r.getStart_date()));
-                    json.put("endDate", format.format(r.getEnd_date()));
-                    json.put("nameProduct",r.getProducto().getName());
-                    json.put("nameFurgon",r.getFurgon().getName());
-                    json.put("nameDevice",r.getDevice().getName());
-                    /*if(r.getLocalInicio().getCiudad().getProvincia().getZona() != null)
-                        json.put("nameStartZone",r.getLocalInicio().getCiudad().
-                                            getProvincia().getZona().getName());
-                    if(r.getLocalFin().getCiudad().getProvincia().getZona() != null)
-                        json.put("nameEndZone",r.getLocalFin().getCiudad().
-                                            getProvincia().getZona().getName());*/
-                    json.put("nameStartLocal",r.getLocalInicio().getName());
-                    json.put("nameEndLocal",r.getLocalFin().getName());
-                    return new ResponseEntity(json.toMap(), HttpStatus.CREATED);
+                    
+                    return new ResponseEntity(r, HttpStatus.CREATED);
                 }
                 else{
                     return new ResponseEntity<String>("It's not possible create new Ruta",
