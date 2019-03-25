@@ -36,8 +36,8 @@ public class Telemetria implements Serializable{
 	private long id;
         
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-        @Column(name = "Dtm", nullable = false)
-	private Date Dtm;
+        @Column(name = "dtm", nullable = false)
+	private Date dtm;
         
         @Column(name = "name", nullable = false)
 	private String name;
@@ -50,7 +50,7 @@ public class Telemetria implements Serializable{
         private Device device;
 
         public Telemetria(Date Dtm, String name, double value) {
-            this.Dtm = Dtm;
+            this.dtm = Dtm;
             this.name = name;
             this.value = value;
         }
@@ -68,11 +68,11 @@ public class Telemetria implements Serializable{
         }
 
         public Date getDtm() {
-            return Dtm;
+            return dtm;
         }
 
         public void setDtm(Date Dtm) {
-            this.Dtm = Dtm;
+            this.dtm = Dtm;
         }
 
         public String getName() {
