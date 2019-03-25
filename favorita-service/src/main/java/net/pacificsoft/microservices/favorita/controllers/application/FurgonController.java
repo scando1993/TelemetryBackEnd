@@ -39,41 +39,9 @@ public class FurgonController {
 	@GetMapping("/furgon")
 	public ResponseEntity getAllFurgons() {
 		try{
-                    List<Map<String, Object>> result = new ArrayList();
-                    Set<Map<String, Object>> ubs;
-                    JSONObject json;
-                    JSONObject resp;
+
                     List<Furgon> furgones = furgonRepository.findAll();
-                    for (Furgon f : furgones){
-                        json = new JSONObject();
-                        ubs = new HashSet();
-                        json.put("id", f.getId());
-                        json.put("numFurgon",f.getNumFurgon());
-                        json.put("name",f.getName());
-                        /*Set<Ruta> rutas = f.getRutas();
-                        for (Ruta r: rutas){
-                            resp = new JSONObject();
-                            resp.put("id", r.getId());
-                            if(r.getLocalInicio().getCiudad().getProvincia().getZona()!=null)
-                                resp.put("nameStartzone", r.getLocalInicio().
-                                    getCiudad().getProvincia().getZona().getName());
-                            resp.put("nameStartProvince", r.getLocalInicio().
-                                    getCiudad().getProvincia().getName());
-                            resp.put("nameStartCity", r.getLocalInicio().
-                                    getCiudad().getName());
-                            if(r.getLocalFin().getCiudad().getProvincia().getZona()!=null)
-                                resp.put("nameEndzone", r.getLocalFin().
-                                    getCiudad().getProvincia().getZona().getName());
-                            resp.put("nameEndProvince", r.getLocalFin().
-                                    getCiudad().getProvincia().getName());
-                            resp.put("nameEndCity", r.getLocalFin().
-                                    getCiudad().getName());
-                            ubs.add(resp.toMap());
-                        }
-                        json.put("Rutas", ubs.toArray());*/
-                        result.add(json.toMap());
-                    }
-                    return new ResponseEntity(result, HttpStatus.OK);
+                    return new ResponseEntity(furgones, HttpStatus.OK);
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("Resources not available.",
@@ -86,34 +54,8 @@ public class FurgonController {
 			@PathVariable(value = "id") Long furgonId){
 		if(furgonRepository.existsById(furgonId)){
                     Furgon f = furgonRepository.findById(furgonId).get();
-                    JSONObject json = new JSONObject();
-                    JSONObject resp = new JSONObject();
-                    Set<Map<String, Object>> ubs = new HashSet();
-                    json.put("id", f.getId());
-                    json.put("numFurgon",f.getNumFurgon());
-                    json.put("name",f.getName());
-                    /*Set<Ruta> rutas = f.getRutas();
-                    for (Ruta r: rutas){
-                        resp = new JSONObject();
-                        resp.put("id", r.getId());
-                        if(r.getLocalInicio().getCiudad().getProvincia().getZona()!=null)
-                            resp.put("nameStartzone", r.getLocalInicio().
-                                getCiudad().getProvincia().getZona().getName());
-                        resp.put("nameStartProvince", r.getLocalInicio().
-                                getCiudad().getProvincia().getName());
-                        resp.put("nameStartCity", r.getLocalInicio().
-                                getCiudad().getName());
-                        if(r.getLocalFin().getCiudad().getProvincia().getZona()!=null)
-                            resp.put("nameEndzone", r.getLocalFin().
-                                getCiudad().getProvincia().getZona().getName());
-                        resp.put("nameEndProvince", r.getLocalFin().
-                                getCiudad().getProvincia().getName());
-                        resp.put("nameEndCity", r.getLocalFin().
-                                getCiudad().getName());
-                        ubs.add(resp.toMap());
-                    }
-                    json.put("Rutas", ubs.toArray());*/
-                    return new ResponseEntity(json.toMap(), HttpStatus.OK);
+                    
+                    return new ResponseEntity(f, HttpStatus.OK);
                 }
 		else{
                     return new ResponseEntity<String>("Furgon #" + furgonId + 
@@ -125,34 +67,9 @@ public class FurgonController {
 	public ResponseEntity createFurgon(@Valid @RequestBody Furgon furgon) {
                 try{
                     Furgon f = furgonRepository.save(furgon);
-                    JSONObject json = new JSONObject();
-                    JSONObject resp = new JSONObject();
-                    Set<Map<String, Object>> ubs = new HashSet();
-                    json.put("id", f.getId());
-                    json.put("numFurgon", f.getNumFurgon());
-                    json.put("name", f.getName());
-                    /*Set<Ruta> rutas = f.getRutas();
-                    for (Ruta r: rutas){
-                        resp = new JSONObject();
-                        resp.put("id", r.getId());
-                        if(r.getLocalInicio().getCiudad().getProvincia().getZona()!=null)
-                            resp.put("nameStartzone", r.getLocalInicio().
-                                getCiudad().getProvincia().getZona().getName());
-                        resp.put("nameStartProvince", r.getLocalInicio().
-                                getCiudad().getProvincia().getName());
-                        resp.put("nameStartCity", r.getLocalInicio().
-                                getCiudad().getName());
-                        if(r.getLocalFin().getCiudad().getProvincia().getZona()!=null)
-                            resp.put("nameEndzone", r.getLocalFin().
-                                getCiudad().getProvincia().getZona().getName());
-                        resp.put("nameEndProvince", r.getLocalFin().
-                                getCiudad().getProvincia().getName());
-                        resp.put("nameEndCity", r.getLocalFin().
-                                getCiudad().getName());
-                        ubs.add(resp.toMap());
-                    }
-                    json.put("Rutas", ubs.toArray());*/
-                    return new ResponseEntity(json.toMap(), HttpStatus.CREATED);
+
+                    
+                    return new ResponseEntity(f, HttpStatus.CREATED);
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("New Furgon not created.",

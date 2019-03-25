@@ -35,21 +35,10 @@ public class BodegaController {
 	@GetMapping("/bodega")
 	public ResponseEntity getAllBodegas() {
                 try{
-                    List<Map<String, Object>> result = new ArrayList();
+                    
                     List<Bodega> bodegas = bodegaRepository.findAll();
-                    JSONObject json;
-                    for(Bodega b : bodegas){
-                        json = new JSONObject();
-                        Ciudad c = b.getCiudad();
-                        json.put("id", b.getId());
-                        json.put("name",b.getName());
-                        json.put("cityName", c.getName());
-                        json.put("provinceName", c.getProvincia().getName());
-                        if(c.getProvincia().getZona()!=null)
-                            json.put("zoneName", c.getProvincia().getZona().getName());
-                        result.add(json.toMap());
-                    }
-                    return new ResponseEntity(result, HttpStatus.OK);
+                    
+                    return new ResponseEntity(bodegas, HttpStatus.OK);
                 }
 		catch(Exception e){
                     return new ResponseEntity<String>("Resources not available.",
@@ -62,15 +51,8 @@ public class BodegaController {
 			@PathVariable(value = "id") Long bodegaId){
                 if(bodegaRepository.existsById(bodegaId)){
                     Bodega b = bodegaRepository.findById(bodegaId).get();
-                    JSONObject json = new JSONObject();  
-                    Ciudad c = b.getCiudad();
-                    json.put("id", b.getId());
-                    json.put("name",b.getName());
-                    json.put("cityName", c.getName());
-                    json.put("provinceName", c.getProvincia().getName());
-                    if(c.getProvincia().getZona()!=null)
-                        json.put("zoneName", c.getProvincia().getZona().getName());
-                    return new ResponseEntity(json.toMap(), HttpStatus.OK);
+                    
+                    return new ResponseEntity(b, HttpStatus.OK);
                 }
 		else{
                     return new ResponseEntity<String>("Bodega #" + bodegaId + 
@@ -88,14 +70,7 @@ public class BodegaController {
                     bodega.setCiudad(ciudad);
                     Bodega b = bodegaRepository.save(bodega);
                     ciudadRepository.save(ciudad);
-                    JSONObject json = new JSONObject();
-                    json.put("id", b.getId());
-                    json.put("name",b.getName());
-                    json.put("cityName", b.getCiudad().getName());
-                    json.put("provinceName", b.getCiudad().getProvincia().getName());
-                    if(b.getCiudad().getProvincia().getZona()!=null)
-                        json.put("zoneName", b.getCiudad().getProvincia().getZona().getName());
-                    return new ResponseEntity(json.toMap(), HttpStatus.CREATED);
+                    return new ResponseEntity(b, HttpStatus.CREATED);
                 }
                 else{
                     return new ResponseEntity<String>("Ciudad #" + ciudadid + 
