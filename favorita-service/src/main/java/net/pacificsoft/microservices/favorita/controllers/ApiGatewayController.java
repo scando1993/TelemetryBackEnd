@@ -78,6 +78,7 @@ public class ApiGatewayController {
             @Valid @RequestBody String dataBody) {
         try{
             boolean validDevice = true;
+            JSONObject qq = new JSONObject(dataBody);
 
             // parsing initial data
             dataBody = "[" + dataBody + "]";
