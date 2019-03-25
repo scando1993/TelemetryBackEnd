@@ -45,7 +45,8 @@ public class ApiGatewayController {
     private MessageRepository messageRepository;
     @Autowired
     private TrackingRepository trackingRepository;
-
+    @Autowired
+    private TelemetriaRepository telemetriaRepository;
 
     final String uri = "http://104.209.196.204:9090/track";
     //final String uri = "http://172.16.2.130:8005/track";
@@ -542,6 +543,18 @@ public class ApiGatewayController {
         }
     }
 
+    @GetMapping("/getLastTelemetry")
+	public ResponseEntity getLastTelemetry(@RequestParam String device) {
+            if(deviceRepository.existsByName(device)){
+                Device d = deviceRepository.findByName(device).get(0);
+                List<Telemetria> ts = telemetriaRepository.findByDeviceOrderByDtm(d);
+                return new ResponseEntity(ts.get(0),HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+           
+        }
 
 
 /*
