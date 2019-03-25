@@ -3,6 +3,7 @@ package net.pacificsoft.microservices.favorita.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
@@ -44,6 +45,7 @@ public class LocationGroup implements Serializable{
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "locationGroup")
+        @JsonIdentityReference(alwaysAsId = true)
         private Set<Tracking> trackings = new HashSet<>();
 
         public LocationGroup(){

@@ -2,6 +2,7 @@ package net.pacificsoft.microservices.favorita.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
@@ -60,12 +61,14 @@ public class RawSensorData implements Serializable{
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "rawSensorData")
+        @JsonIdentityReference(alwaysAsId = true)
         private Set<WifiScan> wifiScans = new HashSet<>();
 
         @JsonIgnore
         @OneToMany(cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY,
                 mappedBy = "rawSensorData")
+        @JsonIdentityReference(alwaysAsId = true)
         private Set<SigfoxMessage> sigfoxMessages = new HashSet<>();
     /*
     public RawSensorData(long epoch, float temperature, Date epochDateTime, String rawData) {

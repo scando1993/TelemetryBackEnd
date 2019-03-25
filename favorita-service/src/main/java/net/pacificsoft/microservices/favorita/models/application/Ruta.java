@@ -2,6 +2,7 @@ package net.pacificsoft.microservices.favorita.models.application;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
@@ -29,7 +30,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table (name = "ruta")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Ruta implements Serializable{
 
 	@Id
@@ -65,9 +66,10 @@ public class Ruta implements Serializable{
         private Locales localFin;
         
         @JsonIgnore
-        @OneToMany(fetch = FetchType.EAGER,
+        @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "ruta")
+        @JsonIdentityReference(alwaysAsId = true)
         private Set<Alerta> alertas = new HashSet<>();
 
         public Ruta(Date start_date, Date end_date) {

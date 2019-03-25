@@ -38,8 +38,6 @@ public class Family implements Serializable{
     @Column(name = "name", nullable = false)
     private String name;
 
-    //@JsonIgnore
-    //@JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "groupid")
     private Group groupFamily;
