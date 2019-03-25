@@ -42,7 +42,7 @@ public class Zona implements Serializable{
     }
 
     public Zona() {
-        super();
+        
     }
 
         public long getId() {
