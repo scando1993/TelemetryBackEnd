@@ -44,6 +44,7 @@ public class Device implements Serializable{
         @Column(name = "name", nullable = false)
         private String name;
 
+
         @JsonIgnore
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "groupID")
