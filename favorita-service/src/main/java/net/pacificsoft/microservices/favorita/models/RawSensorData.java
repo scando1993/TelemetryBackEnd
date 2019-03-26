@@ -52,7 +52,7 @@ public class RawSensorData implements Serializable{
         
         @Column(name = "rawData", nullable = false)
         private String rawData;
-        
+        @JsonIgnore
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "deviceID", nullable = false)
         private Device device;
