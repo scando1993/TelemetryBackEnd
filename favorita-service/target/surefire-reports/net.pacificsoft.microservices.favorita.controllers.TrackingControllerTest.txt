@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: net.pacificsoft.microservices.favorita.controllers.TrackingControllerTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.013 s - in net.pacificsoft.microservices.favorita.controllers.TrackingControllerTest

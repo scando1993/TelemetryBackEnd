@@ -1,8 +1,0 @@
-spring:
-  application:
-    name: favorita-service
-  cloud:
-    discovery:
-      enabled: true
-      serviceId: config-server
-    profile: default

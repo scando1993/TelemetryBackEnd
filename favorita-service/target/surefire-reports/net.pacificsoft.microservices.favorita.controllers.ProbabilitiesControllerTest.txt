@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: net.pacificsoft.microservices.favorita.controllers.ProbabilitiesControllerTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.09 s - in net.pacificsoft.microservices.favorita.controllers.ProbabilitiesControllerTest
