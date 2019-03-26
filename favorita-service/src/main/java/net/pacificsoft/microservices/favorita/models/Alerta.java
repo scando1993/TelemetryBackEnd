@@ -41,8 +41,8 @@ public class Alerta implements Serializable{
     @Column(name = "type_alert", nullable = false)
     private String type_alert;
     
-    @Column(name = "message", nullable = false)
-    private String message;
+    @Column(name = "mensaje", nullable = false)
+    private String mensaje;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
@@ -57,22 +57,22 @@ public class Alerta implements Serializable{
     public Alerta() {
     }
 
-    public Alerta(String type_alert, String message) {
+    public Alerta(String type_alert, String mensaje) {
         this.type_alert = type_alert;
-        this.message = message;
+        this.mensaje = mensaje;
     }
 
-    public Alerta(long id, String type_alert, String message, Ruta ruta, Device device) {
+    public Alerta(long id, String type_alert, String mensaje, Ruta ruta, Device device) {
         this.id = id;
         this.type_alert = type_alert;
-        this.message = message;
+        this.mensaje = mensaje;
         this.ruta = ruta;
         this.device = device;
     }
     public JSONObject toJson(){
         JSONObject json = new JSONObject();
         json.put("type_alert", this.type_alert);
-        json.put("message",message);
+        json.put("mensaje",mensaje);
         return json;
     }
 
@@ -91,11 +91,11 @@ public class Alerta implements Serializable{
     public void setTipoAlerta(String tipo_Alerta) { this.type_alert = tipo_Alerta; }
 */
     public String getMensaje() {
-        return message;
+        return mensaje;
     }
 
     public void setMensaje(String mensaje) {
-        this.message = mensaje;
+        this.mensaje = mensaje;
     }
 
     public Ruta getRuta() {
