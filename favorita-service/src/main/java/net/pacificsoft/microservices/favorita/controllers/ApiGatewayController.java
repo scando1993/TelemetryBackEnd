@@ -49,8 +49,8 @@ public class ApiGatewayController {
     @Autowired
     private TelemetriaRepository telemetriaRepository;
 
-    final String uri = "http://104.209.196.204:9090/track";
-    //final String uri = "http://172.16.2.130:8005/track";
+    // final String uri = "http://104.209.196.204:9090/track";
+    final String uri = "http://172.16.10.41:8005/track";
     final String urlTracking = "http://localhost:2222/tracking";
     final String urlRawSensorData = "http://localhost:2222/rawSensorData";
     final String urlPrediction = "http://localhost:2222/prediction";
@@ -159,16 +159,20 @@ public class ApiGatewayController {
             JSONObject jsonRequesGoServer = new JSONObject();
             JSONObject s = new JSONObject();
             jsonRequesGoServer.put("t", jDataBody.getInt("epoch"));
+            logger.info("T1");
             jsonRequesGoServer.put("d", deviceName);
             s.put("wifi", wifiList);
             jsonRequesGoServer.put("s", s);
             JSONObject jData = new JSONObject();
+            logger.info("Data prepared to send");
+            logger.info("sending data to: " + uri);
+            logger.info("" + jsonRequesGoServer.toString());
             //jData = new JSONObject(restTemplate.postForObject( uri, json1.toString(), String.class));
-
             for(Family family:families){
                 jsonRequesGoServer.put("f",family.getName());
                 jData = new JSONObject(restTemplate.postForObject( uri, jsonRequesGoServer.toString(), String.class));
                 Boolean empty = jData.getJSONObject("message").getJSONObject("location_names").isEmpty();
+                logger.info("" + empty);
                 if(empty){
                     jsonRequesGoServer.remove("f");
                 }
@@ -176,8 +180,9 @@ public class ApiGatewayController {
                     break;
                 }
             }
+            logger.info("Successfull Responce");
             if(jData.getJSONObject("message").getJSONObject("location_names").isEmpty()){
-                logger.error("Have not found a succesful data response from Go Server, maybe invalid family");
+                logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
                 //creating Alert
                 //endPoint = "/" + deviceId;
                 endPoint = "/" + device.getId() + "/0";

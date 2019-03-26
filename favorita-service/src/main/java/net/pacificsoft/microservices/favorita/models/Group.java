@@ -49,7 +49,7 @@ public class Group implements Serializable{
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "groupFamily")
-    @JsonIdentityReference(alwaysAsId = true)
+    //@JsonIdentityReference(alwaysAsId = true)
     private Set<Family> families = new HashSet<>();
 
     public Group() {
