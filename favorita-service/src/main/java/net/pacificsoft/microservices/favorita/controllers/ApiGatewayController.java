@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-//HOLA AGAIN OTRA VEZ khjkjk12...dddddjjjjjjjweqew3333iiee32323ee
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ApiGatewayController {
@@ -273,7 +272,7 @@ public class ApiGatewayController {
 
             //----------getting Device
             Device device = new Device();
-            if(deviceRepository.existsByName(deviceName)){
+            /*if(deviceRepository.existsByName(deviceName)){
                 logger.info("Device found");
                 device= (deviceRepository.findByName(deviceName)).get(0);
             }
@@ -283,7 +282,7 @@ public class ApiGatewayController {
                 endPoint = "/" + device.getId() + "/0";
                 Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, continuing ith Device: unknown");
                 Alerta alertResponse = restTemplate.postForObject(urlAlert + endPoint, alerta, Alerta.class);
-            }
+            }*/
             long deviceId = device.getId();
 
             //-------getting Families
@@ -497,12 +496,12 @@ public class ApiGatewayController {
             String startDate = jData.getString("startDate");
             String endDate = jData.getString("endDate");
             Device device = new Device();
-            if(deviceRepository.existsByName(deviceName)){
+            /*if(deviceRepository.existsByName(deviceName)){
                 device = deviceRepository.findByName(deviceName).get(0);
             }
             else{
                 return new ResponseEntity("No device Found", HttpStatus.NOT_FOUND);
-            }
+            }*/
             Date start;
             Date end;
             try {
@@ -520,11 +519,12 @@ public class ApiGatewayController {
                 return new ResponseEntity<String>("Make sure that you had sent the Date Format\n" + formatApiInnerDate, HttpStatus.BAD_REQUEST);
             }
             ArrayList<Tracking> trackings;
-            if (startDate.compareTo("beginning") != 0)
+            /*if (startDate.compareTo("beginning") != 0)
                  trackings = (ArrayList<Tracking>) trackingRepository.findByDtmBetweenAndDevice(start,end,device);
             else
-                trackings = (ArrayList<Tracking>)trackingRepository.findByDtmLessThanEqualAndDevice(end, device);
-            return new ResponseEntity(trackings,HttpStatus.OK);
+                trackings = (ArrayList<Tracking>)trackingRepository.findByDtmLessThanEqualAndDevice(end, device);*/
+            //return new ResponseEntity(trackings,HttpStatus.OK);
+            return null;
         }
         catch(Exception e){
             logger.error("Could not parse data. Bad request");
@@ -545,15 +545,15 @@ public class ApiGatewayController {
 
     @GetMapping("/getLastTelemetry")
 	public ResponseEntity getLastTelemetry(@RequestParam String device) {
-            if(deviceRepository.existsByName(device)){
+            /*if(deviceRepository.existsByName(device)){
                 Device d = deviceRepository.findByName(device).get(0);
                 List<Telemetria> ts = telemetriaRepository.findByDeviceOrderByDtm(d);
                 return new ResponseEntity(ts.get(0),HttpStatus.OK);
             }
             else{
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
-            }
-           
+            }*/
+            return null;
         }
 
 

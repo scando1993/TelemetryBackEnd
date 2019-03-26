@@ -1,10 +1,11 @@
 package net.pacificsoft.microservices.favorita.repository;
 
 import net.pacificsoft.microservices.favorita.models.Probabilities;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ProbabilitiesRepository extends JpaRepository<Probabilities, Long>{
+@RepositoryRestResource()
+public interface ProbabilitiesRepository extends PagingAndSortingRepository<Probabilities, Long>{
 
 }

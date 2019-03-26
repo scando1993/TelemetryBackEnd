@@ -1,35 +1,20 @@
 package net.pacificsoft.microservices.favorita.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.io.Serializable;
-import java.sql.Time;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table (name = "telemetria")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = Telemetria.class)
-@EnableAutoConfiguration(exclude = {
-        JpaRepositoriesAutoConfiguration.class
-})
-public class Telemetria implements Serializable{
+public class Telemetria{
 
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +29,7 @@ public class Telemetria implements Serializable{
         
         @Column(name = "value", nullable = false)
 	private double value;
-        @JsonIgnore
+        
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "deviceID")
         private Device device;

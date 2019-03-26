@@ -1,18 +1,13 @@
 package net.pacificsoft.microservices.favorita.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,20 +16,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import org.json.JSONObject;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table (name = "rawSensorData")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = RawSensorData.class)
-@EnableAutoConfiguration(exclude = {
-        JpaRepositoriesAutoConfiguration.class
-})
-public class RawSensorData implements Serializable{
+public class RawSensorData{
 
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,15 +42,13 @@ public class RawSensorData implements Serializable{
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "deviceID", nullable = false)
         private Device device;
-        
-        @JsonIgnore
+
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "rawSensorData")
         @JsonIdentityReference(alwaysAsId = true)
         private Set<WifiScan> wifiScans = new HashSet<>();
 
-        @JsonIgnore
         @OneToMany(cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY,
                 mappedBy = "rawSensorData")

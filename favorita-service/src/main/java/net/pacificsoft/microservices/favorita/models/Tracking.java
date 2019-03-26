@@ -1,18 +1,12 @@
 package net.pacificsoft.microservices.favorita.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,31 +15,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table (name = "tracking")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-@EnableAutoConfiguration(exclude = {
-        JpaRepositoriesAutoConfiguration.class
-})
-public class Tracking implements Serializable{
+public class Tracking{
 
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
         @Column(name = "location", nullable = false)
 	private String location;
-        
-        @JsonIgnore
+
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "deviceID")
         private Device device;
 
-        @JsonIgnore
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "locationGroupID")
         private LocationGroup locationGroup;
@@ -53,20 +37,19 @@ public class Tracking implements Serializable{
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "tracking")
-        @JsonIdentityReference(alwaysAsId = true)
         private Set<LocationPriority> locationPrioritys = new HashSet<>();
         
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "dtm")
         private Date dtm;
 
-    public Tracking(String location, Date dtm) {
-        this.location = location;
-        this.dtm = dtm;
-    }
-    public Tracking() {
+        public Tracking(String location, Date dtm) {
+            this.location = location;
+            this.dtm = dtm;
+        }
+        public Tracking() {
 
-    }
+        }
 
     public long getId() {
             return id;

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/api/tracking")
 public class ApiNetController {
     
-        @Autowired
+       /* @Autowired
 	private DeviceRepository deviceRepository;
         
         @GetMapping("/getAllDevice")

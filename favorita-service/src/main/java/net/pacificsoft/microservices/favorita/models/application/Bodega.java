@@ -1,27 +1,18 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "bodega")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = Bodega.class)
-public class Bodega implements Serializable{
+public class Bodega{
     
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +20,7 @@ public class Bodega implements Serializable{
         @Column(name = "name", nullable = false)
 	private String name;
 
-        @ManyToOne(fetch = FetchType.EAGER)
+        @ManyToOne(cascade= {CascadeType.ALL})
         @JoinColumn(name = "ciudadID")
         private Ciudad ciudad;
 
@@ -55,10 +46,5 @@ public class Bodega implements Serializable{
 
         public void setCiudad(Ciudad ciudad) {
             this.ciudad = ciudad;
-        }
-
-        @Override
-        public String toString(){
-            return "Bodega: "+id+" "+name;
         }
 }

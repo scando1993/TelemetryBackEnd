@@ -1,27 +1,18 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table (name = "formato")
-@EntityListeners(AuditingEntityListener.class)
-//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class Formato implements Serializable{
+public class Formato{
 
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +22,6 @@ public class Formato implements Serializable{
         @Column(name = "code", nullable = false)
         private String code;
 
-        @JsonIgnore
         @OneToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "localID")
         private Locales locales;
@@ -66,10 +56,5 @@ public class Formato implements Serializable{
 
         public void setLocales(Locales locales) {
             this.locales = locales;
-        }
-
-        @Override
-        public String toString(){
-            return "Formato: "+id+" "+name+" "+code;
         }
 }

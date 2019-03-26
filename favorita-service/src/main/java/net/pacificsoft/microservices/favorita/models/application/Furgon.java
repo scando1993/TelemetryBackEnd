@@ -1,30 +1,20 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table (name = "furgon")
-@EntityListeners(AuditingEntityListener.class)
-//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class Furgon implements Serializable{
+public class Furgon{
 
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +26,9 @@ public class Furgon implements Serializable{
         @Column(name = "name", nullable = false)
 	private String name;
         
-        @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "furgon")
-        @JsonIdentityReference(alwaysAsId = true)
         private Set<Ruta> rutas = new HashSet<>();
 
         public long getId() {

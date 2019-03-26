@@ -1,17 +1,9 @@
 package net.pacificsoft.microservices.favorita.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,117 +13,65 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "message")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = Message.class)
-@EnableAutoConfiguration(exclude = {
-        JpaRepositoriesAutoConfiguration.class
-})
-public class Message implements Serializable{
+public class Message{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private long id;
 
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "message")
-    @JsonIdentityReference(alwaysAsId = true)
-    private Set<Prediction> predictions = new HashSet<>();
+        @OneToMany(cascade = CascadeType.ALL,
+                fetch = FetchType.LAZY,
+                mappedBy = "message")
+        private Set<Prediction> predictions = new HashSet<>();
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guessesID")
-    private MessageGuess messageGuess;
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "guessesID")
+        private MessageGuess messageGuess;
 
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL,
-           fetch = FetchType.LAZY,
-           mappedBy = "message")
-    @JsonIdentityReference(alwaysAsId = true)
-    private GoApiResponse goApiResponse;
+        @OneToOne(cascade = CascadeType.ALL,
+               fetch = FetchType.LAZY,
+               mappedBy = "message")
+        private GoApiResponse goApiResponse;
 
-    /*@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "locationNamesID")
-    private LocationNames locationNames;*/
+        /*@OneToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "locationNamesID")
+        private LocationNames locationNames;*/
 
-    public Message() {
-    }
+        public Message() {
+        }
 
-    
-    
-        /**
-         * @return the id
-         */
         public long getId() {
                 return id;
         }
 
-        /**
-         * @param id the id to set
-         */
         public void setId(long id) {
                 this.id = id;
         }
 
-        /**
-         * @return the predictions
-         */
         public Set<Prediction> getPredictions() {
                 return predictions;
         }
 
-        /**
-         * @param predictions the predictions to set
-         */
         public void setPredictions(Set<Prediction> predictions) {
                 this.predictions = predictions;
         }
 
-        /**
-         * @return the messageGuess
-         */
         public MessageGuess getMessageGuess() {
                 return messageGuess;
         }
 
-        /**
-         * @param messageGuess the messageGuess to set
-         */
         public void setMessageGuess(MessageGuess messageGuess) {
                 this.messageGuess = messageGuess;
         }
 
-        /**
-         * @return the goApiResponse
-         */
         public GoApiResponse getGoApiResponse() {
                 return goApiResponse;
         }
 
-        /**
-         * @param goApiResponse the goApiResponse to set
-         */
         public void setGoApiResponse(GoApiResponse goApiResponse) {
                 this.goApiResponse = goApiResponse;
         }
-
-        /*
-        public LocationNames getLocationNames() {
-                return locationNames;
-        }
-
-   
-        public void setLocationNames(LocationNames locationNames) {
-                this.locationNames = locationNames;
-        }
-*/
-       
-
 }

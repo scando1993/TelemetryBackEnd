@@ -1,16 +1,10 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,36 +13,29 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "ciudad")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class Ciudad implements Serializable{
+public class Ciudad{
     
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
         @Column(name = "name", nullable = false)
 	private String name;
-        
-        @JsonIgnore
+
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "provinciaID")
         private Provincia provincia;
         
-        
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "ciudad")
-        @JsonIdentityReference(alwaysAsId = true)
         private Set<Bodega> bodegas = new HashSet<>();
         
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "ciudad")
-        @JsonIdentityReference(alwaysAsId = true)
         private Set<Locales> locales = new HashSet<>();
         
         public long getId() {
@@ -89,12 +76,5 @@ public class Ciudad implements Serializable{
 
         public void setLocales(Set<Locales> locales) {
             this.locales = locales;
-        }
-
-        
-        
-        @Override
-        public String toString(){
-            return "Ciudad: "+id+" "+name;
         }
 }
