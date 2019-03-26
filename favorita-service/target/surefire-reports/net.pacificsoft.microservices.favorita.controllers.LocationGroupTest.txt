@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: net.pacificsoft.microservices.favorita.controllers.LocationGroupTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.117 s - in net.pacificsoft.microservices.favorita.controllers.LocationGroupTest
