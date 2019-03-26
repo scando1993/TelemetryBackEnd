@@ -186,7 +186,7 @@ public class ApiGatewayController {
                 //creating Alert
                 //endPoint = "/" + deviceId;
                 endPoint = "/" + device.getId() + "/0";
-                Alerta alerta = new Alerta("Go Server erro","No family match");
+                Alerta alerta = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family");
                 Alerta alertResponse = restTemplate.postForObject(urlAlert + endPoint, alerta, Alerta.class);
 
                 //JSONObject jsonTrackingResponse = new JSONObject(restTemplate.postForObject( urlAlert + endPoint, alerta, Alerta.class));
