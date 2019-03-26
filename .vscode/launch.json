@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Application",
+            "request": "launch",
+            "mainClass": "net.pacificsoft.microservices.favorita.Application",
+            "projectName": "favorita-service"
+        }
+    ]
+}
