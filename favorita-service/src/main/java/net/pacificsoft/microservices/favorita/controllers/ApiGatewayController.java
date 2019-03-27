@@ -59,8 +59,8 @@ public class ApiGatewayController {
     @Autowired
     private LocationGroupRepository locationGroupRepository;
 
-    final String uri = "http://104.209.196.204:9090/track";
-    //final String uri = "http://172.16.10.41:8005/track";
+    //final String uri = "http://104.209.196.204:9090/track";
+    final String uri = "http://172.16.10.41:8005/track";
     final String urlTracking = "http://localhost:2222/tracking";
     final String urlRawSensorData = "http://localhost:2222/rawSensorData";
     final String urlPrediction = "http://localhost:2222/prediction";
@@ -701,26 +701,27 @@ public class ApiGatewayController {
     private void postAlert(Alerta alert, Device device){
         device.getAlertas().add(alert);
         alert.setDevice(device);
-        deviceRepository.save(device);
         alertaRepository.save(alert);
+        deviceRepository.save(device);
     }
     private void postTelemtry(Telemetria telemetry, Device device){
         device.getTelemetrias().add(telemetry);
         telemetry.setDevice(device);
-        deviceRepository.save(device);
         telemetriaRepository.save(telemetry);
+        deviceRepository.save(device);
     }
     private void postRawSensorDara(RawSensorData rawSensorData, Device device){
         device.getRawSensorDatas().add(rawSensorData);
         rawSensorData.setDevice(device);
-        deviceRepository.save(device);
         rawDataRepository.save(rawSensorData);
+        deviceRepository.save(device);
+
     }
     private void postWifiScan(WifiScan wifiScan,RawSensorData rawSensorData){
         rawSensorData.getWifiScans().add(wifiScan);
         wifiScan.setRawSensorData(rawSensorData);
-        rawDataRepository.save(rawSensorData);
         wifiScanRepository.save(wifiScan);
+        rawDataRepository.save(rawSensorData);
     }
     private void postMessageGuess(MessageGuess messageGuess){
         messageGuessRepository.save(messageGuess);
@@ -728,17 +729,17 @@ public class ApiGatewayController {
     private void postMessage(Message message, MessageGuess messageGuess){
         messageGuess.getMessages().add(message);
         message.setMessageGuess(messageGuess);
-        messageGuessRepository.save(messageGuess);
         messageRepository.save(message);
+        messageGuessRepository.save(messageGuess);
     }
     private void postGoApiResponse(GoApiResponse goApiResponse, Message message, Device device){
         device.getGoApiResponses().add(goApiResponse);
         message.setGoApiResponse(goApiResponse);
         goApiResponse.setDevice(device);
         goApiResponse.setMessage(message);
+        goApiResponseRepository.save(goApiResponse);
         deviceRepository.save(device);
         messageRepository.save(message);
-        goApiResponseRepository.save(goApiResponse);
     }
     private void postTracking(Tracking tracking, Device device, long idLocationGroup){
         LocationGroup locationGroup = locationGroupRepository.findById(idLocationGroup).get();
@@ -746,8 +747,8 @@ public class ApiGatewayController {
         device.getTrackings().add(tracking);
         tracking.setDevice(device);
         tracking.setLocationGroup(locationGroup);
+        trackingRepository.save(tracking);
         deviceRepository.save(device);
         locationGroupRepository.save(locationGroup);
-        trackingRepository.save(tracking);
     }
 }
