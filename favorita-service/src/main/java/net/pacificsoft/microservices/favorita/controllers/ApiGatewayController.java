@@ -136,9 +136,9 @@ public class ApiGatewayController {
             logger.info("WifiSensor have been storaged");
 
             if(!validDevice){
-                logger.error("Device not found returning 103");
+                logger.error("Device not found returning 404");
                 Alerta alert = new Alerta("Device error","Device: " + deviceName + " not found, saving data with deviceName: unknown");
-                return new ResponseEntity(alert.toJson().toMap(), HttpStatus.CHECKPOINT);
+                return new ResponseEntity(alert.toJson().toMap(), HttpStatus.NOT_FOUND);
             }
 
             //-------getting Families
