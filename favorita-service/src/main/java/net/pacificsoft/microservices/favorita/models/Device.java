@@ -29,6 +29,9 @@ public class Device{
         
         @Column(name = "name", nullable = false)
         private String name;
+        
+        @Column(name = "uuid", nullable = true)
+        private String uuid;
 
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "groupID")
@@ -190,4 +193,12 @@ public class Device{
         public void setGoApiResponses(Set<GoApiResponse> goApiResponses) {
             this.goApiResponses = goApiResponses;
         }
+
+        public String getUuid() {
+            return uuid;
+        }
+
+        public void setUuid(String uuid) {
+            this.uuid = uuid;
+        } 
 }
