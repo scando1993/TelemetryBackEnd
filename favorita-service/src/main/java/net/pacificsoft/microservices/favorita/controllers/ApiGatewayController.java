@@ -129,7 +129,8 @@ public class ApiGatewayController {
 
 
             //-----------creating rawsSensorData
-            RawSensorData rawSensorData = (RawSensorData)jDataBody.toMap();
+            //RawSensorData rawSensorData = (RawSensorData)jDataBody.toMap();
+            RawSensorData rawSensorData = new RawSensorData(jDataBody.getLong("epoch"),temperature,epochDateTime,jDataBody.getString("rawData"));
             postRawSensorDara(rawSensorData,device);
             logger.info("Raw data have been storaged");
 
