@@ -59,8 +59,8 @@ public class ApiGatewayController {
     @Autowired
     private LocationGroupRepository locationGroupRepository;
 
-    //final String uri = "http://104.209.196.204:9090/track";
-    final String uri = "http://172.16.10.41:8005/track";
+    final String uri = "http://104.209.196.204:9090/track";
+    //final String uri = "http://172.16.10.41:8005/track";
     final String urlTracking = "http://localhost:2222/tracking";
     final String urlRawSensorData = "http://localhost:2222/rawSensorData";
     final String urlPrediction = "http://localhost:2222/prediction";
@@ -76,7 +76,7 @@ public class ApiGatewayController {
     private static final Logger logger = LoggerFactory.getLogger(ApiGatewayController.class);
     private RestTemplate restTemplate = new RestTemplate();
     private SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-    final long defaultTrackingLocationGroup = 3L;
+    final long defaultTrackingLocationGroup = 4L;
     private String endPoint;
 
     final String formatApiInnerDate = "{\"device\": String,\n" +
@@ -125,9 +125,6 @@ public class ApiGatewayController {
                 postAlert(alerta, device);
                 validDevice = false;
             }
-
-
-
             //-----------creating rawsSensorData
             //RawSensorData rawSensorData = (RawSensorData)jDataBody.toMap();
             RawSensorData rawSensorData = new RawSensorData(jDataBody.getLong("epoch"),temperature,epochDateTime,jDataBody.getString("rawData"));
@@ -139,8 +136,9 @@ public class ApiGatewayController {
             logger.info("WifiSensor have been storaged");
 
             if(!validDevice){
-                Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, saving data with deviceName: unknown");
-                return new ResponseEntity("", HttpStatus.CHECKPOINT);
+                logger.error("Device not found returning 103");
+                Alerta alert = new Alerta("Device error","Device: " + deviceName + " not found, saving data with deviceName: unknown");
+                return new ResponseEntity(alert.toJson().toMap(), HttpStatus.CHECKPOINT);
             }
 
             //-------getting Families
@@ -271,12 +269,11 @@ public class ApiGatewayController {
 
                     listProbabilities.add(probability);
                     listLocationNames.add(locationNames);
-
                 }
+                predictionsRepository.save(prediction);
+                messageRepository.save(message);
                 probabilitiesRepository.saveAll(listProbabilities);
                 locationNamesRepository.saveAll(listLocationNames);
-                messageRepository.save(message);
-                predictionsRepository.save(prediction);
 
             }
             logger.info("All predictions,, locationNames and probabilities have been storaged");
