@@ -138,5 +138,5 @@ public class Ruta{
 
         public void setAlertas(Set<Alerta> alertas) {
             this.alertas = alertas;
-        }   
+        }        
 }

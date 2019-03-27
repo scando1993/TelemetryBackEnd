@@ -18,60 +18,56 @@ import javax.persistence.Table;
 @Table(name = "message")
 public class Message{
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "message")
+    private Set<Prediction> predictions = new HashSet<>();
 
-        @OneToMany(cascade = CascadeType.ALL,
-                fetch = FetchType.LAZY,
-                mappedBy = "message")
-        private Set<Prediction> predictions = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "guessesID")
+    private MessageGuess messageGuess;
 
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "guessesID")
-        private MessageGuess messageGuess;
+    @OneToOne(cascade = CascadeType.ALL,
+           fetch = FetchType.LAZY,
+           mappedBy = "message")
+    private GoApiResponse goApiResponse;
 
-        @OneToOne(cascade = CascadeType.ALL,
-               fetch = FetchType.LAZY,
-               mappedBy = "message")
-        private GoApiResponse goApiResponse;
+    public Message() {
+    }
 
-        /*@OneToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "locationNamesID")
-        private LocationNames locationNames;*/
+    public long getId() {
+            return id;
+    }
 
-        public Message() {
-        }
+    public void setId(long id) {
+            this.id = id;
+    }
 
-        public long getId() {
-                return id;
-        }
+    public Set<Prediction> getPredictions() {
+            return predictions;
+    }
 
-        public void setId(long id) {
-                this.id = id;
-        }
+    public void setPredictions(Set<Prediction> predictions) {
+            this.predictions = predictions;
+    }
 
-        public Set<Prediction> getPredictions() {
-                return predictions;
-        }
+    public MessageGuess getMessageGuess() {
+            return messageGuess;
+    }
 
-        public void setPredictions(Set<Prediction> predictions) {
-                this.predictions = predictions;
-        }
+    public void setMessageGuess(MessageGuess messageGuess) {
+            this.messageGuess = messageGuess;
+    }
 
-        public MessageGuess getMessageGuess() {
-                return messageGuess;
-        }
+    public GoApiResponse getGoApiResponse() {
+            return goApiResponse;
+    }
 
-        public void setMessageGuess(MessageGuess messageGuess) {
-                this.messageGuess = messageGuess;
-        }
-
-        public GoApiResponse getGoApiResponse() {
-                return goApiResponse;
-        }
-
-        public void setGoApiResponse(GoApiResponse goApiResponse) {
-                this.goApiResponse = goApiResponse;
-        }
+    public void setGoApiResponse(GoApiResponse goApiResponse) {
+            this.goApiResponse = goApiResponse;
+    }
 }

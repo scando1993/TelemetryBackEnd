@@ -19,14 +19,19 @@ public class Locales{
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+        
         @Column(name = "numLoc", nullable = false)
         private long numLoc;
+        
         @Column(name = "length", nullable = false)
         private long length;
+        
         @Column(name = "latitude", nullable = false)
         private long latitude;
+        
         @Column(name = "name", nullable = false)
 	private String name;
+        
         @Column(name = "family", nullable = false)
         private String family;
         

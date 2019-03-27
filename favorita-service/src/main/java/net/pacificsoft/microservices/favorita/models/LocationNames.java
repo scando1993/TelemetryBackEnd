@@ -57,11 +57,11 @@ public class LocationNames{
 
     public LocationNames() {
     }
-
+    
     public long getId() {
         return id;
     }
-
+    
     public void setId(long id) {
         this.id = id;
     }
@@ -69,7 +69,7 @@ public class LocationNames{
     public Double getIdname() {
         return idname;
     }
-
+    
     public void setIdname(Double idname) {
         this.idname = idname;
     }
@@ -81,14 +81,12 @@ public class LocationNames{
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public Prediction getPrediction() {
         return prediction;
     }
 
     public void setPrediction(Prediction prediction) {
         this.prediction = prediction;
-    }
-
-    
+    }    
 }

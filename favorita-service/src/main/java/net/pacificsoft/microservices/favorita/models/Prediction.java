@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 @Entity
 @Table(name = "prediction")
-public class Prediction{
+public class Prediction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +25,11 @@ public class Prediction{
     
     @Column(name = "name", nullable = false)
     private String name;
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "messageID")
     private Message message;
-
+    
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "prediction")
@@ -99,5 +100,4 @@ public class Prediction{
     public void setProbabilitieses(Set<Probabilities> probabilitieses) {
         this.probabilitieses = probabilitieses;
     }
-    
 }

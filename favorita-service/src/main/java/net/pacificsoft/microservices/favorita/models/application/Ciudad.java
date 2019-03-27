@@ -21,13 +21,14 @@ public class Ciudad{
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+        
         @Column(name = "name", nullable = false)
 	private String name;
 
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "provinciaID")
         private Provincia provincia;
-        
+                
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "ciudad")

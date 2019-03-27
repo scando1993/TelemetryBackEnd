@@ -1,7 +1,6 @@
 package net.pacificsoft.microservices.favorita.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +19,7 @@ import org.json.JSONObject;
 
 @Entity
 @Table (name = "rawSensorData")
-public class RawSensorData{
+public class RawSensorData {
 
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,21 +37,18 @@ public class RawSensorData{
         
         @Column(name = "rawData", nullable = false)
         private String rawData;
-        
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "deviceID", nullable = false)
         private Device device;
-
+        
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "rawSensorData")
-        @JsonIdentityReference(alwaysAsId = true)
         private Set<WifiScan> wifiScans = new HashSet<>();
-
+        
         @OneToMany(cascade = CascadeType.ALL,
                 fetch = FetchType.LAZY,
                 mappedBy = "rawSensorData")
-        @JsonIdentityReference(alwaysAsId = true)
         private Set<SigfoxMessage> sigfoxMessages = new HashSet<>();
     /*
     public RawSensorData(long epoch, float temperature, Date epochDateTime, String rawData) {
@@ -88,9 +84,6 @@ public class RawSensorData{
             return json;
         }
 
-        
-
-        
         public long getId() {
             return id;
         }

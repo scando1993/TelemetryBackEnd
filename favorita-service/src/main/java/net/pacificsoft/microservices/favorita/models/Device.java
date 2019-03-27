@@ -87,7 +87,7 @@ public class Device{
             this.groupFamily = groupFamily;
             this.status = status;
         }
-        
+
         public long getId() {
             return id;
         }
@@ -182,12 +182,11 @@ public class Device{
         }
 
         /*public Features getFeatures() {
-            return features;
+        return features;
         }
         public void setFeatures(Features features) {
-            this.features = features;
+        this.features = features;
         }*/
-        
         public void setGoApiResponses(Set<GoApiResponse> goApiResponses) {
             this.goApiResponses = goApiResponses;
         }

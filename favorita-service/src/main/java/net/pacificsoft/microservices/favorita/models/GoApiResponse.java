@@ -26,7 +26,7 @@ public class GoApiResponse{
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "messageID")
     private Message message;
-
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deviceID")
     private Device device;
@@ -37,12 +37,13 @@ public class GoApiResponse{
 
     public GoApiResponse() {
     }
+    
     public JSONObject toJson(){
         JSONObject json = new JSONObject();
         json.put("success", this.sucess);
         return json;
     }
-
+    
     public long getId() {
         return id;
     }
@@ -50,7 +51,7 @@ public class GoApiResponse{
     public void setId(long id) {
         this.id = id;
     }
-
+    
     public boolean getSucess() {
         return sucess;
     }
@@ -73,5 +74,5 @@ public class GoApiResponse{
 
     public void setDevice(Device device) {
         this.device = device;
-    }
+    }    
 }

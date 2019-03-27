@@ -32,7 +32,7 @@ public class SigfoxMessage{
 	private String payload1;
         @Column(name = "payload2", nullable = false)
 	private String payload2;
-
+        
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "rawSensorDataID")
         private RawSensorData rawSensorData;

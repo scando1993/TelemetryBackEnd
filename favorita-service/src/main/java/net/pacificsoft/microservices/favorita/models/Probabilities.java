@@ -22,57 +22,54 @@ public class Probabilities{
         @Column(name = "nameID", nullable = false)
         private Double nameID;
 
-        @Column(name = "probability", nullable = false)
-        private Double probability;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "probilityID")
-        private Prediction prediction;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "probilityID")
+    private Prediction prediction;
 
         public Probabilities(Double nameID, Double probability) {
             this.nameID = nameID;
             this.probability = probability;
         }
 
-        public Probabilities() {
-        }
-	public JSONObject toJson(){
-		JSONObject json = new JSONObject();
-		json.put("idname", this.nameID);
-		json.put("probability", this.probability);
-		return json;
-	}
+    public Probabilities() {
+    }
     
-	public long getId() {
-		return id;
-	}
+    public JSONObject toJson(){
+            JSONObject json = new JSONObject();
+            json.put("idname", this.nameID);
+            json.put("probability", this.probability);
+            return json;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public long getId() {
+            return id;
+    }
 
-	public Double getNameID() {
-		return nameID;
-	}
+    public void setId(long id) {
+            this.id = id;
+    }
 
-	public void setNameID(Double nameID) {
-		this.nameID = nameID;
-	}
+    public Double getNameID() {
+            return nameID;
+    }
 
-	public Double getProbability() {
-		return probability;
-	}
+    public void setNameID(Double nameID) {
+            this.nameID = nameID;
+    }
 
-	public void setProbability(Double probability) {
-		this.probability = probability;
-	}
+    public Double getProbability() {
+            return probability;
+    }
 
-        public Prediction getPrediction() {
-            return prediction;
-        }
+    public void setProbability(Double probability) {
+            this.probability = probability;
+    }
 
-        public void setPrediction(Prediction prediction) {
-            this.prediction = prediction;
-        }
+    public Prediction getPrediction() {
+        return prediction;
+    }
 
+    public void setPrediction(Prediction prediction) {
+        this.prediction = prediction;
+    }   
 }

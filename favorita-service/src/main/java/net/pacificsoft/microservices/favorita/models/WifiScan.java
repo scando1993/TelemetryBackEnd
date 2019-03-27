@@ -17,14 +17,13 @@ public class WifiScan{
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-
         
         @Column(name = "RSSI", nullable = false)
         private int RSSI;
         
         @Column(name = "formatoID", nullable = false)
 	private String MAC;
-        
+                
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "rawSensorDataID")
         private RawSensorData rawSensorData;

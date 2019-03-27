@@ -15,22 +15,23 @@ import javax.persistence.Table;
 @Entity
 @Table (name = "status")
 public class Status{
+
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
         
-        @Column(name = "batery", nullable = false)
+        @Column(name = "batery")
         private double batery;
         
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-        @Column(name = "last_transmision", nullable = false)
+        @Column(name = "last_transmision")
         private Date last_transmision;
         
-        @Column(name = "signal_level", nullable = false)
+        @Column(name = "signal_level")
         private double signal_level;
         
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-        @Column(name = "last_update", nullable = false)
+        @Column(name = "last_update")
 	private Date last_update;
 
         @OneToOne(fetch = FetchType.EAGER)

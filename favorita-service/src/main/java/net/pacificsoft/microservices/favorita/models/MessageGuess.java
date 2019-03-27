@@ -15,7 +15,7 @@ import org.json.JSONObject;
 
 @Entity
 @Table(name = "messageGuess")
-public class MessageGuess{
+public class MessageGuess {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,9 +74,8 @@ public class MessageGuess{
     public Set<Message> getMessages() {
         return messages;
     }
-
+    
     public void setMessages(Set<Message> messages) {
         this.messages = messages;
     }
-
 }

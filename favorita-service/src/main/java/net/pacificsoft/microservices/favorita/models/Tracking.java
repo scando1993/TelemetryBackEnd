@@ -18,14 +18,15 @@ import javax.persistence.Table;
 
 @Entity
 @Table (name = "tracking")
-public class Tracking{
+public class Tracking {
 
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+        
         @Column(name = "location", nullable = false)
 	private String location;
-
+        
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "deviceID")
         private Device device;
@@ -51,7 +52,7 @@ public class Tracking{
 
         }
 
-    public long getId() {
+        public long getId() {
             return id;
         }
 

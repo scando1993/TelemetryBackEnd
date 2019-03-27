@@ -1,6 +1,7 @@
 package net.pacificsoft.microservices.favorita.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +31,7 @@ public class Telemetria{
         @Column(name = "value", nullable = false)
 	private double value;
         
+        @JsonIgnore
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "deviceID")
         private Device device;
@@ -82,7 +84,5 @@ public class Telemetria{
 
         public void setDevice(Device device) {
             this.device = device;
-        }
-
-        
+        }        
 }

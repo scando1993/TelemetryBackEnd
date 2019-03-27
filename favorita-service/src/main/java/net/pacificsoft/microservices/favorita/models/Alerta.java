@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 @Entity
 @Table (name = "alerta")
-public class Alerta {
+public class Alerta{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class Alerta {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rutaID", nullable = true)
     private Ruta ruta;
-
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "deviceID")
     private Device device;
@@ -37,22 +37,22 @@ public class Alerta {
     public Alerta() {
     }
 
-    public Alerta(String type_alert, String message) {
+    public Alerta(String type_alert, String mensaje) {
         this.type_alert = type_alert;
-        this.mensaje = message;
+        this.mensaje = mensaje;
     }
 
-    public Alerta(long id, String type_alert, String message, Ruta ruta, Device device) {
+    public Alerta(long id, String type_alert, String mensaje, Ruta ruta, Device device) {
         this.id = id;
         this.type_alert = type_alert;
-        this.mensaje = message;
+        this.mensaje = mensaje;
         this.ruta = ruta;
         this.device = device;
     }
     public JSONObject toJson(){
         JSONObject json = new JSONObject();
         json.put("type_alert", this.type_alert);
-        json.put("message",mensaje);
+        json.put("mensaje",mensaje);
         return json;
     }
 

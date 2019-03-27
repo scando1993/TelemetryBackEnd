@@ -14,11 +14,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "zona")
-public class Zona {
+public class Zona{
     
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+        
         @Column(name = "name", nullable = false)
 	private String name;
         

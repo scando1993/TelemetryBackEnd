@@ -21,14 +21,14 @@ public class Provincia{
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+        
         @Column(name = "name", nullable = false)
 	private String name;
         
-        @ManyToOne(cascade= {CascadeType.ALL})
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "zonaID")
         private Zona zona;
-        
-        
+                
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "provincia")

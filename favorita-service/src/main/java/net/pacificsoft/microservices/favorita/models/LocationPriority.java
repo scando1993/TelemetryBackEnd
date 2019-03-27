@@ -13,7 +13,7 @@ public class LocationPriority{
 	private String name;
         @Column(name = "priority", nullable = false)
         private int priority;
-
+        
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "trackingID")
         private Tracking tracking;
@@ -54,7 +54,5 @@ public class LocationPriority{
 
         public void setTracking(Tracking tracking) {
             this.tracking = tracking;
-        }
-
-        
+        }        
 }

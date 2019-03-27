@@ -14,18 +14,24 @@ import javax.persistence.Table;
 
 @Entity
 @Table (name = "producto")
-public class Producto{
+public class Producto {
+    
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+        
         @Column(name = "temp_max", nullable = false)
         private float temp_max;
+        
         @Column(name = "temp_min", nullable = false)
 	private float temp_min;
+        
         @Column(name = "temp_max_ideal", nullable = false)
         private float temp_max_ideal;
+        
         @Column(name = "temp_min_ideal", nullable = false)
         private float temp_min_ideal;
+        
         @Column(name = "name", nullable = false)
         private String name;
         

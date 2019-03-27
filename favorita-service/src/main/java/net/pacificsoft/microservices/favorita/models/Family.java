@@ -12,8 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "family")
-public class Family{
-    
+public class Family {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

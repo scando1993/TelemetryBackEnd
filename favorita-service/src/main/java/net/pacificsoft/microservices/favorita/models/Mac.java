@@ -11,19 +11,19 @@ import javax.persistence.Table;
 @Table (name = "mac")
 public class Mac{
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-        
-        @Column(name = "mac", nullable = false)
-	private String mac;
-        
-         @Column(name = "family", nullable = false)
-	private String family;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
-        public long getId() {
-            return id;
-        }
+    @Column(name = "mac", nullable = false)
+    private String mac;
+
+    @Column(name = "family", nullable = false)
+    private String family;
+
+    public long getId() {
+        return id;
+    }
 
         public void setId(long id) {
             this.id = id;
@@ -41,7 +41,7 @@ public class Mac{
             return family;
         }
 
-        public void setFamily(String family) {
-            this.family = family;
-        }
+    public void setFamily(String family) {
+        this.family = family;
+    } 
 }
