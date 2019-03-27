@@ -1,16 +1,10 @@
 package net.pacificsoft.microservices.favorita.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,19 +14,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import net.pacificsoft.microservices.favorita.models.application.Ruta;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 @Entity
 @Table (name = "device")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = Device.class)
-@EnableAutoConfiguration(exclude = {
-        JpaRepositoriesAutoConfiguration.class
-})
-public class Device implements Serializable{
+public class Device{
 
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
@@ -44,59 +30,43 @@ public class Device implements Serializable{
         @Column(name = "name", nullable = false)
         private String name;
 
-
-        @JsonIgnore
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "groupID")
         private Group groupFamily;
 
-        @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
-        @JsonIdentityReference(alwaysAsId = true)
         private Set<Ruta> rutas = new HashSet<>();
         
-        @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
-        @JsonIdentityReference(alwaysAsId = true)
         private Set<Tracking> trackings = new HashSet<>();
         
-        @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
-        @JsonIdentityReference(alwaysAsId = true)
         private Set<RawSensorData> rawSensorDatas = new HashSet<>();
         
-        @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
-        @JsonIdentityReference(alwaysAsId = true)
         private Set<Alerta> alertas = new HashSet<>();
         
-        @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
-        @JsonIdentityReference(alwaysAsId = true)
         private Set<Telemetria> telemetrias = new HashSet<>();
         
-        @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
-        @JsonIdentityReference(alwaysAsId = true)
         private Set<GoApiResponse> goApiResponses = new HashSet<>();
         
-        @JsonIgnore
         @OneToOne(fetch = FetchType.EAGER,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
-        @JsonIdentityReference(alwaysAsId = true)
         private Status status;
         
         /*@OneToOne(fetch = FetchType.LAZY)
@@ -117,10 +87,7 @@ public class Device implements Serializable{
             this.groupFamily = groupFamily;
             this.status = status;
         }
-        
-        
 
-        
         public long getId() {
             return id;
         }
@@ -206,26 +173,21 @@ public class Device implements Serializable{
             return groupFamily;
         }
 
-    public void setGroupFamily(Group groupFamily) {
-        this.groupFamily = groupFamily;
-    }
+        public void setGroupFamily(Group groupFamily) {
+            this.groupFamily = groupFamily;
+        }
 
-    public Set<GoApiResponse> getGoApiResponses() {
-        return goApiResponses;
-    }
+        public Set<GoApiResponse> getGoApiResponses() {
+            return goApiResponses;
+        }
 
-    /*public Features getFeatures() {
-    return features;
-    }
-    public void setFeatures(Features features) {
-    this.features = features;
-    }*/
-    public void setGoApiResponses(Set<GoApiResponse> goApiResponses) {
-        this.goApiResponses = goApiResponses;
-    }
-
-    @Override
-    public String toString() {
-        return "Bodega: "+id+" "+family+" "+name;
-    }
+        /*public Features getFeatures() {
+        return features;
+        }
+        public void setFeatures(Features features) {
+        this.features = features;
+        }*/
+        public void setGoApiResponses(Set<GoApiResponse> goApiResponses) {
+            this.goApiResponses = goApiResponses;
+        }
 }
