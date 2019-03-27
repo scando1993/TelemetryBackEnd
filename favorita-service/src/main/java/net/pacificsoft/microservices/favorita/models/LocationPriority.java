@@ -1,47 +1,30 @@
 package net.pacificsoft.microservices.favorita.models;
 
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 
 @Entity
 @Table(name = "locationPriority")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-@EnableAutoConfiguration(exclude = {
-        JpaRepositoriesAutoConfiguration.class
-})
-public class LocationPriority implements Serializable{
+public class LocationPriority{
     
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-	    private long id;
+	private long id;
         @Column(name = "name", nullable = false)
-	    private String name;
+	private String name;
         @Column(name = "priority", nullable = false)
         private int priority;
-
-        @JsonIgnore
+        
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "trackingID")
         private Tracking tracking;
 
-    public LocationPriority(String name, int priority) {
-        this.name = name;
-        this.priority = priority;
-    }
-    public LocationPriority(){}
+        public LocationPriority(String name, int priority) {
+            this.name = name;
+            this.priority = priority;
+        }
+        public LocationPriority(){}
 
-    public long getId() {
+        public long getId() {
             return id;
         }
 
@@ -71,7 +54,5 @@ public class LocationPriority implements Serializable{
 
         public void setTracking(Tracking tracking) {
             this.tracking = tracking;
-        }
-
-        
+        }        
 }

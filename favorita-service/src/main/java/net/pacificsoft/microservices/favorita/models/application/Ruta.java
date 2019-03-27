@@ -1,18 +1,12 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,16 +16,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import net.pacificsoft.microservices.favorita.models.Alerta;
 import net.pacificsoft.microservices.favorita.models.Device;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table (name = "ruta")
-@EntityListeners(AuditingEntityListener.class)
-//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class Ruta implements Serializable{
+public class Ruta{
 
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,11 +55,9 @@ public class Ruta implements Serializable{
         @JoinColumn(name = "localFinID")
         private Locales localFin;
         
-        @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "ruta")
-        @JsonIdentityReference(alwaysAsId = true)
         private Set<Alerta> alertas = new HashSet<>();
 
         public Ruta(Date start_date, Date end_date) {
@@ -150,8 +138,5 @@ public class Ruta implements Serializable{
 
         public void setAlertas(Set<Alerta> alertas) {
             this.alertas = alertas;
-        }   
-        
-        
-        
+        }        
 }

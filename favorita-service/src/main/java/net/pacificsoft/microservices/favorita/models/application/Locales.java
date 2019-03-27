@@ -1,49 +1,40 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table (name = "locales")
-@EntityListeners(AuditingEntityListener.class)
-//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class Locales implements Serializable{
+public class Locales{
 
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+        
         @Column(name = "numLoc", nullable = false)
         private long numLoc;
+        
         @Column(name = "length", nullable = false)
         private long length;
+        
         @Column(name = "latitude", nullable = false)
         private long latitude;
+        
         @Column(name = "name", nullable = false)
 	private String name;
+        
         @Column(name = "family", nullable = false)
         private String family;
         
-
-        @JsonIgnore
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "ciudadID")
         private Ciudad ciudad;
@@ -51,19 +42,16 @@ public class Locales implements Serializable{
         @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "localInicio")
-        @JsonIdentityReference(alwaysAsId = true)
         private Ruta rutaInicio;
         
         @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "localFin")
-        @JsonIdentityReference(alwaysAsId = true)
         private Ruta rutaFin;
         
         @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "locales")
-        @JsonIdentityReference(alwaysAsId = true)
         private Formato formato;
 
         public long getId() {
@@ -144,10 +132,5 @@ public class Locales implements Serializable{
 
         public void setFormato(Formato formato) {
             this.formato = formato;
-        }
-
-        
-        public String toString(){
-            return "Locales: "+id+" "+numLoc + " "+length+" "+latitude+" "+name+" ";
         }
 }
