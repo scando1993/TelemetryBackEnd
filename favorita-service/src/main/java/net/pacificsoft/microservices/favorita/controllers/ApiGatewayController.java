@@ -58,6 +58,8 @@ public class ApiGatewayController {
     private WifiScanRepository wifiScanRepository;
     @Autowired
     private LocationGroupRepository locationGroupRepository;
+    @Autowired
+    private MacRepository macRepository;
 
     final String uri = "http://104.209.196.204:9090/track";
     //final String uri = "http://172.16.10.41:8005/track";
@@ -123,7 +125,7 @@ public class ApiGatewayController {
                 //creating alert
                 Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, continuing ith Device: unknown");
                 postAlert(alerta, device);
-                validDevice = false;
+                //validDevice = false;
             }
             //-----------creating rawsSensorData
             //RawSensorData rawSensorData = (RawSensorData)jDataBody.toMap();
@@ -142,6 +144,14 @@ public class ApiGatewayController {
             }
 
             //-------getting Families
+            String family = findFamilyMac(wifiList);
+            if(family.compareTo("") == 0){
+                logger.error("Any MAC is associated with any family");
+                Alerta alert = new Alerta("MAC error","MACs do not have any family");
+                postAlert(alert,device);
+                return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PARTIAL_CONTENT);
+            }
+            /*
             Set<Family> families = device.getGroup().getFamilies();
             if(families.size() == 0){
                 logger.error("Device is not associated with any family");
@@ -149,7 +159,7 @@ public class ApiGatewayController {
                 postAlert(alert,device);
                 return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PRECONDITION_FAILED);
             }
-
+            */
 
             //-----creatinig Telemetry
 
@@ -161,15 +171,16 @@ public class ApiGatewayController {
             JSONObject jsonRequesGoServer = new JSONObject();
             JSONObject s = new JSONObject();
             jsonRequesGoServer.put("t", jDataBody.getInt("epoch"));
-            logger.info("T1");
             jsonRequesGoServer.put("d", deviceName);
             s.put("wifi", wifiList);
             jsonRequesGoServer.put("s", s);
+            jsonRequesGoServer.put("f", family);
             JSONObject jData = new JSONObject();
             logger.info("Data prepared to send");
             logger.info("sending data to: " + uri);
             logger.info("" + jsonRequesGoServer.toString());
-            //jData = new JSONObject(restTemplate.postForObject( uri, json1.toString(), String.class));
+            jData = new JSONObject(restTemplate.postForObject( uri, jsonRequesGoServer.toString(), String.class));
+            /*
             for(Family family:families){
                 jsonRequesGoServer.put("f",family.getName());
                 jData = new JSONObject(restTemplate.postForObject( uri, jsonRequesGoServer.toString(), String.class));
@@ -182,6 +193,7 @@ public class ApiGatewayController {
                     break;
                 }
             }
+            */
             logger.info("Successfull Responce");
             if(jData.getJSONObject("message").getJSONObject("location_names").isEmpty()){
                 logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
@@ -664,7 +676,16 @@ public class ApiGatewayController {
         json.put("epochDateTime", dtmFormated);
         return json;
     }
-
+    private String findFamilyMac(JSONObject wifiList){
+        Iterator<String> iterator = wifiList.keys();
+        while(iterator.hasNext()) {
+            String mac = (String) iterator.next();
+            if(macRepository.existsByMac(mac)){
+                return macRepository.findByMac(mac).get(0).getFamily();
+            }
+        }
+        return "";
+    }
     private void postWifiScan (JSONObject wifiList, String url, RestTemplate restTemplate) throws Exception{
         Iterator<String> iterator = wifiList.keys();
         while(iterator.hasNext()){
