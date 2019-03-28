@@ -33,6 +33,7 @@ public class Application {
                                                     Status.class, Telemetria.class, Tracking.class, WifiScan.class, Bodega.class,
                                                     Ciudad.class, Formato.class, Furgon.class, Locales.class, Producto.class,
                                                     Provincia.class, Ruta.class, Zona.class);
+                                config.setDefaultPageSize(Integer.MAX_VALUE);
 			}
 		};
 	}
