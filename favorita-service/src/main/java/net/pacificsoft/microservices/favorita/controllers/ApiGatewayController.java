@@ -774,6 +774,20 @@ public class ApiGatewayController {
         return json;
     }
     private String findFamilyMac(JSONObject wifiList){
+        if(wifiList.has("00:00:00:00:00:00")) {
+            List<WifiScan> wifiScans = wifiScanRepository.findAllOrderById();
+            Iterator<WifiScan> iterator = wifiScans.iterator();
+            while (iterator.hasNext()) {
+                WifiScan wifiScan = iterator.next();
+                String mac = wifiScan.getMAC();
+                if (mac.compareTo("00:00:00:00:00:00") != 0) {
+                    if (macRepository.existsByMac(mac)) {
+                        return macRepository.findByMac(mac).get(0).getFamily();
+                    } else return "";
+                }
+            }
+            return "";
+        }
         Iterator<String> iterator = wifiList.keys();
         while(iterator.hasNext()) {
             String mac = (String) iterator.next();
