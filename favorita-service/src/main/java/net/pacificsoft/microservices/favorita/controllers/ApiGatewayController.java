@@ -78,6 +78,7 @@ public class ApiGatewayController {
     private static final Logger logger = LoggerFactory.getLogger(ApiGatewayController.class);
     private RestTemplate restTemplate = new RestTemplate();
     private SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+
     final long defaultTrackingLocationGroup = 4L;
     private String endPoint;
 
@@ -85,28 +86,119 @@ public class ApiGatewayController {
             "        \"startDate\": \"yyyy-MM-ddTHH:MM\" or \"beginning\",\n" +
             "        \"endDate\": \"yyyy-MM-ddTHH:MM\" or \"now\"}";
 
+    static class EverHubEvent {
+        private String rawData;
+        private String epochDateTime;
+        private Date epoch;
+        private String family;
+        private String device;
+        private Object wifi;
+        private double temperature;
+        private int battery;
+
+        public EverHubEvent(String rawData, String epochDateTime, Date epoch, String family, String device, Object wifi, double temperature, int battery) {
+            this.rawData = rawData;
+            this.epochDateTime = epochDateTime;
+            this.epoch = epoch;
+            this.family = family;
+            this.device = device;
+            this.wifi = wifi;
+            this.temperature = temperature;
+            this.battery = battery;
+        }
+
+        public EverHubEvent() {}
+
+        public String getRawData() {
+            return rawData;
+        }
+
+        public void setRawData(String rawData) {
+            this.rawData = rawData;
+        }
+
+        public String getEpochDateTime() {
+            return epochDateTime;
+        }
+
+        public void setEpochDateTime(String epochDateTime) {
+            this.epochDateTime = epochDateTime;
+        }
+
+        public Date getEpoch() {
+            return epoch;
+        }
+
+        public void setEpoch(Date epoch) {
+            this.epoch = epoch;
+        }
+
+        public String getFamily() {
+            return family;
+        }
+
+        public void setFamily(String family) {
+            this.family = family;
+        }
+
+        public String getDevice() {
+            return device;
+        }
+
+        public void setDevice(String device) {
+            this.device = device;
+        }
+
+        public Object getWifi() {
+            return wifi;
+        }
+
+        public void setWifi(Object wifi) {
+            this.wifi = wifi;
+        }
+
+        public double getTemperature() {
+            return temperature;
+        }
+
+        public void setTemperature(double temperature) {
+            this.temperature = temperature;
+        }
+
+        public int getBattery() {
+            return battery;
+        }
+
+        public void setBattery(int battery) {
+            this.battery = battery;
+        }
+    }
     @PostMapping("/track")
     public ResponseEntity Storage(
             @Valid @RequestBody String dataBody) {
         try{
             boolean validDevice = true;
-
+            as.setTimeZone(TimeZone.getTimeZone("America/Guayaquil"));
+            //JSONObject m = new JSONObject(dataBody);
+            //EverHubEvent everHubEvent = new EverHubEvent();
             // parsing initial data
-            dataBody = "[" + dataBody + "]";
-            JSONArray j = new JSONArray(dataBody);
-            JSONObject jDataBody = j.getJSONObject(0);
+            //dataBody = "[" + dataBody + "]";
+            //JSONArray j = new JSONArray(dataBody);
+            JSONObject jDataBody = new JSONObject(dataBody);
             JSONArray wifis = (JSONArray)jDataBody.remove("wifi");
-            JSONObject wifiList = getWifiMACs(wifis);
 
             int batteryLevel = (int)jDataBody.remove("battery");
             String deviceName = (String)jDataBody.remove("device");
             String familyDevice = (String)jDataBody.remove("family");
             String dtmS = (String) jDataBody.remove("EpochDateTime");
+
             if (dtmS.length() > 16){
                 dtmS = dtmS.substring(0,16);
             }
             jDataBody.put("epochDateTime", dtmS);
+
             Date epochDateTime = as.parse(dtmS);
+            //Date epochDateTime = new Date(jDataBody.getInt("epoch"));
             double temperature = jDataBody.getDouble("temperature");
 
             //------log
@@ -133,6 +225,9 @@ public class ApiGatewayController {
             postRawSensorDara(rawSensorData,device);
             logger.info("Raw data have been storaged");
 
+            //-------Obtainning MACS
+            JSONObject wifiList = getWifiMACs(wifis);
+
             //-----------creating wifiSensor
             postWifiScans(wifiList,rawSensorData);
             logger.info("WifiSensor have been storaged");
@@ -142,6 +237,11 @@ public class ApiGatewayController {
                 Alerta alert = new Alerta("Device error","Device: " + deviceName + " not found, saving data with deviceName: unknown");
                 return new ResponseEntity(alert.toJson().toMap(), HttpStatus.NOT_FOUND);
             }
+
+            //-----creatinig Telemetry
+            Telemetria telemetry = new Telemetria(epochDateTime,"temperature",temperature);
+            postTelemtry(telemetry,device);
+            logger.info("Telemetry have been storaged");
 
             //-------getting Families
             String family = findFamilyMac(wifiList);
@@ -161,24 +261,21 @@ public class ApiGatewayController {
             }
             */
 
-            //-----creatinig Telemetry
-
-            Telemetria telemetry = new Telemetria(epochDateTime,"temperature",temperature);
-            postTelemtry(telemetry,device);
-            logger.info("Telemetry have been storaged");
-
             //-------creating request to send Go server
             JSONObject jsonRequesGoServer = new JSONObject();
+            //----s
             JSONObject s = new JSONObject();
             jsonRequesGoServer.put("t", jDataBody.getInt("epoch"));
             jsonRequesGoServer.put("d", deviceName);
             s.put("wifi", wifiList);
             jsonRequesGoServer.put("s", s);
+            //----f
             jsonRequesGoServer.put("f", family);
-            JSONObject jData = new JSONObject();
+            //----ready to be send
             logger.info("Data prepared to send");
             logger.info("sending data to: " + uri);
             logger.info("" + jsonRequesGoServer.toString());
+            JSONObject jData;
             jData = new JSONObject(restTemplate.postForObject( uri, jsonRequesGoServer.toString(), String.class));
             /*
             for(Family family:families){
@@ -705,6 +802,20 @@ public class ApiGatewayController {
         }
     }
     private JSONObject getWifiMACs(JSONArray wifi){
+        if(wifi.isEmpty()){
+            List<RawSensorData> rawSensorDataList= rawDataRepository.findAll();
+            RawSensorData rawSensorData = rawSensorDataList.get(rawSensorDataList.size() - 2);
+            //List<WifiScan> wifiScans = wifiScanRepository.findByRawSensorDataOrderById(rawSensorData);
+            //wifiScans = wifiScans.subList(0,2);
+            Set<WifiScan> wifiScans = rawSensorData.getWifiScans();
+            Iterator<WifiScan> iterator = wifiScans.iterator();
+            JSONObject json = new JSONObject();
+            while(iterator.hasNext()){
+                WifiScan wifiScan = iterator.next();
+                json.put(wifiScan.getMAC(),wifiScan.getRSSI());
+            }
+            return json;
+        }
         Iterator<Object> iterator = wifi.iterator();
         JSONObject json = new JSONObject();
         while (iterator.hasNext()){
