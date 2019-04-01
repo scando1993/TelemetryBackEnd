@@ -29,7 +29,7 @@ eureka:
 spring:
   datasource:
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://localhost;databaseName=ColdChainTrackDev
+    url: jdbc:sqlserver://pacificsoft.database.windows.net;databaseName=ColdChainTrackDev
     username: soporte
     password: Pacific12Pacific12
     tomcat:
