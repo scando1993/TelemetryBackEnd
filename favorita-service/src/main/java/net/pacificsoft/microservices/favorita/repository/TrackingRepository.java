@@ -17,6 +17,6 @@ public interface TrackingRepository extends JpaRepository<Tracking, Long>{
     List<Tracking> findByDtmGreaterThanEqualAndDtmLessThanEqual(Date start, Date end);
     List<Tracking> findByDtmLessThanEqual(Date end);
     List<Tracking> findByDtmLessThanEqualAndDevice(Date end, Device device);
-
+    List<Tracking> findByDeviceOrderByDtmDesc(Device device);
 
 }

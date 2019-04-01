@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RepositoryRestResource()
 public interface TelemetriaRepository extends JpaRepository<Telemetria, Long>{
-    List<Telemetria> findByDeviceOrderByDtm(Device device);
+    List<Telemetria> findByDeviceOrderByDtmDesc(Device device);
 }

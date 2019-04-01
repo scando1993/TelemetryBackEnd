@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.json.JSONObject;
 
 @Entity
@@ -22,11 +24,11 @@ public class GoApiResponse{
     
     @Column(name = "sucess", nullable = false)
     private boolean sucess;
-
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "messageID")
     private Message message;
-    
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deviceID")
     private Device device;
