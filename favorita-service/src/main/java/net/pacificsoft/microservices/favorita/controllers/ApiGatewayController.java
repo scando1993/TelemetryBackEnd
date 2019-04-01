@@ -79,7 +79,7 @@ public class ApiGatewayController {
     private RestTemplate restTemplate = new RestTemplate();
     private SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-    final long defaultTrackingLocationGroup = 4L;
+    final long defaultTrackingLocationGroup = 1L;
     private String endPoint;
 
     final String formatApiInnerDate = "{\"device\": String,\n" +
@@ -249,6 +249,7 @@ public class ApiGatewayController {
 
             //-------getting Families
             String family = findFamilyMac(wifiList);
+            //family = "favorita";
             if(family.compareTo("") == 0){
                 logger.error("Any MAC is associated with any family");
                 Alerta alert = new Alerta("MAC error","MACs do not have any family");
@@ -295,6 +296,7 @@ public class ApiGatewayController {
                 }
             }
             */
+
             logger.info("Successfull Responce");
             if(jData.getJSONObject("message").getJSONObject("location_names").isEmpty()){
                 logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
@@ -400,7 +402,7 @@ public class ApiGatewayController {
 
             return new ResponseEntity<String>("It's not possible create new Data, the reason: \n" +
                     a,
-                    HttpStatus.NOT_FOUND);
+                    HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }
@@ -723,7 +725,7 @@ public class ApiGatewayController {
 	public ResponseEntity getLastTelemetry(@RequestParam String device) {
             if(deviceRepository.existsByName(device)){
                 Device d = deviceRepository.findByName(device).get(0);
-                List<Telemetria> ts = telemetriaRepository.findByDeviceOrderByDtm(d);
+                List<Telemetria> ts = telemetriaRepository.findByDeviceOrderByDtmDesc(d);
                 return new ResponseEntity(ts.get(0),HttpStatus.OK);
             }
             else{
