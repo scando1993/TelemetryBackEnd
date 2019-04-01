@@ -80,6 +80,7 @@ public class ApiGatewayController {
     private SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     final long defaultTrackingLocationGroup = 4L;
+    
     private String endPoint;
 
     final String formatApiInnerDate = "{\"device\": String,\n" +
