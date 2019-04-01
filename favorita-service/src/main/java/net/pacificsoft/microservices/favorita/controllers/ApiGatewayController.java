@@ -77,7 +77,7 @@ public class ApiGatewayController {
     final String urlFamily = "http://localhost:2222/family";
     private static final Logger logger = LoggerFactory.getLogger(ApiGatewayController.class);
     private RestTemplate restTemplate = new RestTemplate();
-    private SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+    private SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     final long defaultTrackingLocationGroup = 4L;
     private String endPoint;
@@ -85,7 +85,9 @@ public class ApiGatewayController {
     final String formatApiInnerDate = "{\"device\": String,\n" +
             "        \"startDate\": \"yyyy-MM-ddTHH:MM\" or \"beginning\",\n" +
             "        \"endDate\": \"yyyy-MM-ddTHH:MM\" or \"now\"}";
-
+    final String formatApiRequestJson =  "{\"rawData\":\"String\",\"EpochDateTime\":\"String\",\"epoch\":UnixDate/long,\n +" +
+                                        "\"family\":\"String\",\"device\":\"String\",\"wifi\":[{\"MAC\":\"String\",\"rssi\":int},...}],\n +" +
+                                      "\"temperature\":double,\"battery\":int}";
     static class EverHubEvent {
         private String rawData;
         private String epochDateTime;
@@ -178,29 +180,31 @@ public class ApiGatewayController {
             @Valid @RequestBody String dataBody) {
         try{
             boolean validDevice = true;
-            as.setTimeZone(TimeZone.getTimeZone("America/Guayaquil"));
-            //JSONObject m = new JSONObject(dataBody);
-            //EverHubEvent everHubEvent = new EverHubEvent();
-            // parsing initial data
-            //dataBody = "[" + dataBody + "]";
-            //JSONArray j = new JSONArray(dataBody);
-            JSONObject jDataBody = new JSONObject(dataBody);
-            JSONArray wifis = (JSONArray)jDataBody.remove("wifi");
 
-            int batteryLevel = (int)jDataBody.remove("battery");
-            String deviceName = (String)jDataBody.remove("device");
-            String familyDevice = (String)jDataBody.remove("family");
-            String dtmS = (String) jDataBody.remove("EpochDateTime");
-
-            if (dtmS.length() > 16){
-                dtmS = dtmS.substring(0,16);
+            JSONObject jDataBody;
+            String rawData;
+            Long epoch;
+            JSONArray wifis;
+            String deviceName;
+            String familyDevice;
+            Date epochDateTime;
+            double temperature;
+            int batteryLevel;
+            try {
+                jDataBody = new JSONObject(dataBody);
+                rawData = jDataBody.getString("rawData");
+                epoch = jDataBody.getLong("epoch");
+                wifis = (JSONArray) jDataBody.remove("wifi");
+                deviceName = (String) jDataBody.remove("device");
+                familyDevice = (String) jDataBody.remove("family");
+                String dtmS = (String) jDataBody.remove("EpochDateTime");
+                epochDateTime = as.parse(dtmS);
+                temperature = jDataBody.getDouble("temperature");
+                batteryLevel = (int) jDataBody.remove("battery");
             }
-            jDataBody.put("epochDateTime", dtmS);
-
-            Date epochDateTime = as.parse(dtmS);
-            //Date epochDateTime = new Date(jDataBody.getInt("epoch"));
-            double temperature = jDataBody.getDouble("temperature");
-
+            catch (Exception e){
+                return new ResponseEntity("Expected JSON:\n" + formatApiRequestJson, HttpStatus.BAD_REQUEST);
+            }
             //------log
             logger.info("All data have been parsed correctly");
             //-------
@@ -221,7 +225,7 @@ public class ApiGatewayController {
             }
             //-----------creating rawsSensorData
             //RawSensorData rawSensorData = (RawSensorData)jDataBody.toMap();
-            RawSensorData rawSensorData = new RawSensorData(jDataBody.getLong("epoch"),temperature,epochDateTime,jDataBody.getString("rawData"));
+            RawSensorData rawSensorData = new RawSensorData(epoch,temperature,epochDateTime,rawData);
             postRawSensorDara(rawSensorData,device);
             logger.info("Raw data have been storaged");
 
@@ -265,7 +269,7 @@ public class ApiGatewayController {
             JSONObject jsonRequesGoServer = new JSONObject();
             //----s
             JSONObject s = new JSONObject();
-            jsonRequesGoServer.put("t", jDataBody.getInt("epoch"));
+            jsonRequesGoServer.put("t", epoch);
             jsonRequesGoServer.put("d", deviceName);
             s.put("wifi", wifiList);
             jsonRequesGoServer.put("s", s);
@@ -385,7 +389,7 @@ public class ApiGatewayController {
                 locationNamesRepository.saveAll(listLocationNames);
 
             }
-            logger.info("All predictions,, locationNames and probabilities have been storaged");
+            logger.info("All predictions, locationNames and probabilities have been storaged");
             logger.info("All data have been Successfully storaged");
             System.gc();
 
