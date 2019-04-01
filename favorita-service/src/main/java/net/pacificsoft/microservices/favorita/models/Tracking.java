@@ -1,6 +1,8 @@
 package net.pacificsoft.microservices.favorita.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,15 +28,15 @@ public class Tracking {
         
         @Column(name = "location", nullable = false)
 	private String location;
-        
+    @JsonIgnore
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "deviceID")
         private Device device;
-
+    @JsonIgnore
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "locationGroupID")
         private LocationGroup locationGroup;
-        
+        @JsonIgnore
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "tracking")

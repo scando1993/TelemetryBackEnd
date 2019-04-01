@@ -249,7 +249,7 @@ public class ApiGatewayController {
 
             //-------getting Families
             String family = findFamilyMac(wifiList);
-            //family = "favorita";
+            family = "favorita";
             if(family.compareTo("") == 0){
                 logger.error("Any MAC is associated with any family");
                 Alerta alert = new Alerta("MAC error","MACs do not have any family");
@@ -731,8 +731,21 @@ public class ApiGatewayController {
             else{
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
-           
+
         }
+
+    @GetMapping("/getLastTracking")
+    public ResponseEntity getLastTracking(@RequestParam String device) {
+        if(deviceRepository.existsByName(device)){
+            Device d = deviceRepository.findByName(device).get(0);
+            List<Tracking> ts = trackingRepository.findByDeviceOrderByDtmDesc(d);
+            return new ResponseEntity(ts.get(0),HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+    }
 
 
 /*
