@@ -32,6 +32,9 @@ public class Device{
         
         @Column(name = "uuid", nullable = true)
         private String uuid;
+        
+        @Column(name = "description")
+        private String description;
 
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "groupID")
@@ -201,4 +204,12 @@ public class Device{
         public void setUuid(String uuid) {
             this.uuid = uuid;
         } 
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }        
 }
