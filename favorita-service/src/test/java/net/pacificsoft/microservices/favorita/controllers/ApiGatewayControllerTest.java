@@ -53,9 +53,7 @@ public class ApiGatewayControllerTest {
     @MockBean
     @Autowired
     private DeviceRepository repositoryD;
-    @MockBean
-    @Autowired
-    private FamilyRepository repositoryF;
+
     @MockBean
     @Autowired
     private GroupRepository repositoryG;
@@ -74,12 +72,10 @@ public class ApiGatewayControllerTest {
         //Before call goApi
         rawSensorData = new RawSensorData(2L, (float)45.12, generalDtm, "loquesea");
         device = new Device("test1","2");
-        Family family = new Family("test1");
-        Group group = new Group("Super");
+                Group group = new Group("Super");
 
-        group.getFamilies().add(family);
+
         group.getDevices().add(device);
-        family.setGroup(group);
         device.setGroup(group);
         rawSensorData.setDevice(device);
         device.getRawSensorDatas().add(rawSensorData);

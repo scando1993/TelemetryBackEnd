@@ -11,10 +11,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import net.pacificsoft.microservices.favorita.models.Family;
+
 import net.pacificsoft.microservices.favorita.models.Group;
 import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
-import net.pacificsoft.microservices.favorita.repository.FamilyRepository;
 import net.pacificsoft.microservices.favorita.repository.GroupRepository;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -35,14 +34,11 @@ public class GroupControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @MockBean
-    @Autowired
-    private FamilyRepository repositoryF;
-    
+
     @MockBean
     @Autowired
     private GroupRepository repositoryG;
-    
+
     @MockBean
     @Autowired
     private DeviceRepository repositoryD;
@@ -50,7 +46,7 @@ public class GroupControllerTest {
     @Test
     public void getAll_test() throws Exception{
         Group g1 = new Group("g1");
-        Group g2 = new Group("g1");   
+        Group g2 = new Group("g1");
         List<Group> deviceList = Arrays.asList(g1, g2);
 
         given(repositoryG.findAll()).willReturn(deviceList);
@@ -62,8 +58,8 @@ public class GroupControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name", is(g1.getName())));
     }
-    
-    
+
+
     @Test
     public void getById_test() throws Exception{
         Group g1 = new Group("g1");
@@ -74,7 +70,7 @@ public class GroupControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
-    
+
     @Test
     public void post_test() throws Exception {
         Group g1 = new Group("g1");
@@ -87,7 +83,7 @@ public class GroupControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
-    
+
     
     @Test
     public void delete_test() throws Exception{
