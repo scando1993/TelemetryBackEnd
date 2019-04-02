@@ -34,6 +34,9 @@ public class Application {
                                                     Ciudad.class, Formato.class, Furgon.class, Locales.class, Producto.class,
                                                     Provincia.class, Ruta.class, Zona.class);
                                 config.setDefaultPageSize(Integer.MAX_VALUE);
+                                config.setReturnBodyOnCreate(Boolean.TRUE);
+                                config.setReturnBodyOnUpdate(Boolean.TRUE);
+                                config.setReturnBodyForPutAndPost(Boolean.TRUE);
 			}
 		};
 	}
