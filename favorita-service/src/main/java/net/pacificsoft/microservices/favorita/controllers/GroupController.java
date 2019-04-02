@@ -10,10 +10,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import net.pacificsoft.microservices.favorita.models.application.Bodega;
+import net.pacificsoft.microservices.favorita.repository.application.BodegaRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import net.pacificsoft.microservices.favorita.models.Device;
+import net.pacificsoft.microservices.favorita.models.Family;
 import net.pacificsoft.microservices.favorita.models.Group;
+import net.pacificsoft.microservices.favorita.models.application.Ciudad;
 import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
+import net.pacificsoft.microservices.favorita.repository.FamilyRepository;
 import net.pacificsoft.microservices.favorita.repository.GroupRepository;
+import net.pacificsoft.microservices.favorita.repository.application.CiudadRepository;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -24,7 +34,9 @@ public class GroupController {
     
 	@Autowired
 	private GroupRepository gRepository;
-
+        
+        @Autowired
+	private FamilyRepository familyRepository;
         
         @Autowired
 	private DeviceRepository deviceRepository;
@@ -89,6 +101,10 @@ public class GroupController {
                     for(Device d: g.getDevices()){
                             d.setGroup(null);
                             deviceRepository.save(d);
+                        }
+                    for(Family f: g.getFamilies()){
+                            f.setGroup(null);
+                            familyRepository.save(f);
                         }
                     gRepository.delete(g);
                     return new ResponseEntity(HttpStatus.OK);

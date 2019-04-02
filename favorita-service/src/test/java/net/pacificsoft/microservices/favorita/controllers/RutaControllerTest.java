@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import net.pacificsoft.microservices.favorita.controllers.application.RutaController;
 import net.pacificsoft.microservices.favorita.models.application.Ruta;
+import net.pacificsoft.microservices.favorita.repository.FamilyRepository;
 import net.pacificsoft.microservices.favorita.repository.application.RutaRepository;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasSize;
@@ -31,6 +32,10 @@ public class RutaControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @MockBean
+    @Autowired
+    private FamilyRepository repository;
+    
     @MockBean
     @Autowired
     private RutaRepository repositoryR;
