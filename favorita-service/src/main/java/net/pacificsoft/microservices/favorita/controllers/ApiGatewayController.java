@@ -90,7 +90,7 @@ public class ApiGatewayController {
 
     @PostMapping("/track")
     public ResponseEntity Storage(
-            @Valid @RequestBody string dataBody) {
+            @Valid @RequestBody String dataBody) {
         //Gson gson = new Gson();   
         //dataBody = "[" + dataBody + "]";
         //EverHubEvent everHubEvent = gson.fromJson(dataBody,EverHubEvent.class);
