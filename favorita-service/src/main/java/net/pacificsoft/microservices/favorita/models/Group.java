@@ -28,11 +28,6 @@ public class Group{
             mappedBy = "groupFamily")
     private Set<Device> devices = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "groupFamily")
-    private Set<Family> families = new HashSet<>();
-
     public Group() {
     }
 
@@ -64,11 +59,4 @@ public class Group{
         this.devices = devices;
     }
 
-    public Set<Family> getFamilies() {
-        return families;
-    }
-
-    public void setFamilies(Set<Family> families) {
-        this.families = families;
-    }
 }

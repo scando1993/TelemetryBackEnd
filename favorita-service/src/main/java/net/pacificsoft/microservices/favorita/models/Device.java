@@ -22,11 +22,11 @@ public class Device{
 
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-        
+	    private long id;
+
         @Column(name = "family", nullable = false)
-	private String family;
-        
+	    private String family;
+
         @Column(name = "name", nullable = false)
         private String name;
         
@@ -83,8 +83,16 @@ public class Device{
             this.family = family;
             this.name = name;
         }
-        public Device(){
+
+        public Device(String family, String name, String uuid, String description) {
+            this.family = family;
+            this.name = name;
+            this.uuid = uuid;
+            this.description = description;
         }
+
+        public Device(){
+            }
 
         public Device(long id, String family, String name, Group groupFamily, Status status) {
             this.id = id;
