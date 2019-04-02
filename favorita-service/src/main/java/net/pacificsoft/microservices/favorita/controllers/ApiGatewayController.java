@@ -132,6 +132,10 @@ public class ApiGatewayController {
                 device= (deviceRepository.findByName(deviceName)).get(0);
             }
             else {
+                if(deviceRepository.existsByName("unknown")) {
+                    logger.error("Device: unknown is not storaged in DB");
+                    return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
                 device = (deviceRepository.findByName("unknown")).get(0);
                 logger.warn("Device no found in database, setting relations to device = 'unknown'");
                 //creating alert
