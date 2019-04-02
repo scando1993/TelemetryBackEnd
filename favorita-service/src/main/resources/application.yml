@@ -28,8 +28,8 @@ eureka:
 
 spring:
   datasource:
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://pacificsoft.database.windows.net;databaseName=pruebaTrack
+    #driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:mysql://192.168.10.103/ColdChainTracking?userSSL=false
     username: soporte
     password: Pacific12Pacific12
     tomcat:
@@ -44,4 +44,4 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.SQLServer2012Dialect
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect

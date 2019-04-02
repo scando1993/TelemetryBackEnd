@@ -2,6 +2,7 @@
 package net.pacificsoft.microservices.favorita.controllers;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.google.gson.Gson;
 import net.pacificsoft.microservices.favorita.models.*;
 import net.pacificsoft.microservices.favorita.repository.*;
 import org.json.JSONArray;
@@ -23,9 +24,6 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-//HOLA
-//Allan2
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ApiGatewayController {
@@ -58,6 +56,8 @@ public class ApiGatewayController {
     private WifiScanRepository wifiScanRepository;
     @Autowired
     private LocationGroupRepository locationGroupRepository;
+    @Autowired
+    private MacRepository macRepository;
 
     final String uri = "http://104.209.196.204:9090/track";
     //final String uri = "http://172.16.10.41:8005/track";
@@ -75,38 +75,52 @@ public class ApiGatewayController {
     final String urlFamily = "http://localhost:2222/family";
     private static final Logger logger = LoggerFactory.getLogger(ApiGatewayController.class);
     private RestTemplate restTemplate = new RestTemplate();
-    private SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-    final long defaultTrackingLocationGroup = 3L;
+    private SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+    final long defaultTrackingLocationGroup = 1L;
+
     private String endPoint;
 
     final String formatApiInnerDate = "{\"device\": String,\n" +
             "        \"startDate\": \"yyyy-MM-ddTHH:MM\" or \"beginning\",\n" +
             "        \"endDate\": \"yyyy-MM-ddTHH:MM\" or \"now\"}";
+    final String formatApiRequestJson =  "{\"rawData\":\"String\",\"EpochDateTime\":\"String\",\"epoch\":UnixDate/long,\n +" +
+                                        "\"family\":\"String\",\"device\":\"String\",\"wifi\":[{\"MAC\":\"String\",\"rssi\":int},...}],\n +" +
+                                      "\"temperature\":double,\"battery\":int}";
 
     @PostMapping("/track")
     public ResponseEntity Storage(
             @Valid @RequestBody String dataBody) {
+        //Gson gson = new Gson();   
+        //dataBody = "[" + dataBody + "]";
+        //EverHubEvent everHubEvent = gson.fromJson(dataBody,EverHubEvent.class);
         try{
             boolean validDevice = true;
 
-            // parsing initial data
-            dataBody = "[" + dataBody + "]";
-            JSONArray j = new JSONArray(dataBody);
-            JSONObject jDataBody = j.getJSONObject(0);
-            JSONArray wifis = (JSONArray)jDataBody.remove("wifi");
-            JSONObject wifiList = getWifiMACs(wifis);
-
-            int batteryLevel = (int)jDataBody.remove("battery");
-            String deviceName = (String)jDataBody.remove("device");
-            String familyDevice = (String)jDataBody.remove("family");
-            String dtmS = (String) jDataBody.remove("EpochDateTime");
-            if (dtmS.length() > 16){
-                dtmS = dtmS.substring(0,16);
+            JSONObject jDataBody;
+            String rawData;
+            Long epoch;
+            JSONArray wifis;
+            String deviceName;
+            String familyDevice;
+            Date epochDateTime;
+            double temperature;
+            int batteryLevel;
+            try {
+                jDataBody = new JSONObject(dataBody);
+                rawData = jDataBody.getString("rawData");
+                epoch = jDataBody.getLong("epoch");
+                wifis = (JSONArray) jDataBody.remove("wifi");
+                deviceName = (String) jDataBody.remove("device");
+                familyDevice = (String) jDataBody.remove("family");
+                String dtmS = (String) jDataBody.remove("EpochDateTime");
+                epochDateTime = as.parse(dtmS);
+                temperature = jDataBody.getDouble("temperature");
+                batteryLevel = (int) jDataBody.remove("battery");
             }
-            jDataBody.put("epochDateTime", dtmS);
-            Date epochDateTime = as.parse(dtmS);
-            double temperature = jDataBody.getDouble("temperature");
-
+            catch (Exception e){
+                return new ResponseEntity("Expected JSON:\n" + formatApiRequestJson, HttpStatus.BAD_REQUEST);
+            }
             //------log
             logger.info("All data have been parsed correctly");
             //-------
@@ -123,26 +137,42 @@ public class ApiGatewayController {
                 //creating alert
                 Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, continuing ith Device: unknown");
                 postAlert(alerta, device);
-                validDevice = false;
+                //validDevice = false;
             }
-
-
-
             //-----------creating rawsSensorData
-            RawSensorData rawSensorData = (RawSensorData)jDataBody.toMap();
+            //RawSensorData rawSensorData = (RawSensorData)jDataBody.toMap();
+            RawSensorData rawSensorData = new RawSensorData(epoch,temperature,epochDateTime,rawData);
             postRawSensorDara(rawSensorData,device);
             logger.info("Raw data have been storaged");
+
+            //-------Obtainning MACS
+            JSONObject wifiList = getWifiMACs(wifis);
 
             //-----------creating wifiSensor
             postWifiScans(wifiList,rawSensorData);
             logger.info("WifiSensor have been storaged");
 
             if(!validDevice){
-                Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, saving data with deviceName: unknown");
-                return new ResponseEntity("", HttpStatus.CHECKPOINT);
+                logger.error("Device not found returning 404");
+                Alerta alert = new Alerta("Device error","Device: " + deviceName + " not found, saving data with deviceName: unknown");
+                return new ResponseEntity(alert.toJson().toMap(), HttpStatus.NOT_FOUND);
             }
 
+            //-----creatinig Telemetry
+            Telemetria telemetry = new Telemetria(epochDateTime,"temperature",temperature);
+            postTelemtry(telemetry,device);
+            logger.info("Telemetry have been storaged");
+
             //-------getting Families
+            String family = findFamilyMac(wifiList);
+            family = "favorita";
+            if(family.compareTo("") == 0){
+                logger.error("Any MAC is associated with any family");
+                Alerta alert = new Alerta("MAC error","MACs do not have any family");
+                postAlert(alert,device);
+                return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PARTIAL_CONTENT);
+            }
+            /*
             Set<Family> families = device.getGroup().getFamilies();
             if(families.size() == 0){
                 logger.error("Device is not associated with any family");
@@ -150,27 +180,25 @@ public class ApiGatewayController {
                 postAlert(alert,device);
                 return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PRECONDITION_FAILED);
             }
-
-
-            //-----creatinig Telemetry
-
-            Telemetria telemetry = new Telemetria(epochDateTime,"temperature",temperature);
-            postTelemtry(telemetry,device);
-            logger.info("Telemetry have been storaged");
+            */
 
             //-------creating request to send Go server
             JSONObject jsonRequesGoServer = new JSONObject();
+            //----s
             JSONObject s = new JSONObject();
-            jsonRequesGoServer.put("t", jDataBody.getInt("epoch"));
-            logger.info("T1");
+            jsonRequesGoServer.put("t", epoch);
             jsonRequesGoServer.put("d", deviceName);
             s.put("wifi", wifiList);
             jsonRequesGoServer.put("s", s);
-            JSONObject jData = new JSONObject();
+            //----f
+            jsonRequesGoServer.put("f", family);
+            //----ready to be send
             logger.info("Data prepared to send");
             logger.info("sending data to: " + uri);
             logger.info("" + jsonRequesGoServer.toString());
-            //jData = new JSONObject(restTemplate.postForObject( uri, json1.toString(), String.class));
+            JSONObject jData;
+            jData = new JSONObject(restTemplate.postForObject( uri, jsonRequesGoServer.toString(), String.class));
+            /*
             for(Family family:families){
                 jsonRequesGoServer.put("f",family.getName());
                 jData = new JSONObject(restTemplate.postForObject( uri, jsonRequesGoServer.toString(), String.class));
@@ -183,6 +211,8 @@ public class ApiGatewayController {
                     break;
                 }
             }
+            */
+
             logger.info("Successfull Responce");
             if(jData.getJSONObject("message").getJSONObject("location_names").isEmpty()){
                 logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
@@ -270,15 +300,14 @@ public class ApiGatewayController {
 
                     listProbabilities.add(probability);
                     listLocationNames.add(locationNames);
-
                 }
+                predictionsRepository.save(prediction);
+                messageRepository.save(message);
                 probabilitiesRepository.saveAll(listProbabilities);
                 locationNamesRepository.saveAll(listLocationNames);
-                messageRepository.save(message);
-                predictionsRepository.save(prediction);
 
             }
-            logger.info("All predictions,, locationNames and probabilities have been storaged");
+            logger.info("All predictions, locationNames and probabilities have been storaged");
             logger.info("All data have been Successfully storaged");
             System.gc();
 
@@ -289,7 +318,7 @@ public class ApiGatewayController {
 
             return new ResponseEntity<String>("It's not possible create new Data, the reason: \n" +
                     a,
-                    HttpStatus.NOT_FOUND);
+                    HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }
@@ -612,14 +641,27 @@ public class ApiGatewayController {
 	public ResponseEntity getLastTelemetry(@RequestParam String device) {
             if(deviceRepository.existsByName(device)){
                 Device d = deviceRepository.findByName(device).get(0);
-                List<Telemetria> ts = telemetriaRepository.findByDeviceOrderByDtm(d);
+                List<Telemetria> ts = telemetriaRepository.findByDeviceOrderByDtmDesc(d);
                 return new ResponseEntity(ts.get(0),HttpStatus.OK);
             }
             else{
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
-           
+
         }
+
+    @GetMapping("/getLastTracking")
+    public ResponseEntity getLastTracking(@RequestParam String device) {
+        if(deviceRepository.existsByName(device)){
+            Device d = deviceRepository.findByName(device).get(0);
+            List<Tracking> ts = trackingRepository.findByDeviceOrderByDtmDesc(d);
+            return new ResponseEntity(ts.get(0),HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+    }
 
 
 /*
@@ -666,7 +708,29 @@ public class ApiGatewayController {
         json.put("epochDateTime", dtmFormated);
         return json;
     }
-
+    private String findFamilyMac(JSONObject wifiList){
+        if(wifiList.has("00:00:00:00:00:00")) {
+            List<WifiScan> wifiScans = wifiScanRepository.findAll();
+            for(int i = wifiScans.size() -1; i>=0; i--){
+                WifiScan wifiScan = wifiScans.get(i);
+                String mac = wifiScan.getMAC();
+                if (mac.compareTo("00:00:00:00:00:00") != 0) {
+                    if (macRepository.existsByMac(mac)) {
+                        return macRepository.findByMac(mac).get(0).getFamily();
+                    } else return "";
+                }
+            }
+            return "";
+        }
+        Iterator<String> iterator = wifiList.keys();
+        while(iterator.hasNext()) {
+            String mac = (String) iterator.next();
+            if(macRepository.existsByMac(mac)){
+                return macRepository.findByMac(mac).get(0).getFamily();
+            }
+        }
+        return "";
+    }
     private void postWifiScan (JSONObject wifiList, String url, RestTemplate restTemplate) throws Exception{
         Iterator<String> iterator = wifiList.keys();
         while(iterator.hasNext()){
@@ -686,6 +750,20 @@ public class ApiGatewayController {
         }
     }
     private JSONObject getWifiMACs(JSONArray wifi){
+        if(wifi.isEmpty()){
+            List<RawSensorData> rawSensorDataList= rawDataRepository.findAll();
+            RawSensorData rawSensorData = rawSensorDataList.get(rawSensorDataList.size() - 2);
+            //List<WifiScan> wifiScans = wifiScanRepository.findByRawSensorDataOrderById(rawSensorData);
+            //wifiScans = wifiScans.subList(0,2);
+            Set<WifiScan> wifiScans = rawSensorData.getWifiScans();
+            Iterator<WifiScan> iterator = wifiScans.iterator();
+            JSONObject json = new JSONObject();
+            while(iterator.hasNext()){
+                WifiScan wifiScan = iterator.next();
+                json.put(wifiScan.getMAC(),wifiScan.getRSSI());
+            }
+            return json;
+        }
         Iterator<Object> iterator = wifi.iterator();
         JSONObject json = new JSONObject();
         while (iterator.hasNext()){
@@ -700,26 +778,27 @@ public class ApiGatewayController {
     private void postAlert(Alerta alert, Device device){
         device.getAlertas().add(alert);
         alert.setDevice(device);
-        deviceRepository.save(device);
         alertaRepository.save(alert);
+        deviceRepository.save(device);
     }
     private void postTelemtry(Telemetria telemetry, Device device){
         device.getTelemetrias().add(telemetry);
         telemetry.setDevice(device);
-        deviceRepository.save(device);
         telemetriaRepository.save(telemetry);
+        deviceRepository.save(device);
     }
     private void postRawSensorDara(RawSensorData rawSensorData, Device device){
         device.getRawSensorDatas().add(rawSensorData);
         rawSensorData.setDevice(device);
-        deviceRepository.save(device);
         rawDataRepository.save(rawSensorData);
+        deviceRepository.save(device);
+
     }
     private void postWifiScan(WifiScan wifiScan,RawSensorData rawSensorData){
         rawSensorData.getWifiScans().add(wifiScan);
         wifiScan.setRawSensorData(rawSensorData);
-        rawDataRepository.save(rawSensorData);
         wifiScanRepository.save(wifiScan);
+        rawDataRepository.save(rawSensorData);
     }
     private void postMessageGuess(MessageGuess messageGuess){
         messageGuessRepository.save(messageGuess);
@@ -727,17 +806,17 @@ public class ApiGatewayController {
     private void postMessage(Message message, MessageGuess messageGuess){
         messageGuess.getMessages().add(message);
         message.setMessageGuess(messageGuess);
-        messageGuessRepository.save(messageGuess);
         messageRepository.save(message);
+        messageGuessRepository.save(messageGuess);
     }
     private void postGoApiResponse(GoApiResponse goApiResponse, Message message, Device device){
         device.getGoApiResponses().add(goApiResponse);
         message.setGoApiResponse(goApiResponse);
         goApiResponse.setDevice(device);
         goApiResponse.setMessage(message);
+        goApiResponseRepository.save(goApiResponse);
         deviceRepository.save(device);
         messageRepository.save(message);
-        goApiResponseRepository.save(goApiResponse);
     }
     private void postTracking(Tracking tracking, Device device, long idLocationGroup){
         LocationGroup locationGroup = locationGroupRepository.findById(idLocationGroup).get();
@@ -745,8 +824,8 @@ public class ApiGatewayController {
         device.getTrackings().add(tracking);
         tracking.setDevice(device);
         tracking.setLocationGroup(locationGroup);
+        trackingRepository.save(tracking);
         deviceRepository.save(device);
         locationGroupRepository.save(locationGroup);
-        trackingRepository.save(tracking);
     }
 }
