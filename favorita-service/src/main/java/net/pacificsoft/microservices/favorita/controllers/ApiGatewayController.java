@@ -133,7 +133,7 @@ public class ApiGatewayController {
                 device= (deviceRepository.findByName(deviceName)).get(0);
             }
             else {
-                if(deviceRepository.existsByName("unknown")) {
+                if(!deviceRepository.existsByName("unknown")) {
                     logger.error("Device: unknown is not storaged in DB. Returning 500");
                     return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
@@ -169,8 +169,8 @@ public class ApiGatewayController {
 
             //-------getting Families
             String family = findFamilyMac(wifiList);
-            Set<Family> families = (Set<Family>) new ArrayList<Family>();
-            family = "favorita";
+            Set<Family> families = null;
+            //family = "favorita";
             if(family.compareTo("") == 0){
                 logger.warn("Any MAC is associated with any family. Try with families associated with device");
                 Alerta alert = new Alerta("MAC error","MACs do not have any family");
@@ -189,7 +189,7 @@ public class ApiGatewayController {
 
             //-------creating request to send Go server
             JSONObject jsonRequesGoServer = new JSONObject();
-            JSONObject jData;
+            JSONObject jData = null;
             //----s
             JSONObject s = new JSONObject();
             jsonRequesGoServer.put("t", epoch);
@@ -218,10 +218,12 @@ public class ApiGatewayController {
                     else
                         break;
                 }
-                logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
-                Alerta alert = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family");
-                postAlert(alert,device);
-                return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PRECONDITION_FAILED);
+                if(iterator.hasNext()){
+                    logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
+                    Alerta alert = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family");
+                    postAlert(alert,device);
+                    return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PRECONDITION_FAILED);
+                }
             }
 
             logger.info("Successfull Responce");
