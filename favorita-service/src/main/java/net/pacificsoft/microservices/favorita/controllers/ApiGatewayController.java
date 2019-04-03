@@ -95,7 +95,8 @@ public class ApiGatewayController {
         //dataBody = "[" + dataBody + "]";
         //EverHubEvent everHubEvent = gson.fromJson(dataBody,EverHubEvent.class);
         try{
-            boolean validDevice = true;
+            boolean useUnknownDevice = false;
+            boolean useDeviceFamily = false;
 
             JSONObject jDataBody;
             String rawData;
@@ -132,21 +133,20 @@ public class ApiGatewayController {
                 device= (deviceRepository.findByName(deviceName)).get(0);
             }
             else {
-                if(deviceRepository.existsByName("unknown")) {
-                    logger.error("Device: unknown is not storaged in DB");
+                if(!deviceRepository.existsByName("unknown")) {
+                    logger.error("Device: unknown is not storaged in DB. Returning 500");
                     return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
-                device = (deviceRepository.findByName("unknown")).get(0);
                 logger.warn("Device no found in database, setting relations to device = 'unknown'");
-                //creating alert
+                device = (deviceRepository.findByName("unknown")).get(0);
+                useUnknownDevice = true;
+                //-------creating alert
                 Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, continuing ith Device: unknown");
                 postAlert(alerta, device);
-                //validDevice = false;
             }
             //-----------creating rawsSensorData
-            //RawSensorData rawSensorData = (RawSensorData)jDataBody.toMap();
             RawSensorData rawSensorData = new RawSensorData(epoch,temperature,epochDateTime,rawData);
-            postRawSensorDara(rawSensorData,device);
+            postRawSensorDara(rawSensorData, device);
             logger.info("Raw data have been storaged");
 
             //-------Obtainning MACS
@@ -155,13 +155,13 @@ public class ApiGatewayController {
             //-----------creating wifiSensor
             postWifiScans(wifiList,rawSensorData);
             logger.info("WifiSensor have been storaged");
-
+/*
             if(!validDevice){
                 logger.error("Device not found returning 404");
                 Alerta alert = new Alerta("Device error","Device: " + deviceName + " not found, saving data with deviceName: unknown");
                 return new ResponseEntity(alert.toJson().toMap(), HttpStatus.NOT_FOUND);
             }
-
+*/
             //-----creatinig Telemetry
             Telemetria telemetry = new Telemetria(epochDateTime,"temperature",temperature);
             postTelemtry(telemetry,device);
@@ -169,53 +169,62 @@ public class ApiGatewayController {
 
             //-------getting Families
             String family = findFamilyMac(wifiList);
-            family = "favorita";
+            Set<Family> families = null;
+            //family = "favorita";
             if(family.compareTo("") == 0){
-                logger.error("Any MAC is associated with any family");
+                logger.warn("Any MAC is associated with any family. Try with families associated with device");
                 Alerta alert = new Alerta("MAC error","MACs do not have any family");
                 postAlert(alert,device);
-                return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PARTIAL_CONTENT);
+                if(useUnknownDevice)
+                    return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PARTIAL_CONTENT);
+                families = device.getGroup().getFamilies();
+                useDeviceFamily = true;
+                if(families.size() == 0){
+                    logger.error("Device is not associated with any family");
+                    Alerta alert2 = new Alerta("Device error","Device does not have any family");
+                    postAlert(alert2,device);
+                    return new ResponseEntity("Could not found any family associated with given MACs or device", HttpStatus.INTERNAL_SERVER_ERROR);
+                }
             }
-            /*
-            Set<Family> families = device.getGroup().getFamilies();
-            if(families.size() == 0){
-                logger.error("Device is not associated with any family");
-                Alerta alert = new Alerta("Device error","Device does not have any family");
-                postAlert(alert,device);
-                return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PRECONDITION_FAILED);
-            }
-            */
 
             //-------creating request to send Go server
             JSONObject jsonRequesGoServer = new JSONObject();
+            JSONObject jData = null;
             //----s
             JSONObject s = new JSONObject();
             jsonRequesGoServer.put("t", epoch);
             jsonRequesGoServer.put("d", deviceName);
             s.put("wifi", wifiList);
             jsonRequesGoServer.put("s", s);
-            //----f
-            jsonRequesGoServer.put("f", family);
-            //----ready to be send
-            logger.info("Data prepared to send");
-            logger.info("sending data to: " + uri);
-            logger.info("" + jsonRequesGoServer.toString());
-            JSONObject jData;
-            jData = new JSONObject(restTemplate.postForObject( uri, jsonRequesGoServer.toString(), String.class));
-            /*
-            for(Family family:families){
-                jsonRequesGoServer.put("f",family.getName());
+            if(!useDeviceFamily){
+                //----f
+                jsonRequesGoServer.put("f", family);
+                //----ready to be send
+                logger.info("Data prepared to send");
+                logger.info("sending data to: " + uri);
+                logger.info("" + jsonRequesGoServer.toString());
                 jData = new JSONObject(restTemplate.postForObject( uri, jsonRequesGoServer.toString(), String.class));
-                Boolean empty = jData.getJSONObject("message").getJSONObject("location_names").isEmpty();
-                logger.info("" + empty);
-                if(empty){
-                    jsonRequesGoServer.remove("f");
+            }
+            else{
+                Iterator<Family> iterator = families.iterator();
+                while(iterator.hasNext()){
+                    Family f = iterator.next();
+                    jsonRequesGoServer.put("f",f.getName());
+                    jData = new JSONObject(restTemplate.postForObject( uri, jsonRequesGoServer.toString(), String.class));
+                    Boolean empty = jData.getJSONObject("message").getJSONObject("location_names").isEmpty();
+                    logger.info("" + empty);
+                    if(empty)
+                        jsonRequesGoServer.remove("f");
+                    else
+                        break;
                 }
-                else{
-                    break;
+                if(iterator.hasNext()){
+                    logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
+                    Alerta alert = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family");
+                    postAlert(alert,device);
+                    return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PRECONDITION_FAILED);
                 }
             }
-            */
 
             logger.info("Successfull Responce");
             if(jData.getJSONObject("message").getJSONObject("location_names").isEmpty()){
@@ -590,6 +599,7 @@ public class ApiGatewayController {
     public ResponseEntity getTrackingBetweenDates(
             @Valid @RequestBody String data) {
         try{
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
             JSONObject jData = new JSONObject(data);
             String deviceName = jData.getString("device");
             String startDate = jData.getString("startDate");
@@ -605,11 +615,11 @@ public class ApiGatewayController {
             Date end;
             try {
                 if (startDate.compareTo("beginning") != 0)
-                    start = as.parse(startDate);
+                    start = formater.parse(startDate);
                 else
                     start = new Date();
                 if (endDate.compareTo("now") != 0)
-                    end = as.parse(endDate);
+                    end = formater.parse(endDate);
                 else
                     end = new Date();
             }
@@ -628,12 +638,13 @@ public class ApiGatewayController {
             logger.error("Could not parse data. Bad request");
             return new ResponseEntity<String>("Make sure that you had sent the correct JSON \n" + formatApiInnerDate, HttpStatus.BAD_REQUEST);
         }
-
     }
+
     @GetMapping("/getTelemetryBetweenDates")
     public ResponseEntity getTelemetryBetweenDate(
             @Valid @RequestBody String data) {
         try{
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
             JSONObject jData = new JSONObject(data);
             String deviceName = jData.getString("device");
             String startDate = jData.getString("startDate");
@@ -649,11 +660,11 @@ public class ApiGatewayController {
             Date end;
             try {
                 if (startDate.compareTo("beginning") != 0)
-                    start = as.parse(startDate);
+                    start = formater.parse(startDate);
                 else
                     start = new Date();
                 if (endDate.compareTo("now") != 0)
-                    end = as.parse(endDate);
+                    end = formater.parse(endDate);
                 else
                     end = new Date();
             }
