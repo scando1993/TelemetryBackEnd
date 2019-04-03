@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,10 +25,9 @@ public class LocationGroup{
         @Column(name = "name", nullable = false)
 	private String name;
          
-        @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "locationGroup")
-        private Set<Tracking> trackings = new HashSet<>();
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "groupid")
+        private Group groupFamily;
 
         public LocationGroup(){
         }
@@ -50,11 +51,12 @@ public class LocationGroup{
             this.name = name;
         }
 
-        public Set<Tracking> getTrackings() {
-            return trackings;
-        }
+    public Group getGroupFamily() {
+        return groupFamily;
+    }
 
-        public void setTrackings(Set<Tracking> trackings) {
-            this.trackings = trackings;
-        }   
+    public void setGroupFamily(Group groupFamily) {
+        this.groupFamily = groupFamily;
+    }
+        
 }

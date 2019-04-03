@@ -15,8 +15,8 @@ public class LocationPriority{
         private int priority;
         
         @ManyToOne(fetch = FetchType.EAGER)
-        @JoinColumn(name = "trackingID")
-        private Tracking tracking;
+        @JoinColumn(name = "groupid")
+        private Group groupFamily;
 
         public LocationPriority(String name, int priority) {
             this.name = name;
@@ -48,11 +48,13 @@ public class LocationPriority{
             this.priority = priority;
         }
 
-        public Tracking getTracking() {
-            return tracking;
-        }
+    public Group getGroupFamily() {
+        return groupFamily;
+    }
 
-        public void setTracking(Tracking tracking) {
-            this.tracking = tracking;
-        }        
+    public void setGroupFamily(Group groupFamily) {
+        this.groupFamily = groupFamily;
+    }
+
+        
 }

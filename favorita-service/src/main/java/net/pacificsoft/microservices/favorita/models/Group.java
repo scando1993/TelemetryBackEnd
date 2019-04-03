@@ -32,6 +32,16 @@ public class Group{
             fetch = FetchType.LAZY,
             mappedBy = "groupFamily")
     private Set<Family> families = new HashSet<>();
+    
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "groupFamily")
+    private Set<LocationGroup> locationGroups = new HashSet<>();
+    
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "groupFamily")
+    private Set<LocationPriority> locationPrioritys = new HashSet<>();
 
     public Group() {
     }
@@ -71,4 +81,22 @@ public class Group{
     public void setFamilies(Set<Family> families) {
         this.families = families;
     }
+
+    public Set<LocationGroup> getLocationGroups() {
+        return locationGroups;
+    }
+
+    public void setLocationGroups(Set<LocationGroup> locationGroups) {
+        this.locationGroups = locationGroups;
+    }
+
+    public Set<LocationPriority> getLocationPrioritys() {
+        return locationPrioritys;
+    }
+
+    public void setLocationPrioritys(Set<LocationPriority> locationPrioritys) {
+        this.locationPrioritys = locationPrioritys;
+    }
+    
+    
 }

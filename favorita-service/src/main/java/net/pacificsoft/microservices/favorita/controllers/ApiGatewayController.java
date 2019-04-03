@@ -878,10 +878,10 @@ public class ApiGatewayController {
     }
     private void postTracking(Tracking tracking, Device device, long idLocationGroup){
         LocationGroup locationGroup = locationGroupRepository.findById(idLocationGroup).get();
-        locationGroup.getTrackings().add(tracking);
+        //locationGroup.getTrackings().add(tracking);
         device.getTrackings().add(tracking);
         tracking.setDevice(device);
-        tracking.setLocationGroup(locationGroup);
+        //tracking.setLocationGroup(locationGroup);
         trackingRepository.save(tracking);
         deviceRepository.save(device);
         locationGroupRepository.save(locationGroup);

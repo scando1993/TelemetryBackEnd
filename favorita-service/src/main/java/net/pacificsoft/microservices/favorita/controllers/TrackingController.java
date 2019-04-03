@@ -75,9 +75,9 @@ public class TrackingController {
                         Device device = deviceRepository.findById(deviceId).get();
                         LocationGroup location = locationGroupRepository.findById(locationId).get();
                         device.getTrackings().add(tracking);
-                        location.getTrackings().add(tracking);
+                        //location.getTrackings().add(tracking);
                         tracking.setDevice(device);
-                        tracking.setLocationGroup(location);
+                        //tracking.setLocationGroup(location);
                         Tracking t = trackingRepository.save(tracking);
                         deviceRepository.save(device);
                         locationGroupRepository.save(location);
@@ -107,11 +107,11 @@ public class TrackingController {
                     Device device = deviceRepository.findById(deviceId).get();
                     LocationGroup location = locationGroupRepository.findById(locationId).get();
                     device.getTrackings().add(tracking);
-                    location.getTrackings().add(tracking);
+                    //location.getTrackings().add(tracking);
                     tracking.setLocation(trackingDetails.getLocation());
                     tracking.setDtm(trackingDetails.getDtm());
                     tracking.setDevice(device);
-                    tracking.setLocationGroup(location);
+                    //tracking.setLocationGroup(location);
                     final Tracking updatedTracking = trackingRepository.save(tracking);
                     deviceRepository.save(device);
                     locationGroupRepository.save(location);
@@ -130,9 +130,9 @@ public class TrackingController {
                 if(trackingRepository.existsById(trackingId)){
                     Tracking tracking = trackingRepository.findById(trackingId).get();
                     tracking.getDevice().getTrackings().remove(tracking);
-                    tracking.getLocationGroup().getTrackings().remove(tracking);
+                    //tracking.getLocationGroup().getTrackings().remove(tracking);
                     deviceRepository.save(tracking.getDevice());
-                    locationGroupRepository.save(tracking.getLocationGroup());
+                    //locationGroupRepository.save(tracking.getLocationGroup());
                     trackingRepository.delete(tracking);
                     return new ResponseEntity(HttpStatus.OK);
                 }
