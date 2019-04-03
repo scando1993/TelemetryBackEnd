@@ -26,7 +26,7 @@ public class Application {
 			public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
 				config.setRepositoryDetectionStrategy(
 						RepositoryDetectionStrategy.RepositoryDetectionStrategies.ANNOTATED);
-                                config.exposeIdsFor(Alerta.class, Device.class, Features.class,
+                                config.exposeIdsFor(Alerta.class, Device.class, Family.class, Features.class,
                                                     GoApiResponse.class, Group.class, LocationGroup.class, LocationNames.class,
                                                     LocationPriority.class, Mac.class, Message.class, MessageGuess.class,
                                                     Prediction.class, Probabilities.class, RawSensorData.class, SigfoxMessage.class,

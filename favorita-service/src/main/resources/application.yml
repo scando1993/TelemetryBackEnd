@@ -29,7 +29,7 @@ eureka:
 spring:
   datasource:
     #driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:mysql://192.168.10.103/ColdChainTracking?userSSL=false
+    url: jdbc:mysql://192.168.10.103/ColdChainTracking?userSSL=false&serverTimezone=UTC
     username: soporte
     password: Pacific12Pacific12
     tomcat:
