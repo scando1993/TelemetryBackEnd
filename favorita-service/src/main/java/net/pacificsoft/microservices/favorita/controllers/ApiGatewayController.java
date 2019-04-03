@@ -597,6 +597,7 @@ public class ApiGatewayController {
     public ResponseEntity getTrackingBetweenDates(
             @Valid @RequestBody String data) {
         try{
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
             JSONObject jData = new JSONObject(data);
             String deviceName = jData.getString("device");
             String startDate = jData.getString("startDate");
@@ -612,11 +613,11 @@ public class ApiGatewayController {
             Date end;
             try {
                 if (startDate.compareTo("beginning") != 0)
-                    start = as.parse(startDate);
+                    start = formater.parse(startDate);
                 else
                     start = new Date();
                 if (endDate.compareTo("now") != 0)
-                    end = as.parse(endDate);
+                    end = formater.parse(endDate);
                 else
                     end = new Date();
             }
@@ -636,53 +637,12 @@ public class ApiGatewayController {
             return new ResponseEntity<String>("Make sure that you had sent the correct JSON \n" + formatApiInnerDate, HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/getTelemetryInnerDate")
-    public ResponseEntity getTelemetryInnerDate(
-            @Valid @RequestBody String data) {
-        try{
-            JSONObject jData = new JSONObject(data);
-            String deviceName = jData.getString("device");
-            String startDate = jData.getString("startDate");
-            String endDate = jData.getString("endDate");
-            Device device = new Device();
-            if(deviceRepository.existsByName(deviceName)){
-                device = deviceRepository.findByName(deviceName).get(0);
-            }
-            else{
-                return new ResponseEntity("No device Found", HttpStatus.NOT_FOUND);
-            }
-            Date start;
-            Date end;
-            try {
-                if (startDate.compareTo("beginning") != 0)
-                    start = as.parse(startDate);
-                else
-                    start = new Date();
-                if (endDate.compareTo("now") != 0)
-                    end = as.parse(endDate);
-                else
-                    end = new Date();
-            }
-            catch (Exception e){
-                logger.error("Bad Date");
-                return new ResponseEntity<String>("Make sure that you had sent the Date Format\n" + formatApiInnerDate, HttpStatus.BAD_REQUEST);
-            }
-            ArrayList<Telemetria> telemetries;
-            if (startDate.compareTo("beginning") != 0)
-                telemetries = (ArrayList<Telemetria>) telemetriaRepository.findByDtmBetweenAndDevice(start,end,device);
-            else
-                telemetries = (ArrayList<Telemetria>)telemetriaRepository.findByDtmLessThanEqualAndDevice(end, device);
-            return new ResponseEntity(telemetries,HttpStatus.OK);
-        }
-        catch(Exception e){
-            logger.error("Could not parse data. Bad request");
-            return new ResponseEntity<String>("Make sure that you had sent the correct JSON \n" + formatApiInnerDate, HttpStatus.BAD_REQUEST);
-        }
-    }
+
     @GetMapping("/getTelemetryBetweenDates")
     public ResponseEntity getTelemetryBetweenDate(
             @Valid @RequestBody String data) {
         try{
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
             JSONObject jData = new JSONObject(data);
             String deviceName = jData.getString("device");
             String startDate = jData.getString("startDate");
@@ -698,11 +658,11 @@ public class ApiGatewayController {
             Date end;
             try {
                 if (startDate.compareTo("beginning") != 0)
-                    start = as.parse(startDate);
+                    start = formater.parse(startDate);
                 else
                     start = new Date();
                 if (endDate.compareTo("now") != 0)
-                    end = as.parse(endDate);
+                    end = formater.parse(endDate);
                 else
                     end = new Date();
             }
