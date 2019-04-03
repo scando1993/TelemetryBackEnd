@@ -586,8 +586,8 @@ public class ApiGatewayController {
     }
      */
 
-    @GetMapping("/getTrackingInnerDate")
-    public ResponseEntity getTrackingInnerDate(
+    @GetMapping("/getTrackingBetweenDates")
+    public ResponseEntity getTrackingBetweenDates(
             @Valid @RequestBody String data) {
         try{
             JSONObject jData = new JSONObject(data);
@@ -630,8 +630,8 @@ public class ApiGatewayController {
         }
 
     }
-    @GetMapping("/getTelemetryInnerDate")
-    public ResponseEntity getTelemetryInnerDate(
+    @GetMapping("/getTelemetryBetweenDates")
+    public ResponseEntity getTelemetryBetweenDate(
             @Valid @RequestBody String data) {
         try{
             JSONObject jData = new JSONObject(data);
