@@ -720,6 +720,32 @@ public class ApiGatewayController {
         }
 
     }
+    
+    @GetMapping("/getDeviceTrack")
+    public ResponseEntity getOrderTrackingsDevice(@RequestParam String device) {
+        if(deviceRepository.existsByName(device)){
+            Device d = deviceRepository.findByName(device).get(0);
+            List<Tracking> ts = trackingRepository.findByDeviceOrderByDtmDesc(d);
+            return new ResponseEntity(ts,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+    }
+    
+    @GetMapping("/getDeviceTelemetry")
+    public ResponseEntity getOrderTelemetrysDevice(@RequestParam String device) {
+        if(deviceRepository.existsByName(device)){
+            Device d = deviceRepository.findByName(device).get(0);
+            List<Telemetria> ts = telemetriaRepository.findByDeviceOrderByDtmDesc(d);
+            return new ResponseEntity(ts,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+    }
 
 
 /*
@@ -886,4 +912,6 @@ public class ApiGatewayController {
         deviceRepository.save(device);
         locationGroupRepository.save(locationGroup);
     }
+    
+    
 }
