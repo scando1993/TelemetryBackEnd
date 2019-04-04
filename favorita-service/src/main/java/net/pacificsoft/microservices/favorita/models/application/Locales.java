@@ -1,5 +1,7 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -39,15 +42,15 @@ public class Locales{
         @JoinColumn(name = "ciudadID")
         private Ciudad ciudad;
         
-        @OneToOne(cascade = CascadeType.ALL,
+        @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "localInicio")
-        private Ruta rutaInicio;
+        private Set<Ruta> rutasInicio = new HashSet<>();
         
-        @OneToOne(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+        @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
             mappedBy = "localFin")
-        private Ruta rutaFin;
+        private Set<Ruta> rutasFin = new HashSet<>();
         
         @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
@@ -110,20 +113,20 @@ public class Locales{
             this.ciudad = ciudad;
         }
 
-        public Ruta getRutaInicio() {
-            return rutaInicio;
+        public Set<Ruta> getRutasInicio() {
+            return rutasInicio;
         }
 
-        public void setRutaInicio(Ruta rutaInicio) {
-            this.rutaInicio = rutaInicio;
+        public void setRutasInicio(Set<Ruta> rutasInicio) {
+            this.rutasInicio = rutasInicio;
         }
 
-        public Ruta getRutaFin() {
-            return rutaFin;
+        public Set<Ruta> getRutasFin() {
+            return rutasFin;
         }
 
-        public void setRutaFin(Ruta rutaFin) {
-            this.rutaFin = rutaFin;
+        public void setRutasFin(Set<Ruta> rutasFin) {
+            this.rutasFin = rutasFin;
         }
 
         public Formato getFormato() {
