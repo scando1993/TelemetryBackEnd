@@ -152,9 +152,9 @@ public class TrackingControllerTest {
         Device device = new Device("family","device");
         LocationGroup locationGroup = new LocationGroup("locationG");
         tracking.setDevice(device);
-        tracking.setLocationGroup(locationGroup);
+        //tracking.setLocationGroup(locationGroup);
         device.getTrackings().add(tracking);
-        locationGroup.getTrackings().add(tracking);
+        //locationGroup.getTrackings().add(tracking);
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(tracking));
