@@ -228,9 +228,11 @@ public class ApiGatewayController {
 
             logger.info("Successfull Responce");
             if(jData.getJSONObject("message").getJSONObject("location_names").isEmpty()){
-                logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
-                Alerta alert = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family");
+                logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?");
+                Alerta alert = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?");
                 postAlert(alert,device);
+                Tracking tracking = new Tracking("?", epochDateTime);
+                postTracking(tracking,device,defaultTrackingLocationGroup);
                 return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PRECONDITION_FAILED);
             }
 
