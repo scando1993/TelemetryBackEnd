@@ -58,6 +58,8 @@ public class ApiGatewayController {
     private LocationGroupRepository locationGroupRepository;
     @Autowired
     private MacRepository macRepository;
+    @Autowired
+    private StatusRepository statusRepository;
 
     final String uri = "http://104.209.196.204:9090/track";
     //final String uri = "http://172.16.10.41:8005/track";
@@ -144,6 +146,10 @@ public class ApiGatewayController {
                 Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, continuing ith Device: unknown");
                 postAlert(alerta, device);
             }
+            //-----------updating Device Status
+            updateStatus(device, batteryLevel, epochDateTime);
+            logger.info("Device status updated");
+
             //-----------creating rawsSensorData
             RawSensorData rawSensorData = new RawSensorData(epoch,temperature,epochDateTime,rawData);
             postRawSensorDara(rawSensorData, device);
@@ -914,6 +920,11 @@ public class ApiGatewayController {
         deviceRepository.save(device);
         locationGroupRepository.save(locationGroup);
     }
-    
+    private void updateStatus(Device device, int battery, Date lastTransmition) {
+        Status status = device.getStatus();
+        status.setBatery(battery);
+        status.setLast_transmision(lastTransmition);
+        statusRepository.save(status);
+    }
     
 }
