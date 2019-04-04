@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.Date;
 import java.util.List;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -18,5 +19,7 @@ public interface TrackingRepository extends JpaRepository<Tracking, Long>{
     List<Tracking> findByDtmLessThanEqual(Date end);
     List<Tracking> findByDtmLessThanEqualAndDevice(Date end, Device device);
     List<Tracking> findByDeviceOrderByDtmDesc(Device device);
-
+    //List<Tracking> findByDeviceOrderByDtm(@Param("device") String device);
+    //List<Tracking> findAllOrderById();
+    List<Tracking> findAllByOrderByDtm();
 }
