@@ -47,11 +47,11 @@ public class Ruta{
         @JoinColumn(name = "productoID")
         private Producto producto;
         
-        @OneToOne(fetch = FetchType.EAGER)
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "localInicioID")
         private Locales localInicio;
         
-        @OneToOne(fetch = FetchType.EAGER)
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "localFinID")
         private Locales localFin;
         
