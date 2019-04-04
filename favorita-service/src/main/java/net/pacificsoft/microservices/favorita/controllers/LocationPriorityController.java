@@ -67,8 +67,8 @@ public class LocationPriorityController {
             try{
                 if(trackingRepository.existsById(trackingId)){
                     Tracking tracking = trackingRepository.findById(trackingId).get();
-                    tracking.getLocationPrioritys().add(locationPriority);
-                    locationPriority.setTracking(tracking);
+                    //tracking.getLocationPrioritys().add(locationPriority);
+                    //locationPriority.setTracking(tracking);
                     LocationPriority lP = locationPriorityRepository.save(locationPriority);
                     trackingRepository.save(tracking);
                     return new ResponseEntity(lP, HttpStatus.CREATED);
@@ -112,8 +112,8 @@ public class LocationPriorityController {
                                 @PathVariable(value = "id") Long lpId){
                 if(locationPriorityRepository.existsById(lpId)){
                     LocationPriority lp = locationPriorityRepository.findById(lpId).get();
-                    lp.getTracking().getLocationPrioritys().remove(lp);
-                    trackingRepository.save(lp.getTracking());
+                    //lp.getTracking().getLocationPrioritys().remove(lp);
+                    //trackingRepository.save(lp.getTracking());
                     locationPriorityRepository.delete(lp);
                     return new ResponseEntity(HttpStatus.OK);
                 }

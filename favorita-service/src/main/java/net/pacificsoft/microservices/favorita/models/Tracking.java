@@ -32,7 +32,7 @@ public class Tracking {
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "deviceID")
         private Device device;
-    @JsonIgnore
+    /*@JsonIgnore
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "locationGroupID")
         private LocationGroup locationGroup;
@@ -40,8 +40,9 @@ public class Tracking {
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "tracking")
-        private Set<LocationPriority> locationPrioritys = new HashSet<>();
+        private Set<LocationPriority> locationPrioritys = new HashSet<>();*/
         
+    
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "dtm")
         private Date dtm;
@@ -78,13 +79,13 @@ public class Tracking {
             this.device = device;
         }
 
-        public LocationGroup getLocationGroup() {
+       /* public LocationGroup getLocationGroup() {
             return locationGroup;
         }
 
         public void setLocationGroup(LocationGroup locationGroup) {
             this.locationGroup = locationGroup;
-        }
+        }*/
         
         public Date getDtm() {
             return dtm;
@@ -94,11 +95,11 @@ public class Tracking {
             this.dtm = dtm;
         }
 
-        public Set<LocationPriority> getLocationPrioritys() {
+        /*public Set<LocationPriority> getLocationPrioritys() {
             return locationPrioritys;
         }
 
         public void setLocationPrioritys(Set<LocationPriority> locationPrioritys) {
             this.locationPrioritys = locationPrioritys;
-        }
+        }*/
 }
