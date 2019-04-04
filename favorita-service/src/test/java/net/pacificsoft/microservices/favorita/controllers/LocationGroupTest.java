@@ -70,8 +70,8 @@ public class LocationGroupTest {
         LocationGroup locationGroup1 = new LocationGroup("Favorita");
         Tracking tracking = new Tracking("k",new Date(21321));
         Tracking tracking2 = new Tracking("allan",new Date(3244323));
-        locationGroup1.getTrackings().add(tracking);
-        locationGroup1.getTrackings().add(tracking2);
+        //locationGroup1.getTrackings().add(tracking);
+        //locationGroup1.getTrackings().add(tracking2);
         List<LocationGroup> alertList = Arrays.asList(locationGroup1);
 
         given(repository.findAll()).willReturn(alertList);
@@ -88,8 +88,8 @@ public class LocationGroupTest {
         LocationGroup locationGroup1 = new LocationGroup("Favorita");
         Tracking tracking = new Tracking("k",new Date(21321));
         Tracking tracking2 = new Tracking("allan",new Date(3244323));
-        locationGroup1.getTrackings().add(tracking);
-        locationGroup1.getTrackings().add(tracking2);
+        //locationGroup1.getTrackings().add(tracking);
+        //locationGroup1.getTrackings().add(tracking2);
 
         given(repository.existsById(locationGroup1.getId())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(locationGroup1));
