@@ -147,7 +147,7 @@ public class ApiGatewayController {
                 postAlert(alerta, device);
             }
             //-----------updating Device Status
-            updateStatus(device, batteryLevel, epochDateTime);
+            //updateStatus(device, batteryLevel, epochDateTime);
             logger.info("Device status updated");
 
             //-----------creating rawsSensorData
@@ -920,11 +920,18 @@ public class ApiGatewayController {
         deviceRepository.save(device);
         locationGroupRepository.save(locationGroup);
     }
+    /*
     private void updateStatus(Device device, int battery, Date lastTransmition) {
         Status status = device.getStatus();
         status.setBatery(battery);
         status.setLast_transmision(lastTransmition);
         statusRepository.save(status);
+    }*/
+    private void postStatus(Status status, Device device){
+        device.getStatuses().add(status);
+        status.setDevice(device);
+        statusRepository.save(status);
+        deviceRepository.save(device);
     }
     
 }
