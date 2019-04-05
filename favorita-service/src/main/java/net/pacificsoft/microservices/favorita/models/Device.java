@@ -75,6 +75,11 @@ public class Device{
             mappedBy = "device")
         private Status status;
         
+         @OneToOne(fetch = FetchType.EAGER,
+            cascade =  CascadeType.ALL,
+            mappedBy = "device")
+        private ConfigurationDevice configDevice;
+        
         /*@OneToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "featureID")
         private Features features;*/
@@ -212,4 +217,12 @@ public class Device{
         public void setDescription(String description) {
             this.description = description;
         }        
+
+        public ConfigurationDevice getConfigDevice() {
+            return configDevice;
+        }
+
+        public void setConfigDevice(ConfigurationDevice configDevice) {
+            this.configDevice = configDevice;
+        }  
 }
