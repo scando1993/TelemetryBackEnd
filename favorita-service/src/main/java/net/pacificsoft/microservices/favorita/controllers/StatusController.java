@@ -62,7 +62,7 @@ public class StatusController {
             try{
                 if(deviceRepository.existsById(deviceid)){
                     Device device = deviceRepository.findById(deviceid).get();
-                    device.setStatus(status);
+                    //device.setStatus(status);
                     status.setDevice(device);
                     Status s = statusRepository.save(status);
                     deviceRepository.save(device);
@@ -107,7 +107,7 @@ public class StatusController {
 			@PathVariable(value = "id") Long statusId){
                 if(statusRepository.existsById(statusId)){
                     Status status = statusRepository.findById(statusId).get();
-                    status.getDevice().setStatus(null);
+                    //status.getDevice().setStatus(null);
                     deviceRepository.save(status.getDevice());
                     statusRepository.delete(status);
                     return new ResponseEntity(HttpStatus.OK);
