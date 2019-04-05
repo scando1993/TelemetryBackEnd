@@ -1,6 +1,9 @@
 package net.pacificsoft.microservices.favorita.models;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import net.pacificsoft.microservices.favorita.models.application.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.ColumnTransformer;
@@ -27,19 +31,7 @@ public class ConfigurationDevice{
         
         @Column(name = "send_time", nullable = false)
         private double send_time;
-        
-        @Column(name = "ssid", nullable = false)
-        private String ssid;
-        
-        @Column(name = "mac", nullable = false)
-        private String mac;
-        
-        @ColumnTransformer(
-        read="AES_DECRYPT(password, '${mms.encryption.key}')",
-        write="AES_ENCRYPT(?, '${mms.encryption.key}')")
-        @Column(name = "password", nullable = false)
-        private String password;
-        
+
         @Column(name = "delta_temperature", nullable = false)
         private double delta_temperature;
         
@@ -47,6 +39,11 @@ public class ConfigurationDevice{
         @JoinColumn(name = "deviceID")
         private Device device;
 
+        @OneToMany(fetch = FetchType.LAZY,
+            cascade =  CascadeType.ALL,
+            mappedBy = "configDevice")
+        private Set<DetailConfiguration> detailConfigurations = new HashSet<>();
+        
         public long getId() {
             return id;
         }
@@ -71,30 +68,6 @@ public class ConfigurationDevice{
             this.send_time = send_time;
         }
 
-        public String getSsid() {
-            return ssid;
-        }
-
-        public void setSsid(String ssid) {
-            this.ssid = ssid;
-        }
-
-        public String getMac() {
-            return mac;
-        }
-
-        public void setMac(String mac) {
-            this.mac = mac;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
         public double getDelta_temperature() {
             return delta_temperature;
         }
@@ -109,5 +82,13 @@ public class ConfigurationDevice{
 
         public void setDevice(Device device) {
             this.device = device;
+        }   
+
+        public Set<DetailConfiguration> getDetailConfigurations() {
+            return detailConfigurations;
+        }
+
+        public void setDetailConfigurations(Set<DetailConfiguration> detailConfigurations) {
+            this.detailConfigurations = detailConfigurations;
         }   
 }
