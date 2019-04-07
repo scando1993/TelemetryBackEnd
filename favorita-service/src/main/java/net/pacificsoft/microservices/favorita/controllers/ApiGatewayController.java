@@ -228,9 +228,11 @@ public class ApiGatewayController {
 
             logger.info("Successfull Responce");
             if(jData.getJSONObject("message").getJSONObject("location_names").isEmpty()){
-                logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
-                Alerta alert = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family");
+                logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?");
+                Alerta alert = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?");
                 postAlert(alert,device);
+                Tracking tracking = new Tracking("?", epochDateTime);
+                postTracking(tracking,device,defaultTrackingLocationGroup);
                 return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PRECONDITION_FAILED);
             }
 
@@ -720,6 +722,32 @@ public class ApiGatewayController {
         }
 
     }
+    
+    @GetMapping("/getDeviceTrack")
+    public ResponseEntity getOrderTrackingsDevice(@RequestParam String device) {
+        if(deviceRepository.existsByName(device)){
+            Device d = deviceRepository.findByName(device).get(0);
+            List<Tracking> ts = trackingRepository.findByDeviceOrderByDtmDesc(d);
+            return new ResponseEntity(ts,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+    }
+    
+    @GetMapping("/getDeviceTelemetry")
+    public ResponseEntity getOrderTelemetrysDevice(@RequestParam String device) {
+        if(deviceRepository.existsByName(device)){
+            Device d = deviceRepository.findByName(device).get(0);
+            List<Telemetria> ts = telemetriaRepository.findByDeviceOrderByDtmDesc(d);
+            return new ResponseEntity(ts,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+    }
 
 
 /*
@@ -886,4 +914,6 @@ public class ApiGatewayController {
         deviceRepository.save(device);
         locationGroupRepository.save(locationGroup);
     }
+    
+    
 }

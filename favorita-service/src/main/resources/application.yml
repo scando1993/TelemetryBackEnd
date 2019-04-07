@@ -10,6 +10,10 @@
 # Hibernate ddl auto (create, create-drop, validate, update)
 #spring.jpa.hibernate.ddl-auto = create-drop
 
+mms:
+    encryption:
+        key: pacificsoft
+
 server:
   port: ${PORT:2222}
 

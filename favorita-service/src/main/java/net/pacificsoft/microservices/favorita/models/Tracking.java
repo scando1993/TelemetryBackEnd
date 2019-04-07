@@ -42,6 +42,7 @@ public class Tracking {
             mappedBy = "tracking")
         private Set<LocationPriority> locationPrioritys = new HashSet<>();*/
         
+    
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "dtm")
         private Date dtm;

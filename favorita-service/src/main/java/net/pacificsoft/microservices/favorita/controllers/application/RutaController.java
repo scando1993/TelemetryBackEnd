@@ -99,9 +99,9 @@ public class RutaController {
                     Device device = deviceRepository.findById(deviceid).get();
                     device.getRutas().add(ruta);
                     Locales localInicio = localesRepository.findById(localinicioid).get();
-                    localInicio.setRutaInicio(ruta);
+                    //localInicio.setRutaInicio(ruta);
                     Locales localFin = localesRepository.findById(localfinid).get();
-                    localFin.setRutaFin(ruta);
+                    //localFin.setRutaFin(ruta);
                     Producto producto = productoRepository.findById(productid).get();
                     producto.getRutas().add(ruta);
                     ruta.setFurgon(furgon);
@@ -147,9 +147,9 @@ public class RutaController {
                     Device device = deviceRepository.findById(deviceid).get();
                     device.getRutas().add(ruta);
                     Locales localInicio = localesRepository.findById(localinicioid).get();
-                    localInicio.setRutaInicio(ruta);
+                    //localInicio.setRutaInicio(ruta);
                     Locales localFin = localesRepository.findById(localfinid).get();
-                    localFin.setRutaFin(ruta);
+                    //localFin.setRutaFin(ruta);
                     Producto producto = productoRepository.findById(productid).get();
                     producto.getRutas().add(ruta);
                     ruta.setFurgon(furgon);
@@ -181,8 +181,8 @@ public class RutaController {
                         a.setRuta(null);
                         alertaRepository.save(a);
                     }
-                    ruta.getLocalFin().setRutaFin(null);
-                    ruta.getLocalInicio().setRutaInicio(null);
+                    //ruta.getLocalFin().setRutaFin(null);
+                    //ruta.getLocalInicio().setRutaInicio(null);
                     ruta.getFurgon().getRutas().remove(ruta);
                     ruta.getProducto().getRutas().remove(ruta);
                     ruta.getDevice().getRutas().remove(ruta);

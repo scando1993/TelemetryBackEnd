@@ -70,10 +70,15 @@ public class Device{
             mappedBy = "device")
         private Set<GoApiResponse> goApiResponses = new HashSet<>();
         
-        @OneToOne(fetch = FetchType.EAGER,
+        @OneToMany(fetch = FetchType.EAGER,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
-        private Status status;
+        private Set<Status> statuses = new HashSet<>();
+        
+         @OneToOne(fetch = FetchType.EAGER,
+            cascade =  CascadeType.ALL,
+            mappedBy = "device")
+        private ConfigurationDevice configDevice;
         
         /*@OneToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "featureID")
@@ -86,12 +91,12 @@ public class Device{
         public Device(){
         }
 
-        public Device(long id, String family, String name, Group groupFamily, Status status) {
+        public Device(long id, String family, String name, Group groupFamily) {
             this.id = id;
             this.family = family;
             this.name = name;
             this.groupFamily = groupFamily;
-            this.status = status;
+            //this.status = status;
         }
 
         public long getId() {
@@ -158,12 +163,12 @@ public class Device{
             this.telemetrias = telemetrias;
         }
 
-        public Status getStatus() {
-            return status;
+        public Set<Status> getStatus() {
+            return statuses;
         }
 
-        public void setStatus(Status status) {
-            this.status = status;
+        public void setStatus(Set<Status> statuses) {
+            this.statuses = statuses;
         }
 
         public Group getGroup() {
@@ -212,4 +217,12 @@ public class Device{
         public void setDescription(String description) {
             this.description = description;
         }        
+
+        public ConfigurationDevice getConfigDevice() {
+            return configDevice;
+        }
+
+        public void setConfigDevice(ConfigurationDevice configDevice) {
+            this.configDevice = configDevice;
+        }  
 }
