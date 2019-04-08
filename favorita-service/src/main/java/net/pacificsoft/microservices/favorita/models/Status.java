@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -21,7 +22,7 @@ public class Status{
 	private long id;
         
         @Column(name = "batery")
-        private double batery;
+        private int batery;
         
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "last_transmision")
@@ -34,11 +35,11 @@ public class Status{
         @Column(name = "last_update")
 	private Date last_update;
 
-        @OneToOne(fetch = FetchType.EAGER)
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "deviceID")
         private Device device;
 
-        public Status(double batery, Date last_transmision, double signal_level, Date last_update) {
+        public Status(int batery, Date last_transmision, double signal_level, Date last_update) {
             this.batery = batery;
             this.last_transmision = last_transmision;
             this.signal_level = signal_level;
@@ -56,11 +57,11 @@ public class Status{
             this.id = id;
         }
 
-        public double getBatery() {
+        public int getBatery() {
             return batery;
         }
 
-        public void setBatery(double batery) {
+        public void setBatery(int batery) {
             this.batery = batery;
         }
 

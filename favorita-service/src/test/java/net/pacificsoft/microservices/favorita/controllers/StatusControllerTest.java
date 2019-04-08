@@ -103,7 +103,7 @@ public class StatusControllerTest {
         
         Device device = new Device();
         status.setDevice(device);
-        device.setStatus(status);     
+        //device.setStatus(status);     
 
         given(repositoryG.existsById(status.getDevice().getId())).willReturn(true);
         given(repositoryG.findById(any())).willReturn(Optional.of(device));
@@ -130,7 +130,7 @@ public class StatusControllerTest {
         
         Device device = new Device();
         status.setDevice(device);
-        device.setStatus(status); 
+        //device.setStatus(status); 
 
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(status));

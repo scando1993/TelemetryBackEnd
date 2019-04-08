@@ -58,6 +58,8 @@ public class ApiGatewayController {
     private LocationGroupRepository locationGroupRepository;
     @Autowired
     private MacRepository macRepository;
+    @Autowired
+    private StatusRepository statusRepository;
 
     final String uri = "http://104.209.196.204:9090/track";
     //final String uri = "http://172.16.10.41:8005/track";
@@ -144,6 +146,10 @@ public class ApiGatewayController {
                 Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, continuing ith Device: unknown");
                 postAlert(alerta, device);
             }
+            //-----------updating Device Status
+            //updateStatus(device, batteryLevel, epochDateTime);
+            logger.info("Device status updated");
+
             //-----------creating rawsSensorData
             RawSensorData rawSensorData = new RawSensorData(epoch,temperature,epochDateTime,rawData);
             postRawSensorDara(rawSensorData, device);
@@ -228,9 +234,11 @@ public class ApiGatewayController {
 
             logger.info("Successfull Responce");
             if(jData.getJSONObject("message").getJSONObject("location_names").isEmpty()){
-                logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
-                Alerta alert = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family");
+                logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?");
+                Alerta alert = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?");
                 postAlert(alert,device);
+                Tracking tracking = new Tracking("?", epochDateTime);
+                postTracking(tracking,device,defaultTrackingLocationGroup);
                 return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PRECONDITION_FAILED);
             }
 
@@ -720,6 +728,32 @@ public class ApiGatewayController {
         }
 
     }
+    
+    @GetMapping("/getDeviceTrack")
+    public ResponseEntity getOrderTrackingsDevice(@RequestParam String device) {
+        if(deviceRepository.existsByName(device)){
+            Device d = deviceRepository.findByName(device).get(0);
+            List<Tracking> ts = trackingRepository.findByDeviceOrderByDtmDesc(d);
+            return new ResponseEntity(ts,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+    }
+    
+    @GetMapping("/getDeviceTelemetry")
+    public ResponseEntity getOrderTelemetrysDevice(@RequestParam String device) {
+        if(deviceRepository.existsByName(device)){
+            Device d = deviceRepository.findByName(device).get(0);
+            List<Telemetria> ts = telemetriaRepository.findByDeviceOrderByDtmDesc(d);
+            return new ResponseEntity(ts,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+    }
 
 
 /*
@@ -878,12 +912,26 @@ public class ApiGatewayController {
     }
     private void postTracking(Tracking tracking, Device device, long idLocationGroup){
         LocationGroup locationGroup = locationGroupRepository.findById(idLocationGroup).get();
-        locationGroup.getTrackings().add(tracking);
+        //locationGroup.getTrackings().add(tracking);
         device.getTrackings().add(tracking);
         tracking.setDevice(device);
-        tracking.setLocationGroup(locationGroup);
+        //tracking.setLocationGroup(locationGroup);
         trackingRepository.save(tracking);
         deviceRepository.save(device);
         locationGroupRepository.save(locationGroup);
     }
+    /*
+    private void updateStatus(Device device, int battery, Date lastTransmition) {
+        Status status = device.getStatus();
+        status.setBatery(battery);
+        status.setLast_transmision(lastTransmition);
+        statusRepository.save(status);
+    }*/
+    private void postStatus(Status status, Device device){
+        device.getStatuses().add(status);
+        status.setDevice(device);
+        statusRepository.save(status);
+        deviceRepository.save(device);
+    }
+    
 }

@@ -81,8 +81,8 @@ public class LocationPriorityControllerTest {
         LocationPriority locationPriority2 = new LocationPriority("LocationPrioruty2",22);
         Tracking tracking = new Tracking("track1",new Date(21321));
         Tracking tracking2 = new Tracking("track2",new Date(3244323));
-        tracking.getLocationPrioritys().add(locationPriority);
-        locationPriority.setTracking(tracking);
+        //tracking.getLocationPrioritys().add(locationPriority);
+        //locationPriority.setTracking(tracking);
         List<LocationPriority> locationPriorities = Arrays.asList(locationPriority,locationPriority2);
 
         given(repository.findAll()).willReturn(locationPriorities);
@@ -100,8 +100,8 @@ public class LocationPriorityControllerTest {
         LocationPriority locationPriority = new LocationPriority("LocationPrioruty1",2);
         Tracking tracking = new Tracking("track1",new Date(21321));
         Tracking tracking2 = new Tracking("track2",new Date(3244323));
-        tracking.getLocationPrioritys().add(locationPriority);
-        locationPriority.setTracking(tracking);
+        //tracking.getLocationPrioritys().add(locationPriority);
+        //locationPriority.setTracking(tracking);
 
         given(repository.existsById(locationPriority.getId())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(locationPriority));
@@ -136,8 +136,8 @@ public class LocationPriorityControllerTest {
     public void delete_test() throws Exception{
         LocationPriority locationPriority = new LocationPriority("LocationPriority", 99);
         Tracking tracking = new Tracking("track1",new Date(21321));
-        tracking.getLocationPrioritys().add(locationPriority);
-        locationPriority.setTracking(tracking);
+        //tracking.getLocationPrioritys().add(locationPriority);
+        //locationPriority.setTracking(tracking);
         given(repository.existsById(any())).willReturn(true);
         given(repository.findById(any())).willReturn(Optional.of(locationPriority));
 

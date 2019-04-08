@@ -9,6 +9,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RepositoryRestResource()
+//@RepositoryConfig(cacheName = "MacCache")
 public interface MacRepository extends JpaRepository<Mac, Long>{
     List<Mac> findByMac (String mac);
     boolean existsByMac(String mac);

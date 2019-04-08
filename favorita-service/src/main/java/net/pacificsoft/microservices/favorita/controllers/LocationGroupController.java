@@ -105,13 +105,13 @@ public class LocationGroupController {
 			@PathVariable(value = "id") Long locationId){
                 if(locationGroupRepository.existsById(locationId)){
                     LocationGroup location = locationGroupRepository.findById(locationId).get();
-                    if(location.getTrackings().size()>0){
+                    /*if(location.getTrackings().size()>0){
                         Set<Tracking> ubFs = location.getTrackings();
                         for(Tracking t:ubFs){
                             t.setLocationGroup(null);
                             trackingRepository.save(t);
                         }
-                    }
+                    }*/
                     locationGroupRepository.delete(location);
                     return new ResponseEntity(HttpStatus.OK);
                 }

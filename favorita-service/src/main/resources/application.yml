@@ -10,6 +10,10 @@
 # Hibernate ddl auto (create, create-drop, validate, update)
 #spring.jpa.hibernate.ddl-auto = create-drop
 
+mms:
+    encryption:
+        key: pacificsoft
+
 server:
   port: ${PORT:2222}
 
@@ -25,11 +29,12 @@ eureka:
 # ===============================
 # DATABASE
 # ===============================
-
 spring:
+  main:
+      allow-bean-definition-overriding: true
   datasource:
     #driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:mysql://192.168.10.103/ColdChainTracking?userSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://192.168.10.103/Tracking?userSSL=false&serverTimezone=UTC
     username: soporte
     password: Pacific12Pacific12
     tomcat:
