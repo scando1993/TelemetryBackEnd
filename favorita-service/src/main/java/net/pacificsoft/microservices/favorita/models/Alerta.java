@@ -21,7 +21,7 @@ public class Alerta{
     private long id;
     
     @Column(name = "type_alert", nullable = false)
-    private String type_alert;
+    private String typeAlert;
     
     @Column(name = "mensaje", nullable = false)
     private String mensaje;
@@ -38,20 +38,20 @@ public class Alerta{
     }
 
     public Alerta(String type_alert, String mensaje) {
-        this.type_alert = type_alert;
+        this.typeAlert = type_alert;
         this.mensaje = mensaje;
     }
 
     public Alerta(long id, String type_alert, String mensaje, Ruta ruta, Device device) {
         this.id = id;
-        this.type_alert = type_alert;
+        this.typeAlert = type_alert;
         this.mensaje = mensaje;
         this.ruta = ruta;
         this.device = device;
     }
     public JSONObject toJson(){
         JSONObject json = new JSONObject();
-        json.put("type_alert", this.type_alert);
+        json.put("type_alert", this.typeAlert);
         json.put("mensaje",mensaje);
         return json;
     }
@@ -88,12 +88,12 @@ public class Alerta{
         this.device = device;
     }
 
-    public String getType_alert() {
-        return type_alert;
+    public String getTypeAlert() {
+        return typeAlert;
     }
 
-    public void setType_alert(String type_alert) {
-        this.type_alert = type_alert;
+    public void setTypeAlert(String typeAlert) {
+        this.typeAlert = typeAlert;
     }
 
 }

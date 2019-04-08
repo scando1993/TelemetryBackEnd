@@ -55,6 +55,6 @@ public class ZonaControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].type_alert", is(alert1.getType_alert())));
+                .andExpect(jsonPath("$[0].type_alert", is(alert1.getTypeAlert())));
     }
 }

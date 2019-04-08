@@ -24,12 +24,16 @@ public class Application {
     
     //@Autowired
     //DataSource datasource;
+    private static final Logger logger = LogManager.getLogger(Application.class);
+    private static final ThreadStartRuta ts = new ThreadStartRuta();
     
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+        //ts.start();
     }
     
-    private static final Logger logger = LogManager.getLogger(Application.class);
+    
+    
     @Bean
 	public RepositoryRestConfigurer repositoryRestConfigurer() {
 
