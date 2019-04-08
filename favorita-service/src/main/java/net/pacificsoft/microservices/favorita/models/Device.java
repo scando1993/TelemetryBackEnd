@@ -163,11 +163,11 @@ public class Device{
             this.telemetrias = telemetrias;
         }
 
-        public Set<Status> getStatuses() {
+        public Set<Status> getStatus() {
             return statuses;
         }
 
-        public void setStatuses(Set<Status> statuses) {
+        public void setStatus(Set<Status> statuses) {
             this.statuses = statuses;
         }
 
