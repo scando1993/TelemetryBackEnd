@@ -52,6 +52,11 @@ public class Locales{
             mappedBy = "localFin")
         private Set<Ruta> rutasFin = new HashSet<>();
         
+        @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "locales")
+        private Set<LocalesMac> localesMacs = new HashSet<>();
+        
         @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "locales")
@@ -136,4 +141,12 @@ public class Locales{
         public void setFormato(Formato formato) {
             this.formato = formato;
         }
+
+        public Set<LocalesMac> getLocalesMacs() {
+            return localesMacs;
+        }
+
+        public void setLocalesMacs(Set<LocalesMac> localesMacs) {
+            this.localesMacs = localesMacs;
+        }    
 }

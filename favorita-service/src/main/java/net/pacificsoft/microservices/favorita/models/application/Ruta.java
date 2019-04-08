@@ -31,6 +31,9 @@ public class Ruta{
         @Column(name = "start_date", nullable = false)
 	private Date start_date;
         
+        @Column(name = "status")
+	private String status;
+        
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "end_date", nullable = false)
 	private Date end_date;
@@ -138,5 +141,13 @@ public class Ruta{
 
         public void setAlertas(Set<Alerta> alertas) {
             this.alertas = alertas;
-        }        
+        }     
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }   
 }
