@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RepositoryRestResource()
-public interface LocalesMac extends JpaRepository<Locales, Long>{
+public interface LocalesMac extends JpaRepository<LocalesMac, Long>{
 
 }
