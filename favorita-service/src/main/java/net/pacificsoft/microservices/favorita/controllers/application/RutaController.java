@@ -22,15 +22,21 @@ import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import net.pacificsoft.microservices.favorita.models.Alerta;
+import net.pacificsoft.microservices.favorita.models.Telemetria;
+import net.pacificsoft.microservices.favorita.models.Tracking;
 import net.pacificsoft.microservices.favorita.models.application.Producto;
 import net.pacificsoft.microservices.favorita.repository.AlertaRepository;
+import net.pacificsoft.microservices.favorita.repository.TelemetriaRepository;
+import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
 import net.pacificsoft.microservices.favorita.repository.application.ProductoRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -54,6 +60,12 @@ public class RutaController {
         
         @Autowired
 	private AlertaRepository alertaRepository;
+        
+        @Autowired
+	private TrackingRepository trackingRepository;
+        
+        @Autowired
+	private TelemetriaRepository telemetriaRepository;
 	
 	@GetMapping("/ruta")
 	public ResponseEntity getAllRutas() {
@@ -200,4 +212,61 @@ public class RutaController {
                 }
 	}
         
+        @GetMapping("/getRutaTelemetrias")
+	public ResponseEntity getDevicesTelemetrias(@RequestParam Long rutaid) {
+            if(rutaRepository.existsById(rutaid)){
+                Ruta ruta = rutaRepository.findById(rutaid).get();
+                List<Tracking> trackings = trackingRepository.findByDtmBetweenAndDevice(ruta.getStart_date(), ruta.getEnd_date(),ruta.getDevice());
+                JSONObject device;
+                List<Map<String, Object>> result = new ArrayList();
+                List<Map<String, Object>> telemetrias;
+                JSONObject tel;
+                for(Tracking t: trackings){
+                     telemetrias = new ArrayList();
+                     device = new JSONObject();
+                     device.put("id", t.getDevice().getId());
+                     device.put("name", t.getDevice().getName());
+                     for(Telemetria telem: t.getDevice().getTelemetrias()){
+                         tel = new JSONObject();
+                         tel.put("dtm", telem.getDtm());
+                         tel.put("value", telem.getValue());
+                         telemetrias.add(tel.toMap());
+                     }
+                     device.put("telemetrias", telemetrias);
+                     result.add(device.toMap());
+                }
+                return new ResponseEntity(result, HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity<String>("Resources not available.",
+                            HttpStatus.NOT_FOUND);
+            }
+	}
+        
+        @GetMapping("/getTrackingsTelemetria")
+	public ResponseEntity getTrackingTelemetry(@RequestParam Long telemetriaid) {
+            if(telemetriaRepository.existsById(telemetriaid)){
+                Telemetria telemetria = telemetriaRepository.findById(telemetriaid).get();
+                Device device = telemetria.getDevice();
+                JSONObject jdevice = new JSONObject();
+                jdevice.put("id_device", device.getId());
+                jdevice.put("name", device.getName());
+                JSONObject jtracking;
+                List<Map<String, Object>> result = new ArrayList();
+                List<Map<String, Object>> trackings = new ArrayList();
+                for(Tracking t: device.getTrackings()){
+                    jtracking = new JSONObject();
+                    jtracking.put("dtm", t.getDtm());
+                    jtracking.put("location", t.getLocation());
+                    trackings.add(jtracking.toMap());
+                }
+                jdevice.put("trackings", trackings);
+{               return new ResponseEntity(jdevice.toMap(), HttpStatus.OK);
+            }
+            }
+            else{
+                return new ResponseEntity<String>("Resources not available.",
+                            HttpStatus.NOT_FOUND);
+            }
+        }
 }
