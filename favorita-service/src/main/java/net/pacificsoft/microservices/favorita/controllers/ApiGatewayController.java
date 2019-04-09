@@ -2,6 +2,7 @@
 package net.pacificsoft.microservices.favorita.controllers;
 
 
+import net.pacificsoft.microservices.favorita.LinealizeService;
 import net.pacificsoft.microservices.favorita.models.*;
 import net.pacificsoft.microservices.favorita.repository.*;
 import org.json.JSONArray;
@@ -785,6 +786,21 @@ public class ApiGatewayController {
             run(ruta);
     }
 
+    @GetMapping("/CorrectRoute")
+    public ResponseEntity startThreadTrack(@RequestParam Long id){
+        try {
+            Ruta ruta = rutaRepository.findById(id).get();
+            //ThreadStartRuta ts = new ThreadStartRuta();
+            //ts.start();
+            Device device = ruta.getDevice();
+            startLinealizeService(device, ruta.getStart_date(), ruta.getEnd_date());
+            return new ResponseEntity("WOW", HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 /*
 --------------------Axiliar Functions------------------------------------
@@ -1041,7 +1057,23 @@ public class ApiGatewayController {
                 alertaRepository.save(alert);
                 deviceRepository.save(ruta.getDevice());
                 rutaRepository.save(ruta);
-    } 
+    }
+
+    public void startLinealizeService(Device device, Date start, Date end){
+        ArrayList<String> priorityQueue = new ArrayList<>();
+        priorityQueue.add("recepcion carne");
+        priorityQueue.add("carga furgon");
+        priorityQueue.add("?");
+        LinealizeService linealizeService = new LinealizeService(priorityQueue,true);
+        linealizeService.setLogger(logger);
+        linealizeService.setAlertaRepository(alertaRepository);
+        List<Tracking> trackingList = trackingRepository.findByDtmBetweenAndDeviceOrderByDtm(start, end, device);
+        for (Tracking t : trackingList){
+            linealizeService.addTrack(t);
+        }
+        List<Tracking> q =linealizeService.getTrackingList();
+
+    }
     
     
 }

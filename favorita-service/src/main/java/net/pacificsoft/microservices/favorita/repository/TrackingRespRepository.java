@@ -15,6 +15,8 @@ public interface TrackingRespRepository extends JpaRepository<Tracking, Long>{
     Tracking findByDtm(Date dtm);
     List<Tracking> findByDtmBetween(Date start, Date end);
     List<Tracking> findByDtmBetweenAndDevice(Date start, Date end, Device device);
+    List<Tracking> findByDtmBetweenAndDeviceOrderByDtm(Date start, Date end, Device device);
+
     List<Tracking> findByDtmGreaterThanEqualAndDtmLessThanEqual(Date start, Date end);
     List<Tracking> findByDtmLessThanEqual(Date end);
     List<Tracking> findByDtmLessThanEqualAndDevice(Date end, Device device);
