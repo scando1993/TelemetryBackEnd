@@ -57,6 +57,7 @@ public class ThreadStateRuta extends Thread{
     public void run() {
         boolean process = true;
         boolean fin = true;
+        Date start_date = ruta.getStart_date();
         while(process && fin){
             try {
                 Thread.sleep(Variables.time_check);
@@ -66,7 +67,7 @@ public class ThreadStateRuta extends Thread{
             long valErr = 0;
             Telemetria tAnterior = null;
             Producto p = ruta.getProducto();
-            List<Telemetria> telemetrias = telemetriaRepository.findByDtmBetweenAndDevice(ruta.getStart_date(), ruta.getEnd_date(),ruta.getDevice());
+            List<Telemetria> telemetrias = telemetriaRepository.findByDtmBetweenAndDevice(start_date, ruta.getEnd_date(),ruta.getDevice());
             float temp_max = p.getTemp_max();
             float temp_min = p.getTemp_min();
             float temp_max_ideal = p.getTemp_max_ideal();
@@ -90,6 +91,7 @@ public class ThreadStateRuta extends Thread{
                 else{
                     tAnterior = new Telemetria(t.getDtm(), t.getName(), t.getValue());
                     valErr = 0;
+                    start_date = new Date();
                 }
                 if (valErr >= 3600){
                     String typeAlert = "temperatura_limite_maximas";
@@ -103,7 +105,7 @@ public class ThreadStateRuta extends Thread{
             }
             if(!process){
                 RawSensorData rw = rawSensorRepository.findByEpochDateTimeBetweenAndDeviceOrderByEpochDateTimeDesc(
-                                    ruta.getStart_date(), ruta.getEnd_date(), ruta.getDevice()).get(0);
+                                    start_date, ruta.getEnd_date(), ruta.getDevice()).get(0);
                 Set<LocalesMac> localesMacs = ruta.getLocalFin().getLocalesMacs();
                 for(WifiScan ws: rw.getWifiScans()){
                     for(LocalesMac lm: localesMacs){
