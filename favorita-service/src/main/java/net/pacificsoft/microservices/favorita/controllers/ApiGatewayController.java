@@ -180,8 +180,8 @@ public class ApiGatewayController {
             //family = "favorita";
             if(family.compareTo("") == 0){
                 logger.warn("Any MAC is associated with any family. Try with families associated with device");
-                Alerta alert = new Alerta("MAC error", "MACs do not have any family", new Date());
-                postAlert(alert,device);
+                Alerta alert = new Alerta("MAC error", "MACs do not have any family, looking for a family asociate with the device: "+deviceName, new Date());
+                //postAlert(alert,device);
                 if(useUnknownDevice)
                     return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PARTIAL_CONTENT);
                 families = device.getGroup().getFamilies();
@@ -771,11 +771,26 @@ public class ApiGatewayController {
 
     }
     
+    @GetMapping("/getAlertasRuta")
+        public ResponseEntity getAlertasRuta(@RequestParam Long rutaid){
+            if(rutaRepository.existsById(rutaid)){
+                Ruta ruta = rutaRepository.findById(rutaid).get();
+                List<Alerta> alertas = alertaRepository.findByRuta(ruta);
+                return new ResponseEntity(alertas,HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            
+    }
+    
     @GetMapping("/startThread")
         public void startThread(){
+            //Ruta ruta = rutaRepository.findById(id).get();
             ThreadStartRuta ts = new ThreadStartRuta(rutaRepository, alertaRepository, deviceRepository,
                                                      trackingRepository, telemetriaRepository, rawDataRepository);
             ts.start();
+            //run(ruta);
     }
 
 

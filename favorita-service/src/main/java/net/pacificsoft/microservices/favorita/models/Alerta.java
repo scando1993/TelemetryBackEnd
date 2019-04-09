@@ -1,6 +1,7 @@
 package net.pacificsoft.microservices.favorita.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,10 +33,12 @@ public class Alerta{
     @Column(name = "dtm")
     private Date dtm;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rutaID", nullable = true)
     private Ruta ruta;
     
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "deviceID")
     private Device device;

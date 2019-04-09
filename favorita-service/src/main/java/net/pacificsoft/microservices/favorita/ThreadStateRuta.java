@@ -82,12 +82,13 @@ public class ThreadStateRuta extends Thread{
             float temp_min_ideal = p.getTemp_min_ideal();
             for (Telemetria t: telemetrias){
                 double temp = t.getValue();
-                if((temp >= temp_max_ideal || temp <= temp_min_ideal) &&
-                   (temp <= temp_max || temp >= temp_min)){
+                if((temp >= temp_max_ideal && temp <= temp_max) ||
+                   (temp <= temp_min_ideal && temp >= temp_min)){
                     if(ruta.getProducto()!=null){
                         String typeAlert = "temperatura_limite_ideales";
                         String mensaje = "Temperatura del producto " + p.getName() + 
-                                        " esta fuera de los límites ideales";
+                                        " esta fuera de los límites ideales con una temperatura de "+temp+" grados, temperatura máxima ideal: "+temp_max_ideal
+                                        +", temperatura mínima ideal: "+temp_min_ideal;
                         ruta.setStatus("No ideal");
                         saveRuta(ruta, typeAlert, mensaje);
                     }
@@ -107,10 +108,10 @@ public class ThreadStateRuta extends Thread{
                     if(ruta.getProducto()!=null){
                         String typeAlert = "temperatura_limite_maximas";
                         String mensaje = "Temperatura del producto " + p.getName() + 
-                                        " esta fuera de los límites máximos";
+                                        " esta fuera de los límites máximos con una temperatura de "+temp+" grados, temperatura máxima: "+temp_max
+                                +", temperatura mínima: "+temp_min;
                         ruta.setStatus("No efectiva");
                         saveRuta(ruta, typeAlert, mensaje);
-                        process = false;
                     }
                     break;
                 }
