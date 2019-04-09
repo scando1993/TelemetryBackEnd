@@ -163,19 +163,15 @@ public class Device{
             this.telemetrias = telemetrias;
         }
 
-        public Set<Status> getStatus() {
+        public Set<Status> getStatuses() {
             return statuses;
         }
 
-        public void setStatus(Set<Status> statuses) {
-            this.statuses = statuses;
-        }
-
         public Group getGroup() {
-            return groupFamily;
-        }
+                return groupFamily;
+            }
 
-           public void setGroup(Group group) {
+        public void setGroup(Group group) {
             this.groupFamily = group;
         }
 
