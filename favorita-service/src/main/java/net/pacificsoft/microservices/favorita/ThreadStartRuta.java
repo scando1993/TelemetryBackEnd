@@ -14,6 +14,7 @@ public class ThreadStartRuta extends Thread{
     List<Long> ids = new ArrayList();
     @Override
 	public void run() {
+            while(true){
             List<Ruta> rutas = rutaRepository.findAll();
             for (Ruta r: rutas){
                 Date date = new Date();
@@ -30,5 +31,6 @@ public class ThreadStartRuta extends Thread{
                     ts.start();
                 }
             }
+        }
         }
 }

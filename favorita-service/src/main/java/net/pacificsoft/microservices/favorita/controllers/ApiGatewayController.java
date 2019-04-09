@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import net.pacificsoft.microservices.favorita.ThreadStartRuta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -683,6 +684,7 @@ public class ApiGatewayController {
             return new ResponseEntity<String>("Make sure that you had sent the correct JSON \n" + formatApiInnerDate, HttpStatus.BAD_REQUEST);
         }
     }
+    
     @GetMapping("/getAllFamilies")
         public ResponseEntity getAllFamilies(){
         try{
@@ -758,6 +760,12 @@ public class ApiGatewayController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 
+    }
+    
+    @GetMapping("/startThread")
+        public void startThread(){
+            ThreadStartRuta ts = new ThreadStartRuta();
+            ts.start();
     }
 
 

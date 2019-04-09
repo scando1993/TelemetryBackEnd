@@ -1,5 +1,6 @@
 package net.pacificsoft.microservices.favorita;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -46,51 +47,56 @@ public class ThreadStateRuta extends Thread{
             }
             long valErr = 0;
             Telemetria tAnterior = null;
-            Device d = ruta.getDevice();
             Producto p = ruta.getProducto();
-            List<Tracking> trackings = trackingRepository.findByDtmBetweenAndDevice(ruta.getStart_date(), ruta.getEnd_date(),ruta.getDevice());
             List<Telemetria> telemetrias = telemetriaRepository.findByDtmBetweenAndDevice(ruta.getStart_date(), ruta.getEnd_date(),ruta.getDevice());
             float temp_max = p.getTemp_max();
             float temp_min = p.getTemp_min();
             float temp_max_ideal = p.getTemp_max_ideal();
             float temp_min_ideal = p.getTemp_min_ideal();
             for (Telemetria t: telemetrias){
-                if(t.getValue() >= temp_max || t.getValue() <= temp_min){
+                double temp = t.getValue();
+                if((temp >= temp_max_ideal || temp <= temp_min_ideal) &&
+                   (temp <= temp_max || temp >= temp_min)){
+                    String typeAlert = "temperatura_limite_ideales";
+                    String mensaje = "Temperatura del producto " + p.getName() + 
+                                    " esta fuera de los límites ideales";
+                    ruta.setStatus("No ideal");
+                    saveRuta(ruta, typeAlert, mensaje);
+                }
+                else if(temp >= temp_max || temp <= temp_min){
                     if(tAnterior != null) {
                         valErr = valErr + (t.getDtm().getTime() - tAnterior.getDtm().getTime());
                     }
+                    tAnterior = new Telemetria(t.getDtm(), t.getName(), t.getValue());
                 }
                 else{
                     tAnterior = new Telemetria(t.getDtm(), t.getName(), t.getValue());
                     valErr = 0;
                 }
                 if (valErr >= 3600){
-                    String typeAlert = "temperatura_limite";
+                    String typeAlert = "temperatura_limite_maximas";
                     String mensaje = "Temperatura del producto " + p.getName() + 
-                                    " esta fuera de los límites";
+                                    " esta fuera de los límites máximos";
+                    ruta.setStatus("No efectiva");
                     saveRuta(ruta, typeAlert, mensaje);
                     process = false;
                     break;
                 }
             }
-            if(alertaRepository.findByRutaAndTypeAlert(ruta, "en_ruta").size()==0){
-                String typeAlert = "en_ruta";
-                String mensaje = "El device " + d.getName() + 
-                                " asociado con el producto " + p.getName() + 
-                                " está en ruta";
-                saveRuta(ruta, typeAlert, mensaje);
-            }
-            RawSensorData rw = rawSensorRepository.findByEpochDateTimeBetweenAndDeviceOrderByEpochDateTimeDesc(
-                                ruta.getStart_date(), ruta.getEnd_date(), ruta.getDevice()).get(0);
-            Set<LocalesMac> localesMacs = ruta.getLocalFin().getLocalesMacs();
-            for(WifiScan ws: rw.getWifiScans()){
-                for(LocalesMac lm: localesMacs){
-                    if(lm.getMac().equals(ws.getMAC())){
-                        fin = false;
-                        String typeAlert = "fin_ruta";
-                        String mensaje = "Ha completado su ruta el furgon " + ruta.getFurgon().getName();
-                        saveRuta(ruta, typeAlert, mensaje);
-                        break;
+            if(!process){
+                RawSensorData rw = rawSensorRepository.findByEpochDateTimeBetweenAndDeviceOrderByEpochDateTimeDesc(
+                                    ruta.getStart_date(), ruta.getEnd_date(), ruta.getDevice()).get(0);
+                Set<LocalesMac> localesMacs = ruta.getLocalFin().getLocalesMacs();
+                for(WifiScan ws: rw.getWifiScans()){
+                    for(LocalesMac lm: localesMacs){
+                        if(lm.getMac().equals(ws.getMAC())){
+                            fin = false;
+                            String typeAlert = "fin_ruta";
+                            String mensaje = "Ha completado su ruta el furgon " + ruta.getFurgon().getName();
+                            ruta.setStatus("Finalizada");
+                            saveRuta(ruta, typeAlert, mensaje);
+                            break;
+                        }
                     }
                 }
             }
@@ -98,7 +104,7 @@ public class ThreadStateRuta extends Thread{
     }
      
     public void saveRuta(Ruta ruta, String typeAlert, String mensaje){
-        Alerta alert = new Alerta(typeAlert, mensaje);
+        Alerta alert = new Alerta(typeAlert, mensaje, new Date());
                 alert.setDevice(ruta.getDevice());
                 alert.setRuta(ruta);
                 ruta.getDevice().getAlertas().add(alert);

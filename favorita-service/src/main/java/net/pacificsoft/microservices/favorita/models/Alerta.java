@@ -55,6 +55,14 @@ public class Alerta{
         this.ruta = ruta;
         this.device = device;
     }
+
+    public Alerta(String typeAlert, String mensaje, Date dtm) {
+        this.typeAlert = typeAlert;
+        this.mensaje = mensaje;
+        this.dtm = dtm;
+    }
+    
+    
     public JSONObject toJson(){
         JSONObject json = new JSONObject();
         json.put("type_alert", this.typeAlert);
