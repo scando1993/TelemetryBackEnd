@@ -20,7 +20,13 @@ public class ThreadStartRuta extends Thread{
                 if(date.compareTo(r.getStart_date())>=0 &&
                    (!ids.contains(r.getId()))){
                     ids.add(r.getId());
-                    ThreadStateRuta ts = new ThreadStateRuta(r.getId());
+                    r.setStatus("Activa");
+                    rutaRepository.save(r);
+                    String typeAlert = "inicio_ruta";
+                    String mensaje = "Inicio ruta. Device: " + r.getDevice().getName() + 
+                                " y producto " + r.getProducto().getName();
+                    ThreadStateRuta ts = new ThreadStateRuta(r);
+                    ts.saveRuta(r, typeAlert, mensaje);
                     ts.start();
                 }
             }

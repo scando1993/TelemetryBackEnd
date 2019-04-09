@@ -1,5 +1,7 @@
 package net.pacificsoft.microservices.favorita.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,6 +27,10 @@ public class Alerta{
     
     @Column(name = "mensaje", nullable = false)
     private String mensaje;
+    
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @Column(name = "dtm")
+    private Date dtm;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rutaID", nullable = true)
@@ -96,4 +102,11 @@ public class Alerta{
         this.typeAlert = typeAlert;
     }
 
+    public Date getDtm() {
+        return dtm;
+    }
+
+    public void setDtm(Date dtm) {
+        this.dtm = dtm;
+    }
 }
