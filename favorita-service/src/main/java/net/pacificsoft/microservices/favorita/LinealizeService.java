@@ -1,10 +1,14 @@
 package net.pacificsoft.microservices.favorita;
+import net.pacificsoft.microservices.favorita.models.Alerta;
 import net.pacificsoft.microservices.favorita.models.LocationPriority;
 import  net.pacificsoft.microservices.favorita.models.Tracking;
 
 import com.google.common.collect.EvictingQueue;
+import net.pacificsoft.microservices.favorita.repository.AlertaRepository;
+import org.slf4j.Logger;
 
 import java.util.*;
+
 
 public class LinealizeService {
     private ArrayList<String> locationPriority;
@@ -14,9 +18,16 @@ public class LinealizeService {
     private Map<Integer, Tracking> anomaliesMap = new TreeMap<>();
     private boolean dirrection;
 
+    private Logger logger;
+    private AlertaRepository alertaRepository;
+
     public LinealizeService(ArrayList<String> locationPriority, boolean dirrection) {
         this.locationPriority = locationPriority;
         this.dirrection = dirrection;
+    }
+
+    public void setAlertaRepository(AlertaRepository alertaRepository) {
+        this.alertaRepository = alertaRepository;
     }
 
     public ArrayList<String> getLocationPriority() {
@@ -41,6 +52,10 @@ public class LinealizeService {
 
     public void setDirrection(boolean dirrection) {
         this.dirrection = dirrection;
+    }
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
     }
 
     public void addTrack(Tracking tracking){
@@ -111,7 +126,8 @@ public class LinealizeService {
                     for (Object q:arrayQueue)
                         this.queue.add((QueueElement) q);
 
-                    return;
+                    break;
+                    //return;
                 }
             }
             else {
@@ -127,9 +143,20 @@ public class LinealizeService {
                 else
                     this.index = this.index + a;
             }
-
-
         }
+        if(initialIndex != this.index && indexChangesCount == 1){
+            String initialLocation = this.locationPriority.get(initialIndex);
+            String actualLocation = this.locationPriority.get(index);
+
+            Alerta alert = new Alerta("Cambio de zona", "Se cambio de zona a " + actualLocation, new Date());
+            try{
+                alertaRepository.save(alert);
+            }
+            catch (Exception e){
+
+            }
+        }
+
     }
 
     public boolean indexCondition(QueueElement anomaly, int anomalyPosQueue, boolean right){
