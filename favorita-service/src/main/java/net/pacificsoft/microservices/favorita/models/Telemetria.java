@@ -21,7 +21,7 @@ public class Telemetria{
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
         
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         @Column(name = "dtm", nullable = false)
 	private Date dtm;
         

@@ -20,15 +20,33 @@ import net.pacificsoft.microservices.favorita.repository.RawSensorDataRepository
 import net.pacificsoft.microservices.favorita.repository.TelemetriaRepository;
 import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
 import net.pacificsoft.microservices.favorita.repository.application.RutaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RestController;
 
+//@RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ThreadStateRuta extends Thread{
     
     private Ruta ruta;
+    
+    @Autowired
     RutaRepository rutaRepository;
+    
+    @Autowired
     DeviceRepository deviceRepository;
+    
+    @Autowired
     AlertaRepository alertaRepository;
+    
+    @Autowired
     TrackingRepository trackingRepository;
+    
+    @Autowired
     TelemetriaRepository telemetriaRepository;
+    
+    @Autowired
     RawSensorDataRepository rawSensorRepository;
     
     public ThreadStateRuta(Ruta ruta) {
