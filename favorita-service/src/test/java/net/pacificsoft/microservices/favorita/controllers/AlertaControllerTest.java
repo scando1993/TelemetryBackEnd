@@ -84,7 +84,7 @@ public class AlertaControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].type_alert", is(alert1.getType_alert())));
+                .andExpect(jsonPath("$[0].type_alert", is(alert1.getTypeAlert())));
     }
     
     @Test
@@ -113,7 +113,7 @@ public class AlertaControllerTest {
 
         JSONObject json = new JSONObject();
         json.put("message", alert.getMensaje());
-        json.put("type_alert", alert.getType_alert());
+        json.put("type_alert", alert.getTypeAlert());
         mvc.perform(post("/alerta/"+alert.getRuta().getId()+'/'+alert.getDevice().getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 .content(json.toString())
@@ -154,7 +154,7 @@ public class AlertaControllerTest {
 
         JSONObject json = new JSONObject();
         json.put("message", alert.getMensaje());
-        json.put("type_alert", alert.getType_alert());
+        json.put("type_alert", alert.getTypeAlert());
 
         mvc.perform(put("/alerta/"+alert.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)

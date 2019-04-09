@@ -1,13 +1,10 @@
 
 package net.pacificsoft.microservices.favorita.controllers;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.google.gson.Gson;
+
 import net.pacificsoft.microservices.favorita.models.*;
 import net.pacificsoft.microservices.favorita.repository.*;
 import org.json.JSONArray;
-import org.slf4j.Marker;
-import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -738,6 +735,20 @@ public class ApiGatewayController {
     
     @GetMapping("/getDeviceTelemetry")
     public ResponseEntity getOrderTelemetrysDevice(@RequestParam String device) {
+        if(deviceRepository.existsByName(device)){
+            Device d = deviceRepository.findByName(device).get(0);
+            List<Telemetria> ts = telemetriaRepository.findByDeviceOrderByDtmDesc(d);
+            return new ResponseEntity(ts,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+    }
+    
+    
+    @GetMapping("/getAlerts")
+    public ResponseEntity getAlerts(@RequestParam String device) {
         if(deviceRepository.existsByName(device)){
             Device d = deviceRepository.findByName(device).get(0);
             List<Telemetria> ts = telemetriaRepository.findByDeviceOrderByDtmDesc(d);
