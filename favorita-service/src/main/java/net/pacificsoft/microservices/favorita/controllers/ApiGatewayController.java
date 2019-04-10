@@ -151,7 +151,7 @@ public class ApiGatewayController {
                 device = (deviceRepository.findByName("unknown")).get(0);
                 useUnknownDevice = true;
                 //-------creating alert
-                Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, continuing ith Device: unknown");
+                Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, continuing ith Device: unknown", new Date());
                 postAlert(alerta, device);
             }
             //-----------updating Device Status
@@ -187,15 +187,15 @@ public class ApiGatewayController {
             //family = "favorita";
             if(family.compareTo("") == 0){
                 logger.warn("Any MAC is associated with any family. Try with families associated with device");
-                Alerta alert = new Alerta("MAC error","MACs do not have any family");
-                postAlert(alert,device);
+                Alerta alert = new Alerta("MAC error", "MACs do not have any family, looking for a family asociate with the device: "+deviceName, new Date());
+                //postAlert(alert,device);
                 if(useUnknownDevice)
                     return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PARTIAL_CONTENT);
                 families = device.getGroup().getFamilies();
                 useDeviceFamily = true;
                 if(families.size() == 0){
                     logger.error("Device is not associated with any family");
-                    Alerta alert2 = new Alerta("Device error","Device does not have any family");
+                    Alerta alert2 = new Alerta("Device error", "Device does not have any family", new Date());
                     postAlert(alert2,device);
                     return new ResponseEntity("Could not found any family associated with given MACs or device", HttpStatus.INTERNAL_SERVER_ERROR);
                 }
@@ -234,7 +234,7 @@ public class ApiGatewayController {
                 }
                 if(iterator.hasNext()){
                     logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
-                    Alerta alert = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family");
+                    Alerta alert = new Alerta("Go Server error", "Response is empty. Could not obtain a valid prediction, maybe invalid family", new Date());
                     postAlert(alert,device);
                     return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PRECONDITION_FAILED);
                 }
@@ -243,7 +243,7 @@ public class ApiGatewayController {
             logger.info("Successfull Responce");
             if(jData.getJSONObject("message").getJSONObject("location_names").isEmpty()){
                 logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?");
-                Alerta alert = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?");
+                Alerta alert = new Alerta("Go Server error", "Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?", new Date());
                 postAlert(alert,device);
                 Tracking tracking = new Tracking("?", epochDateTime);
                 postTracking(tracking,device,defaultTrackingLocationGroup);
@@ -778,12 +778,26 @@ public class ApiGatewayController {
 
     }
     
+    @GetMapping("/getAlertasRuta")
+        public ResponseEntity getAlertasRuta(@RequestParam Long rutaid){
+            if(rutaRepository.existsById(rutaid)){
+                Ruta ruta = rutaRepository.findById(rutaid).get();
+                List<Alerta> alertas = alertaRepository.findByRuta(ruta);
+                return new ResponseEntity(alertas,HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            
+    }
+    
     @GetMapping("/startThread")
-        public void startThread(@RequestParam Long id){
-            Ruta ruta = rutaRepository.findById(id).get();
-            //ThreadStartRuta ts = new ThreadStartRuta();
-            //ts.start();
-            run(ruta);
+        public void startThread(){
+            //Ruta ruta = rutaRepository.findById(id).get();
+            ThreadStartRuta ts = new ThreadStartRuta(rutaRepository, alertaRepository, deviceRepository,
+                                                     trackingRepository, telemetriaRepository, rawDataRepository);
+            ts.start();
+            //run(ruta);
     }
 
     @GetMapping("/CorrectRoute")
@@ -982,7 +996,7 @@ public class ApiGatewayController {
     }
     
     
-        public void run(Ruta ruta) {
+      /*  public void run(Ruta ruta) {
         boolean process = true;
         boolean fin = true;
         while(process && fin){
