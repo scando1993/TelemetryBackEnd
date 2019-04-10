@@ -29,7 +29,7 @@ public class Alerta{
     @Column(name = "mensaje", nullable = false)
     private String mensaje;
     
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "dtm")
     private Date dtm;
 
