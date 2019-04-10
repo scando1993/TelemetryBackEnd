@@ -819,22 +819,6 @@ public class ApiGatewayController {
         }
     }
     
-    @GetMapping("/getAlertasGroupByDay")
-    public ResponseEntity alertasGroupByDay(@RequestParam Long id){
-        try {
-            Ruta ruta = rutaRepository.findById(id).get();
-            //ThreadStartRuta ts = new ThreadStartRuta();
-            //ts.start();
-            Device device = ruta.getDevice();
-            startLinealizeService(device, ruta.getStart_date(), ruta.getEnd_date());
-
-            return new ResponseEntity("WOW", HttpStatus.OK);
-        }
-        catch (Exception e){
-            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    
     @GetMapping("/getAlertasOrder")
     public ResponseEntity alertasOnOrderByDtm(){
         try {
@@ -849,18 +833,28 @@ public class ApiGatewayController {
                     alertas.add(a);
                 }
             }
-            /*
+            Collections.sort(alertas);
             for(Alerta a: alertas){
                 Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDay());
                 if(!dates.contains(d)){
                     dates.add(d);
                     rAl  = new ArrayList();
+                    jAlerta = new JSONObject();
                     rAl.add(a);
+                    Date comp = a.getDtm();
+                    for (Alerta b: alertas){
+                        Date m = b.getDtm();
+                        if(m.getYear()==comp.getYear() && m.getMonth()==comp.getMonth() &&
+                           m.getDate()==comp.getDate() && b.getId()!=a.getId()){
+                            rAl.add(b);
+                        }
+                    }
+                    jAlerta.put("Dtm", d);
+                    jAlerta.put("Alertas", rAl);
+                    result.add(jAlerta.toMap());
                 }
-            }*/
-            
-            Collections.sort(alertas);
-            return new ResponseEntity(alertas, HttpStatus.OK);
+            }
+            return new ResponseEntity(result, HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
