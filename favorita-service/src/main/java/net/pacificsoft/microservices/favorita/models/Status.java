@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -22,14 +21,14 @@ public class Status{
 	private long id;
         
         @Column(name = "batery")
-        private int batery;
+        private Integer batery;
         
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "last_transmision")
         private Date last_transmision;
         
         @Column(name = "signal_level")
-        private double signal_level;
+        private Double signal_level;
         
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         @Column(name = "last_update")
@@ -39,7 +38,7 @@ public class Status{
         @JoinColumn(name = "deviceID")
         private Device device;
 
-        public Status(int batery, Date last_transmision, double signal_level, Date last_update) {
+        public Status(Integer batery, Date last_transmision, Double signal_level, Date last_update) {
             this.batery = batery;
             this.last_transmision = last_transmision;
             this.signal_level = signal_level;
@@ -57,11 +56,11 @@ public class Status{
             this.id = id;
         }
 
-        public int getBatery() {
+        public Integer getBatery() {
             return batery;
         }
 
-        public void setBatery(int batery) {
+        public void setBatery(Integer batery) {
             this.batery = batery;
         }
 
@@ -73,11 +72,11 @@ public class Status{
             this.last_transmision = last_transmision;
         }
 
-        public double getSignal_level() {
+        public Double getSignal_level() {
             return signal_level;
         }
 
-        public void setSignal_level(double signal_level) {
+        public void setSignal_level(Double signal_level) {
             this.signal_level = signal_level;
         }
 
