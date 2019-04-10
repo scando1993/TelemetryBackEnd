@@ -90,7 +90,7 @@ public class ThreadStateRuta extends Thread{
                                         " esta fuera de los límites ideales con una temperatura de "+temp+" grados, temperatura máxima ideal: "+temp_max_ideal
                                         +", temperatura mínima ideal: "+temp_min_ideal;
                         ruta.setStatus("No ideal");
-                        saveRuta(ruta, typeAlert, mensaje);
+                        saveRuta(ruta, typeAlert, mensaje, t.getDtm());
                     }
                 }
                 else if(temp >= temp_max || temp <= temp_min){
@@ -111,7 +111,7 @@ public class ThreadStateRuta extends Thread{
                                         " esta fuera de los límites máximos con una temperatura de "+temp+" grados, temperatura máxima: "+temp_max
                                 +", temperatura mínima: "+temp_min;
                         ruta.setStatus("No efectiva");
-                        saveRuta(ruta, typeAlert, mensaje);
+                        saveRuta(ruta, typeAlert, mensaje, t.getDtm());
                     }
                     break;
                 }
@@ -130,7 +130,7 @@ public class ThreadStateRuta extends Thread{
                                 if(ruta.getFurgon() != null){
                                     String mensaje = "Ha completado su ruta el furgon " + ruta.getFurgon().getName();
                                     ruta.setStatus("Finalizada");
-                                    saveRuta(ruta, typeAlert, mensaje);
+                                    saveRuta(ruta, typeAlert, mensaje, telemetrias.get(telemetrias.size()-1).getDtm());
                                 }
                                 break;
                             }
@@ -143,7 +143,7 @@ public class ThreadStateRuta extends Thread{
                     if(ruta.getFurgon() != null){
                         String mensaje = "Ha terminado su ruta el furgon " + ruta.getFurgon().getName();
                         ruta.setStatus("Finalizada");
-                        saveRuta(ruta, typeAlert, mensaje);
+                        saveRuta(ruta, typeAlert, mensaje, ruta.getEnd_date());
                     }
                     break;
                 }
@@ -151,8 +151,8 @@ public class ThreadStateRuta extends Thread{
         }
     }
      
-    public void saveRuta(Ruta ruta, String typeAlert, String mensaje){
-        Alerta alert = new Alerta(typeAlert, mensaje, new Date());
+    public void saveRuta(Ruta ruta, String typeAlert, String mensaje, Date date){
+        Alerta alert = new Alerta(typeAlert, mensaje, date);
                 alert.setDevice(ruta.getDevice());
                 alert.setRuta(ruta);
                 ruta.getDevice().getAlertas().add(alert);

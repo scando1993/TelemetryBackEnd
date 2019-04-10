@@ -68,7 +68,7 @@ public class ThreadStartRuta extends Thread{
                 if(date.compareTo(r.getStart_date())>=0 &&
                    (!ids.contains(r.getId()))){
                     ids.add(r.getId());
-                    r.setStatus("Activa");
+                    r.setStatus("Activo");
                     repository.save(r);
                     LinealThread linealThread = new LinealThread(r,alertaRepository, trackingRepository);
                     String typeAlert = "inicio_ruta";
