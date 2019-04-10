@@ -1072,7 +1072,7 @@ public class ApiGatewayController {
                 alertaRepository.save(alert);
                 deviceRepository.save(ruta.getDevice());
                 rutaRepository.save(ruta);
-    }
+    }*/
 
     public void startLinealizeService(Device device, Date start, Date end){
         ArrayList<String> priorityQueue = new ArrayList<>();
