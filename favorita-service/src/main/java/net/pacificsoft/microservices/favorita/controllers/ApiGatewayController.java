@@ -796,6 +796,7 @@ public class ApiGatewayController {
             //Ruta ruta = rutaRepository.findById(id).get();
             ThreadStartRuta ts = new ThreadStartRuta(rutaRepository, alertaRepository, deviceRepository,
                                                      trackingRepository, telemetriaRepository, rawDataRepository);
+            ts.setLogger(logger);
             ts.start();
             //run(ruta);
     }
@@ -1079,6 +1080,7 @@ public class ApiGatewayController {
         priorityQueue.add("?");
         priorityQueue.add("recepcion carnes");
         priorityQueue.add("carga furgon");
+
         LinealizeService linealizeService = new LinealizeService(priorityQueue,true);
         linealizeService.setLogger(logger);
         linealizeService.setAlertaRepository(alertaRepository);

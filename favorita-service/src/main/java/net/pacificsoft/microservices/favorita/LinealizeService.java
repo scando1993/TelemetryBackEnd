@@ -8,7 +8,9 @@ import com.google.common.collect.EvictingQueue;
 import net.pacificsoft.microservices.favorita.repository.AlertaRepository;
 import org.slf4j.Logger;
 import org.springframework.util.SerializationUtils;
+import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -156,13 +158,18 @@ public class LinealizeService {
                 else
                     this.index = this.index + a;
                 this.anomaliesMap = new TreeMap<>();
+                indexChangesCount ++;
             }
         }
         if(initialIndex != this.index && indexChangesCount == 1){
             String initialLocation = this.locationPriority.get(initialIndex);
             String actualLocation = this.locationPriority.get(index);
+            Date date = ((QueueElement)this.queue.toArray()[1]).getTracking().getDtm();
+            RestTemplate restTemplate = new RestTemplate();
+            SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            String changeDate = as.format(date);
 
-            Alerta alert = new Alerta("Cambio de zona", "Se cambio de zona a " + actualLocation, new Date());
+            Alerta alert = new Alerta("Cambio de zona", "Se cambio de zona a " + actualLocation, date);
             try{
                 this.alertaRepository.save(alert);
                 this.logger.info("Creando alerta");
