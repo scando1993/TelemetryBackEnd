@@ -21,11 +21,11 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 //@EnableDiscoveryClient
 
 public class Application {
-    
+    //asd
     //@Autowired
     //DataSource datasource;
     private static final Logger logger = LogManager.getLogger(Application.class);
-    private static final ThreadStartRuta ts = new ThreadStartRuta();
+    //private static final ThreadStartRuta ts = new ThreadStartRuta();
     
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

@@ -3,6 +3,7 @@ package net.pacificsoft.microservices.favorita.models.application;
 import net.pacificsoft.microservices.favorita.models.*;
 import javax.persistence.*;
 
+
 @Entity
 @Table(name = "locales_mac")
 public class LocalesMac{

@@ -18,6 +18,14 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import net.pacificsoft.microservices.favorita.ThreadStartRuta;
+import net.pacificsoft.microservices.favorita.ThreadStateRuta;
+import net.pacificsoft.microservices.favorita.Variables;
+import net.pacificsoft.microservices.favorita.models.application.LocalesMac;
+import net.pacificsoft.microservices.favorita.models.application.Producto;
+import net.pacificsoft.microservices.favorita.models.application.Ruta;
+import net.pacificsoft.microservices.favorita.repository.application.RutaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +63,8 @@ public class ApiGatewayController {
     private LocationGroupRepository locationGroupRepository;
     @Autowired
     private MacRepository macRepository;
+    @Autowired
+    private RutaRepository rutaRepository;
 
     final String uri = "http://104.209.196.204:9090/track";
     //final String uri = "http://172.16.10.41:8005/track";
@@ -138,7 +148,7 @@ public class ApiGatewayController {
                 device = (deviceRepository.findByName("unknown")).get(0);
                 useUnknownDevice = true;
                 //-------creating alert
-                Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, continuing ith Device: unknown");
+                Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, continuing ith Device: unknown", new Date());
                 postAlert(alerta, device);
             }
             //-----------creating rawsSensorData
@@ -170,15 +180,15 @@ public class ApiGatewayController {
             //family = "favorita";
             if(family.compareTo("") == 0){
                 logger.warn("Any MAC is associated with any family. Try with families associated with device");
-                Alerta alert = new Alerta("MAC error","MACs do not have any family");
-                postAlert(alert,device);
+                Alerta alert = new Alerta("MAC error", "MACs do not have any family, looking for a family asociate with the device: "+deviceName, new Date());
+                //postAlert(alert,device);
                 if(useUnknownDevice)
                     return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PARTIAL_CONTENT);
                 families = device.getGroup().getFamilies();
                 useDeviceFamily = true;
                 if(families.size() == 0){
                     logger.error("Device is not associated with any family");
-                    Alerta alert2 = new Alerta("Device error","Device does not have any family");
+                    Alerta alert2 = new Alerta("Device error", "Device does not have any family", new Date());
                     postAlert(alert2,device);
                     return new ResponseEntity("Could not found any family associated with given MACs or device", HttpStatus.INTERNAL_SERVER_ERROR);
                 }
@@ -217,7 +227,7 @@ public class ApiGatewayController {
                 }
                 if(iterator.hasNext()){
                     logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
-                    Alerta alert = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family");
+                    Alerta alert = new Alerta("Go Server error", "Response is empty. Could not obtain a valid prediction, maybe invalid family", new Date());
                     postAlert(alert,device);
                     return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PRECONDITION_FAILED);
                 }
@@ -226,7 +236,7 @@ public class ApiGatewayController {
             logger.info("Successfull Responce");
             if(jData.getJSONObject("message").getJSONObject("location_names").isEmpty()){
                 logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?");
-                Alerta alert = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?");
+                Alerta alert = new Alerta("Go Server error", "Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?", new Date());
                 postAlert(alert,device);
                 Tracking tracking = new Tracking("?", epochDateTime);
                 postTracking(tracking,device,defaultTrackingLocationGroup);
@@ -683,6 +693,7 @@ public class ApiGatewayController {
             return new ResponseEntity<String>("Make sure that you had sent the correct JSON \n" + formatApiInnerDate, HttpStatus.BAD_REQUEST);
         }
     }
+    
     @GetMapping("/getAllFamilies")
         public ResponseEntity getAllFamilies(){
         try{
@@ -758,6 +769,28 @@ public class ApiGatewayController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 
+    }
+    
+    @GetMapping("/getAlertasRuta")
+        public ResponseEntity getAlertasRuta(@RequestParam Long rutaid){
+            if(rutaRepository.existsById(rutaid)){
+                Ruta ruta = rutaRepository.findById(rutaid).get();
+                List<Alerta> alertas = alertaRepository.findByRuta(ruta);
+                return new ResponseEntity(alertas,HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            
+    }
+    
+    @GetMapping("/startThread")
+        public void startThread(){
+            //Ruta ruta = rutaRepository.findById(id).get();
+            ThreadStartRuta ts = new ThreadStartRuta(rutaRepository, alertaRepository, deviceRepository,
+                                                     trackingRepository, telemetriaRepository, rawDataRepository);
+            ts.start();
+            //run(ruta);
     }
 
 
@@ -925,6 +958,85 @@ public class ApiGatewayController {
         deviceRepository.save(device);
         locationGroupRepository.save(locationGroup);
     }
+    
+    
+      /*  public void run(Ruta ruta) {
+        boolean process = true;
+        boolean fin = true;
+        while(process && fin){
+            try {
+                Thread.sleep(Variables.time_check);
+            } catch (InterruptedException ex) {
+                java.util.logging.Logger.getLogger(ThreadStateRuta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            long valErr = 0;
+            Telemetria tAnterior = null;
+            Producto p = ruta.getProducto();
+            List<Telemetria> telemetrias = telemetriaRepository.findByDtmBetweenAndDevice(ruta.getStart_date(), ruta.getEnd_date(),ruta.getDevice());
+            float temp_max = p.getTemp_max();
+            float temp_min = p.getTemp_min();
+            float temp_max_ideal = p.getTemp_max_ideal();
+            float temp_min_ideal = p.getTemp_min_ideal();
+            for (Telemetria t: telemetrias){
+                double temp = t.getValue();
+                if((temp >= temp_max_ideal || temp <= temp_min_ideal) &&
+                   (temp <= temp_max || temp >= temp_min)){
+                    String typeAlert = "temperatura_limite_ideales";
+                    String mensaje = "Temperatura del producto " + p.getName() + 
+                                    " esta fuera de los límites ideales";
+                    ruta.setStatus("No ideal");
+                    saveRuta(ruta, typeAlert, mensaje);
+                }
+                else if(temp >= temp_max || temp <= temp_min){
+                    if(tAnterior != null) {
+                        valErr = valErr + (t.getDtm().getTime() - tAnterior.getDtm().getTime());
+                    }
+                    tAnterior = new Telemetria(t.getDtm(), t.getName(), t.getValue());
+                }
+                else{
+                    tAnterior = new Telemetria(t.getDtm(), t.getName(), t.getValue());
+                    valErr = 0;
+                }
+                if (valErr >= 3600){
+                    String typeAlert = "temperatura_limite_maximas";
+                    String mensaje = "Temperatura del producto " + p.getName() + 
+                                    " esta fuera de los límites máximos";
+                    ruta.setStatus("No efectiva");
+                    saveRuta(ruta, typeAlert, mensaje);
+                    process = false;
+                    break;
+                }
+            }
+            if(!process){
+                RawSensorData rw = rawDataRepository.findByEpochDateTimeBetweenAndDeviceOrderByEpochDateTimeDesc(
+                                    ruta.getStart_date(), ruta.getEnd_date(), ruta.getDevice()).get(0);
+                Set<LocalesMac> localesMacs = ruta.getLocalFin().getLocalesMacs();
+                for(WifiScan ws: rw.getWifiScans()){
+                    for(LocalesMac lm: localesMacs){
+                        if(lm.getMac().equals(ws.getMAC())){
+                            fin = false;
+                            String typeAlert = "fin_ruta";
+                            String mensaje = "Ha completado su ruta el furgon " + ruta.getFurgon().getName();
+                            ruta.setStatus("Finalizada");
+                            saveRuta(ruta, typeAlert, mensaje);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+     
+    public void saveRuta(Ruta ruta, String typeAlert, String mensaje){
+        Alerta alert = new Alerta(typeAlert, mensaje, new Date());
+                alert.setDevice(ruta.getDevice());
+                alert.setRuta(ruta);
+                ruta.getDevice().getAlertas().add(alert);
+                ruta.getAlertas().add(alert);
+                alertaRepository.save(alert);
+                deviceRepository.save(ruta.getDevice());
+                rutaRepository.save(ruta);
+    } */
     
     
 }
