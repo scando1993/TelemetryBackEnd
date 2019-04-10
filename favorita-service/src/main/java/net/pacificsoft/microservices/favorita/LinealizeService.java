@@ -5,6 +5,7 @@ import net.pacificsoft.microservices.favorita.models.LocationPriority;
 import  net.pacificsoft.microservices.favorita.models.Tracking;
 
 import com.google.common.collect.EvictingQueue;
+import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import net.pacificsoft.microservices.favorita.repository.AlertaRepository;
 import org.slf4j.Logger;
 import org.springframework.util.SerializationUtils;
@@ -21,6 +22,7 @@ public class LinealizeService {
     private int index;
     private Map<Integer, Tracking> anomaliesMap = new TreeMap<>();
     private boolean dirrection;
+    private Ruta ruta;
 
     private Logger logger;
     private AlertaRepository alertaRepository;
@@ -30,6 +32,14 @@ public class LinealizeService {
         this.dirrection = dirrection;
         this.trackingList = new ArrayList<>();
         this.index = 0;
+    }
+
+    public Ruta getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(Ruta ruta) {
+        this.ruta = ruta;
     }
 
     public void setAlertaRepository(AlertaRepository alertaRepository) {
@@ -171,8 +181,11 @@ public class LinealizeService {
 
             Alerta alert = new Alerta("Cambio de zona", "Se cambio de zona a " + actualLocation, date);
             try{
-                this.alertaRepository.save(alert);
-                this.logger.info("Creando alerta");
+                List<Alerta> alertas = alertaRepository.findByRutaAndDtm(this.ruta, date);
+                if(alertas.size() == 0){
+                    this.alertaRepository.save(alert);
+                    this.logger.info("Creando alerta");
+                }
             }
             catch (Exception e){
                 this.logger.warn("No so se puede error");
