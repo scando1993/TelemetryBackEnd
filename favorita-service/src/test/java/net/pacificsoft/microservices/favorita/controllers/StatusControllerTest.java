@@ -47,7 +47,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 //@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 public class StatusControllerTest {
-
+/*
     @Autowired
     private MockMvc mvc;
 
@@ -166,5 +166,5 @@ public class StatusControllerTest {
                 .andExpect(status().isOk());
 
     }
-    
+    */
 }

@@ -101,7 +101,7 @@ public class ApiGatewayController {
     @PostMapping("/track")
     public ResponseEntity Storage(
             @Valid @RequestBody String dataBody) {
-        //Gson gson = new Gson();   
+        //Gson gson = new Gson();
         //dataBody = "[" + dataBody + "]";
         //EverHubEvent everHubEvent = gson.fromJson(dataBody,EverHubEvent.class);
         try{
@@ -156,19 +156,21 @@ public class ApiGatewayController {
             }
             //-----------updating Device Status
             //updateStatus(device, batteryLevel, epochDateTime);
-            logger.info("Device status updated");
+            Status statusDevice = new Status(batteryLevel, epochDateTime, null ,null );
+            postStatus(statusDevice, device);
+            logger.info("Device status has been storaged");
 
             //-----------creating rawsSensorData
             RawSensorData rawSensorData = new RawSensorData(epoch,temperature,epochDateTime,rawData);
             postRawSensorDara(rawSensorData, device);
-            logger.info("Raw data have been storaged");
+            logger.info("Raw data has been storaged");
 
             //-------Obtainning MACS
             JSONObject wifiList = getWifiMACs(wifis);
 
             //-----------creating wifiSensor
             postWifiScans(wifiList,rawSensorData);
-            logger.info("WifiSensor have been storaged");
+            logger.info("WifiSensor has been storaged");
 /*
             if(!validDevice){
                 logger.error("Device not found returning 404");
@@ -179,7 +181,7 @@ public class ApiGatewayController {
             //-----creatinig Telemetry
             Telemetria telemetry = new Telemetria(epochDateTime,"temperature",temperature);
             postTelemtry(telemetry,device);
-            logger.info("Telemetry have been storaged");
+            logger.info("Telemetry has been storaged");
 
             //-------getting Families
             String family = findFamilyMac(wifiList);
@@ -270,17 +272,17 @@ public class ApiGatewayController {
             //-------Creating MessageGuess
             MessageGuess messageGuess = new MessageGuess(finalLocation, finalProbability);
             postMessageGuess(messageGuess);
-            logger.info("MessageGuess have been storaged");
+            logger.info("MessageGuess has been storaged");
 
             //---------Creating Message
             Message message = new Message();
             postMessage(message, messageGuess);
-            logger.info("Message have been storaged");
+            logger.info("Message has been storaged");
 
             //--------Creating goApiResponse
             GoApiResponse goApiResponse = new GoApiResponse(status);
             postGoApiResponse(goApiResponse,message,device);
-            logger.info("goApiResponse have been storaged");
+            logger.info("goApiResponse has been storaged");
 
             //------------creating Predictions, LocationNames and Probabilities
             jData.getJSONObject("message").getJSONObject("location_names");
@@ -700,7 +702,7 @@ public class ApiGatewayController {
             return new ResponseEntity<String>("Make sure that you had sent the correct JSON \n" + formatApiInnerDate, HttpStatus.BAD_REQUEST);
         }
     }
-    
+
     @GetMapping("/getAllFamilies")
         public ResponseEntity getAllFamilies(){
         try{
@@ -737,7 +739,7 @@ public class ApiGatewayController {
         }
 
     }
-    
+
     @GetMapping("/getDeviceTrack")
     public ResponseEntity getOrderTrackingsDevice(@RequestParam String device) {
         if(deviceRepository.existsByName(device)){
@@ -750,7 +752,7 @@ public class ApiGatewayController {
         }
 
     }
-    
+
     @GetMapping("/getDeviceTelemetry")
     public ResponseEntity getOrderTelemetrysDevice(@RequestParam String device) {
         if(deviceRepository.existsByName(device)){
@@ -763,8 +765,8 @@ public class ApiGatewayController {
         }
 
     }
-    
-    
+
+
     @GetMapping("/getAlerts")
     public ResponseEntity getAlerts(@RequestParam String device) {
         if(deviceRepository.existsByName(device)){
@@ -777,7 +779,7 @@ public class ApiGatewayController {
         }
 
     }
-    
+
     @GetMapping("/getAlertasRuta")
         public ResponseEntity getAlertasRuta(@RequestParam Long rutaid){
             if(rutaid != 0){
@@ -789,9 +791,9 @@ public class ApiGatewayController {
                 List<Alerta> alertas = alertaRepository.findByRutaIsNotNullOrderByDtm();
                 return new ResponseEntity(alertas,HttpStatus.OK);
             }
-            
+
     }
-    
+
     @GetMapping("/startThread")
         public void startThread(){
             //Ruta ruta = rutaRepository.findById(id).get();
@@ -996,8 +998,8 @@ public class ApiGatewayController {
         statusRepository.save(status);
         deviceRepository.save(device);
     }
-    
-    
+
+
       /*  public void run(Ruta ruta) {
         boolean process = true;
         boolean fin = true;
@@ -1020,7 +1022,7 @@ public class ApiGatewayController {
                 if((temp >= temp_max_ideal || temp <= temp_min_ideal) &&
                    (temp <= temp_max || temp >= temp_min)){
                     String typeAlert = "temperatura_limite_ideales";
-                    String mensaje = "Temperatura del producto " + p.getName() + 
+                    String mensaje = "Temperatura del producto " + p.getName() +
                                     " esta fuera de los límites ideales";
                     ruta.setStatus("No ideal");
                     saveRuta(ruta, typeAlert, mensaje);
@@ -1037,7 +1039,7 @@ public class ApiGatewayController {
                 }
                 if (valErr >= 3600){
                     String typeAlert = "temperatura_limite_maximas";
-                    String mensaje = "Temperatura del producto " + p.getName() + 
+                    String mensaje = "Temperatura del producto " + p.getName() +
                                     " esta fuera de los límites máximos";
                     ruta.setStatus("No efectiva");
                     saveRuta(ruta, typeAlert, mensaje);
@@ -1064,7 +1066,7 @@ public class ApiGatewayController {
             }
         }
     }
-     
+
     public void saveRuta(Ruta ruta, String typeAlert, String mensaje){
         Alerta alert = new Alerta(typeAlert, mensaje, new Date());
                 alert.setDevice(ruta.getDevice());
@@ -1095,6 +1097,6 @@ public class ApiGatewayController {
             logger.info(t.getLocation());
         }
     }
-    
-    
+
+
 }

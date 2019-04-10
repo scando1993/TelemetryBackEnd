@@ -10,14 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import net.pacificsoft.microservices.favorita.models.Device;
 import net.pacificsoft.microservices.favorita.models.Status;
 import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
 import net.pacificsoft.microservices.favorita.repository.StatusRepository;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
