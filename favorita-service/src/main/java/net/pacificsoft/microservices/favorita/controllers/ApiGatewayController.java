@@ -830,8 +830,8 @@ public class ApiGatewayController {
             JSONObject jAlerta;
             List<Date> dates = new ArrayList();
             for(Ruta r: rutas){
-                if(r.getEnd_date().compareTo(now)>=0 &&
-                   r.getStart_date().compareTo(now)>=0){
+                if(r.getEnd_date().compareTo(now)>0 &&
+                   r.getStart_date().compareTo(now)<0){
                     for(Alerta a: r.getAlertas()){
                         alertas.add(a);
                     }
