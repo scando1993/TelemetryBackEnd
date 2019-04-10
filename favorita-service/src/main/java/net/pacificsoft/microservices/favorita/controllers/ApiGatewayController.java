@@ -2,6 +2,7 @@
 package net.pacificsoft.microservices.favorita.controllers;
 
 
+import net.pacificsoft.microservices.favorita.LinealizeService;
 import net.pacificsoft.microservices.favorita.models.*;
 import net.pacificsoft.microservices.favorita.repository.*;
 import org.json.JSONArray;
@@ -63,6 +64,8 @@ public class ApiGatewayController {
     private LocationGroupRepository locationGroupRepository;
     @Autowired
     private MacRepository macRepository;
+    @Autowired
+    private StatusRepository statusRepository;
     @Autowired
     private RutaRepository rutaRepository;
 
@@ -151,6 +154,10 @@ public class ApiGatewayController {
                 Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, continuing ith Device: unknown", new Date());
                 postAlert(alerta, device);
             }
+            //-----------updating Device Status
+            //updateStatus(device, batteryLevel, epochDateTime);
+            logger.info("Device status updated");
+
             //-----------creating rawsSensorData
             RawSensorData rawSensorData = new RawSensorData(epoch,temperature,epochDateTime,rawData);
             postRawSensorDara(rawSensorData, device);
@@ -790,8 +797,25 @@ public class ApiGatewayController {
             //Ruta ruta = rutaRepository.findById(id).get();
             ThreadStartRuta ts = new ThreadStartRuta(rutaRepository, alertaRepository, deviceRepository,
                                                      trackingRepository, telemetriaRepository, rawDataRepository);
+            ts.setLogger(logger);
             ts.start();
             //run(ruta);
+    }
+
+    @GetMapping("/CorrectRoute")
+    public ResponseEntity startThreadTrack(@RequestParam Long id){
+        try {
+            Ruta ruta = rutaRepository.findById(id).get();
+            //ThreadStartRuta ts = new ThreadStartRuta();
+            //ts.start();
+            Device device = ruta.getDevice();
+            startLinealizeService(device, ruta.getStart_date(), ruta.getEnd_date());
+
+            return new ResponseEntity("WOW", HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
@@ -959,6 +983,19 @@ public class ApiGatewayController {
         deviceRepository.save(device);
         locationGroupRepository.save(locationGroup);
     }
+    /*
+    private void updateStatus(Device device, int battery, Date lastTransmition) {
+        Status status = device.getStatus();
+        status.setBatery(battery);
+        status.setLast_transmision(lastTransmition);
+        statusRepository.save(status);
+    }*/
+    private void postStatus(Status status, Device device){
+        device.getStatuses().add(status);
+        status.setDevice(device);
+        statusRepository.save(status);
+        deviceRepository.save(device);
+    }
     
     
       /*  public void run(Ruta ruta) {
@@ -1037,7 +1074,27 @@ public class ApiGatewayController {
                 alertaRepository.save(alert);
                 deviceRepository.save(ruta.getDevice());
                 rutaRepository.save(ruta);
-    } */
+    }*/
+
+    public void startLinealizeService(Device device, Date start, Date end){
+        ArrayList<String> priorityQueue = new ArrayList<>();
+        priorityQueue.add("?");
+        priorityQueue.add("recepcion carnes");
+        priorityQueue.add("carga furgon");
+
+        LinealizeService linealizeService = new LinealizeService(priorityQueue,true);
+        linealizeService.setLogger(logger);
+        linealizeService.setAlertaRepository(alertaRepository);
+        List<Tracking> trackingList = trackingRepository.findByDtmBetweenAndDeviceOrderByDtm(start, end, device);
+        for (Tracking t : trackingList){
+            linealizeService.addTrack(t);
+
+        }
+        List<Tracking> q =linealizeService.getTrackingList();
+        for (Tracking t : q){
+            logger.info(t.getLocation());
+        }
+    }
     
     
 }

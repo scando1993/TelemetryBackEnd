@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import net.pacificsoft.microservices.favorita.models.Alerta;
+import net.pacificsoft.microservices.favorita.models.Device;
+import net.pacificsoft.microservices.favorita.models.Tracking;
 import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import net.pacificsoft.microservices.favorita.repository.AlertaRepository;
 import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
@@ -13,6 +15,7 @@ import net.pacificsoft.microservices.favorita.repository.RawSensorDataRepository
 import net.pacificsoft.microservices.favorita.repository.TelemetriaRepository;
 import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
 import net.pacificsoft.microservices.favorita.repository.application.RutaRepository;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,6 +43,7 @@ public class ThreadStartRuta extends Thread{
     @Autowired
     private RawSensorDataRepository rawSensorDataRepository;
 
+    private Logger logger;
     public ThreadStartRuta(RutaRepository repository, AlertaRepository alertaRepository, DeviceRepository deviceRepository,
                            TrackingRepository trackingRepository, TelemetriaRepository telemetriaRepository, RawSensorDataRepository rawDataRepository) {
         this.repository = repository;
@@ -49,9 +53,11 @@ public class ThreadStartRuta extends Thread{
         this.telemetriaRepository = telemetriaRepository;
         this.rawSensorDataRepository = rawDataRepository;
     }
-    
-    
-    
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
     List<Long> ids = new ArrayList();
     @Override
 	public void run() {
@@ -64,6 +70,7 @@ public class ThreadStartRuta extends Thread{
                     ids.add(r.getId());
                     r.setStatus("Activo");
                     repository.save(r);
+                    LinealThread linealThread = new LinealThread(r,alertaRepository, trackingRepository);
                     String typeAlert = "inicio_ruta";
                     if(r.getDevice()!=null && r.getProducto()!=null){
                         String mensaje = "Inicio ruta. Device: " + r.getDevice().getName() + 
@@ -72,6 +79,7 @@ public class ThreadStartRuta extends Thread{
                                                         trackingRepository, telemetriaRepository, rawSensorDataRepository);
                         saveRuta(r, typeAlert, mensaje);
                         ts.start();
+                        linealThread.start();
                     }
                 }
             }
@@ -87,5 +95,24 @@ public class ThreadStartRuta extends Thread{
                 alertaRepository.save(alert);
                 deviceRepository.save(ruta.getDevice());
                 repository.save(ruta);
-    } 
+    }
+    public void startLinealizeService(Device device, Date start, Date end){
+        ArrayList<String> priorityQueue = new ArrayList<>();
+        priorityQueue.add("?");
+        priorityQueue.add("recepcion carnes");
+        priorityQueue.add("carga furgon");
+
+        LinealizeService linealizeService = new LinealizeService(priorityQueue,true);
+        linealizeService.setLogger(logger);
+        linealizeService.setAlertaRepository(alertaRepository);
+        List<Tracking> trackingList = trackingRepository.findByDtmBetweenAndDeviceOrderByDtm(start, end, device);
+        for (Tracking t : trackingList){
+            linealizeService.addTrack(t);
+
+        }
+        List<Tracking> q =linealizeService.getTrackingList();
+        for (Tracking t : q){
+            logger.info(t.getLocation());
+        }
+    }
 }
