@@ -848,18 +848,28 @@ public class ApiGatewayController {
                     alertas.add(a);
                 }
             }
-            /*
+            Collections.sort(alertas);
             for(Alerta a: alertas){
                 Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDay());
                 if(!dates.contains(d)){
                     dates.add(d);
                     rAl  = new ArrayList();
+                    jAlerta = new JSONObject();
                     rAl.add(a);
+                    Date comp = a.getDtm();
+                    for (Alerta b: alertas){
+                        Date m = b.getDtm();
+                        if(m.getYear()==comp.getYear() && m.getMonth()==comp.getMonth() &&
+                           m.getDate()==comp.getDate() && b.getId()!=a.getId()){
+                            rAl.add(b);
+                        }
+                    }
+                    jAlerta.put("Dtm", d);
+                    jAlerta.put("Alertas", rAl);
+                    result.add(jAlerta.toMap());
                 }
-            }*/
-            
-            Collections.sort(alertas);
-            return new ResponseEntity(alertas, HttpStatus.OK);
+            }
+            return new ResponseEntity(result, HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
