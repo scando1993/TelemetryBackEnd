@@ -819,6 +819,56 @@ public class ApiGatewayController {
             return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @GetMapping("/getAlertasGroupByDay")
+    public ResponseEntity alertasGroupByDay(@RequestParam Long id){
+        try {
+            Ruta ruta = rutaRepository.findById(id).get();
+            //ThreadStartRuta ts = new ThreadStartRuta();
+            //ts.start();
+            Device device = ruta.getDevice();
+            startLinealizeService(device, ruta.getStart_date(), ruta.getEnd_date());
+
+            return new ResponseEntity("WOW", HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/getAlertasOrder")
+    public ResponseEntity alertasOnOrderByDtm(){
+        try {
+            List<Ruta> rutas = rutaRepository.findByStatusIs("Activo");
+            List<Alerta> alertas = new ArrayList();
+            List<Alerta> rAl = new ArrayList();
+            List<Map<String, Object>> result = new ArrayList();
+            JSONObject jAlerta;
+            List<Date> dates = new ArrayList();
+            for(Ruta r: rutas){
+                for(Alerta a: r.getAlertas()){
+                    alertas.add(a);
+                }
+            }
+            /*
+            for(Alerta a: alertas){
+                Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDay());
+                if(!dates.contains(d)){
+                    dates.add(d);
+                    rAl  = new ArrayList();
+                    rAl.add(a);
+                }
+            }*/
+            
+            Collections.sort(alertas);
+            return new ResponseEntity(alertas, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    
 
 
 /*

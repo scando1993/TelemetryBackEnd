@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
 import net.pacificsoft.microservices.favorita.models.Alerta;
 import net.pacificsoft.microservices.favorita.models.Device;
 import net.pacificsoft.microservices.favorita.models.RawSensorData;
@@ -49,6 +49,19 @@ public class ThreadStateRuta extends Thread{
     @Autowired
     RawSensorDataRepository rawSensorRepository;
     
+    
+    private Logger logger ;
+
+    public Logger getLogger() {
+        return logger;
+    }
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+    
+    
+    
     public ThreadStateRuta(Ruta ruta, RutaRepository rutaRepository, DeviceRepository deviceRepository,
                            AlertaRepository alertaRepository, TrackingRepository trackingRepository, 
                            TelemetriaRepository telemetriaRepository, RawSensorDataRepository rawSensorRepository) {
@@ -70,7 +83,7 @@ public class ThreadStateRuta extends Thread{
             try {
                 Thread.sleep(Variables.time_check);
             } catch (InterruptedException ex) {
-                Logger.getLogger(ThreadStateRuta.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println(ex.getMessage());
             }
             long valErr = 0;
             Telemetria tAnterior = null;
@@ -149,6 +162,8 @@ public class ThreadStateRuta extends Thread{
                 }
             }
         }
+        logger.warn("Ruta with id "+ruta.getId() + " finished");
+
     }
      
     public void saveRuta(Ruta ruta, String typeAlert, String mensaje, Date date){

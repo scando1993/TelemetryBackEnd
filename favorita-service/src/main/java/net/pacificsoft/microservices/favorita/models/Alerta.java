@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 @Entity
 @Table (name = "alerta")
-public class Alerta{
+public class Alerta implements Comparable<Alerta>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -119,5 +119,10 @@ public class Alerta{
 
     public void setDtm(Date dtm) {
         this.dtm = dtm;
+    }
+
+    @Override
+    public int compareTo(Alerta o) {
+        return (int) (this.getDtm().getTime() - o.getDtm().getTime());
     }
 }

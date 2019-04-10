@@ -78,6 +78,7 @@ public class ThreadStartRuta extends Thread{
                         ThreadStateRuta ts = new ThreadStateRuta(r, repository, deviceRepository, alertaRepository,
                                                         trackingRepository, telemetriaRepository, rawSensorDataRepository);
                         saveRuta(r, typeAlert, mensaje);
+                        ts.setLogger(logger);
                         ts.start();
                         linealThread.start();
                     }
