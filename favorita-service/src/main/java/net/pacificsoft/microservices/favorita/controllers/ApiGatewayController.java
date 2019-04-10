@@ -228,7 +228,6 @@ public class ApiGatewayController {
                     jsonRequesGoServer.put("f",f.getName());
                     jData = new JSONObject(restTemplate.postForObject( uri, jsonRequesGoServer.toString(), String.class));
                     Boolean empty = jData.getJSONObject("message").getJSONObject("location_names").isEmpty();
-                    logger.info("" + empty);
                     if(empty)
                         jsonRequesGoServer.remove("f");
                     else
