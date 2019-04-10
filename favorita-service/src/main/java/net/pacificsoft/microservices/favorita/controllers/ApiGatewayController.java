@@ -124,7 +124,7 @@ public class ApiGatewayController {
                 wifis = (JSONArray) jDataBody.remove("wifi");
                 deviceName = (String) jDataBody.remove("device");
                 familyDevice = (String) jDataBody.remove("family");
-                String dtmS = (String) jDataBody.remove("EpochDateTime");
+                String dtmS = (String) jDataBody.remove("epochDateTime");
                 epochDateTime = as.parse(dtmS);
                 temperature = jDataBody.getDouble("temperature");
                 batteryLevel = (int) jDataBody.remove("battery");
