@@ -773,13 +773,14 @@ public class ApiGatewayController {
     
     @GetMapping("/getAlertasRuta")
         public ResponseEntity getAlertasRuta(@RequestParam Long rutaid){
-            if(rutaRepository.existsById(rutaid)){
+            if(rutaid != 0){
                 Ruta ruta = rutaRepository.findById(rutaid).get();
-                List<Alerta> alertas = alertaRepository.findByRuta(ruta);
+                List<Alerta> alertas = alertaRepository.findByRutaOrderByDtm(ruta);
                 return new ResponseEntity(alertas,HttpStatus.OK);
             }
             else{
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
+                List<Alerta> alertas = alertaRepository.findByRutaIsNotNullOrderByDtm();
+                return new ResponseEntity(alertas,HttpStatus.OK);
             }
             
     }

@@ -12,5 +12,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RepositoryRestResource()
 public interface AlertaRepository extends JpaRepository<Alerta, Long>{
     List<Alerta> findByRutaAndTypeAlert(Ruta ruta, String type_alert);
-    List<Alerta> findByRuta(Ruta ruta);
+    List<Alerta> findByRutaOrderByDtm(Ruta ruta);
+    List<Alerta> findByRutaIsNotNullOrderByDtm();
 }
