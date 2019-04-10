@@ -822,24 +822,28 @@ public class ApiGatewayController {
     @GetMapping("/getAlertasOrder")
     public ResponseEntity alertasOnOrderByDtm(){
         try {
-            List<Ruta> rutas = rutaRepository.findByStatusIs("Activo");
+            Date now = new Date();
+            List<Ruta> rutas = rutaRepository.findAll();
             List<Alerta> alertas = new ArrayList();
             List<Alerta> rAl = new ArrayList();
             List<Map<String, Object>> result = new ArrayList();
             JSONObject jAlerta;
             List<Date> dates = new ArrayList();
             for(Ruta r: rutas){
-                for(Alerta a: r.getAlertas()){
-                    alertas.add(a);
+                if(r.getEnd_date().compareTo(now)>0 &&
+                   r.getStart_date().compareTo(now)<0){
+                    for(Alerta a: r.getAlertas()){
+                        alertas.add(a);
+                    }
                 }
             }
             Collections.sort(alertas);
             for(Alerta a: alertas){
-                Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDay());
+                Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDate());
+                rAl  = new ArrayList();
+                jAlerta = new JSONObject();
                 if(!dates.contains(d)){
                     dates.add(d);
-                    rAl  = new ArrayList();
-                    jAlerta = new JSONObject();
                     rAl.add(a);
                     Date comp = a.getDtm();
                     for (Alerta b: alertas){
@@ -850,7 +854,7 @@ public class ApiGatewayController {
                         }
                     }
                     jAlerta.put("Dtm", d);
-                    jAlerta.put("Alertas", rAl);
+                    jAlerta.put("Alertas", rAl.toArray());
                     result.add(jAlerta.toMap());
                 }
             }
