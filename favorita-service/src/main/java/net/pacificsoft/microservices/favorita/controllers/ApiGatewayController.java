@@ -794,6 +794,7 @@ public class ApiGatewayController {
             //ts.start();
             Device device = ruta.getDevice();
             startLinealizeService(device, ruta.getStart_date(), ruta.getEnd_date());
+
             return new ResponseEntity("WOW", HttpStatus.OK);
         }
         catch (Exception e){
@@ -1061,18 +1062,21 @@ public class ApiGatewayController {
 
     public void startLinealizeService(Device device, Date start, Date end){
         ArrayList<String> priorityQueue = new ArrayList<>();
-        priorityQueue.add("recepcion carne");
-        priorityQueue.add("carga furgon");
         priorityQueue.add("?");
+        priorityQueue.add("recepcion carnes");
+        priorityQueue.add("carga furgon");
         LinealizeService linealizeService = new LinealizeService(priorityQueue,true);
         linealizeService.setLogger(logger);
         linealizeService.setAlertaRepository(alertaRepository);
         List<Tracking> trackingList = trackingRepository.findByDtmBetweenAndDeviceOrderByDtm(start, end, device);
         for (Tracking t : trackingList){
             linealizeService.addTrack(t);
+
         }
         List<Tracking> q =linealizeService.getTrackingList();
-
+        for (Tracking t : q){
+            logger.info(t.getLocation());
+        }
     }
     
     
