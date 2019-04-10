@@ -839,10 +839,10 @@ public class ApiGatewayController {
             Collections.sort(alertas);
             for(Alerta a: alertas){
                 Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDate());
+                rAl  = new ArrayList();
+                jAlerta = new JSONObject();
                 if(!dates.contains(d)){
                     dates.add(d);
-                    rAl  = new ArrayList();
-                    jAlerta = new JSONObject();
                     rAl.add(a);
                     Date comp = a.getDtm();
                     for (Alerta b: alertas){
@@ -853,11 +853,11 @@ public class ApiGatewayController {
                         }
                     }
                     jAlerta.put("Dtm", d);
-                    jAlerta.put("Alertas", rAl);
+                    jAlerta.put("Alertas", rAl.toArray());
                     result.add(jAlerta.toMap());
                 }
             }
-            return new ResponseEntity(alertas, HttpStatus.OK);
+            return new ResponseEntity(result, HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
