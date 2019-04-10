@@ -183,7 +183,8 @@ public class LinealizeService {
             try{
                 List<Alerta> alertas = alertaRepository.findByRutaAndDtm(this.ruta, date);
                 if(alertas.size() == 0){
-                    this.alertaRepository.save(alert);
+                    //this.alertaRepository.save(alert);
+                    postAlert(alert, ruta);
                     this.logger.info("Creando alerta");
                 }
             }
@@ -285,6 +286,13 @@ public class LinealizeService {
             this.location = location;
             this.tracking.setLocation(location);
         }
+    }
+
+    private void postAlert(Alerta alert, Ruta ruta){
+        ruta.getAlertas().add(alert);
+        alert.setRuta(ruta);
+        alert.setDevice(ruta.getDevice());
+        alertaRepository.save(alert);
     }
 
 }
