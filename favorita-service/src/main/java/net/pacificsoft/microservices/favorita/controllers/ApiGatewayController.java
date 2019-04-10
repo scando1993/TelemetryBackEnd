@@ -820,22 +820,6 @@ public class ApiGatewayController {
         }
     }
     
-    @GetMapping("/getAlertasGroupByDay")
-    public ResponseEntity alertasGroupByDay(@RequestParam Long id){
-        try {
-            Ruta ruta = rutaRepository.findById(id).get();
-            //ThreadStartRuta ts = new ThreadStartRuta();
-            //ts.start();
-            Device device = ruta.getDevice();
-            startLinealizeService(device, ruta.getStart_date(), ruta.getEnd_date());
-
-            return new ResponseEntity("WOW", HttpStatus.OK);
-        }
-        catch (Exception e){
-            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    
     @GetMapping("/getAlertasOrder")
     public ResponseEntity alertasOnOrderByDtm(){
         try {
