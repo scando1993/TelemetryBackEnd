@@ -178,10 +178,10 @@ public class LinealizeService {
             RestTemplate restTemplate = new RestTemplate();
             SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             String changeDate = as.format(date);
-
-            Alerta alert = new Alerta("Cambio de zona", "Se cambio de zona a " + actualLocation, date);
+            String msg = "Se cambio de zona a " + actualLocation +  "aporximadamente a la: " + changeDate;
+            Alerta alert = new Alerta("Cambio de zona", msg, date);
             try{
-                List<Alerta> alertas = alertaRepository.findByRutaAndDtm(this.ruta, date);
+                List<Alerta> alertas = alertaRepository.findByRutaAndDtmAndTypeAlert(this.ruta, date, msg);
                 if(alertas.size() == 0){
                     //this.alertaRepository.save(alert);
                     postAlert(alert, ruta);
