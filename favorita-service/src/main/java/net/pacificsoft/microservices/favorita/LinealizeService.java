@@ -145,7 +145,8 @@ public class LinealizeService {
 
                         //((QueueElement)arrayQueue[anomalyPosQueue]).setLocation(priorityChange);
                         //Tracking trackChange = ((QueueElement)arrayQueue[anomalyPosQueue]).getTracking();
-                        this.anomaliesMap.put(anomalyPosArray,anomaly.getTracking());
+                        //this.anomaliesMap.put(anomalyPosArray,anomaly.getTracking());
+                        this.anomaliesMap.put(anomalyPosArray,trackingChange);
                     }
 
                 }
@@ -175,7 +176,7 @@ public class LinealizeService {
             String initialLocation = this.locationPriority.get(initialIndex);
             String actualLocation = this.locationPriority.get(index);
             Date date = ((QueueElement)this.queue.toArray()[1]).getTracking().getDtm();
-            RestTemplate restTemplate = new RestTemplate();
+            //RestTemplate restTemplate = new RestTemplate();
             SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             String changeDate = as.format(date);
             String msg = "Se cambio de zona a " + actualLocation +  "aporximadamente a la: " + changeDate;
