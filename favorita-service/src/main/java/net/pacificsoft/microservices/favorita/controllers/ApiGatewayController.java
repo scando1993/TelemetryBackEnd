@@ -810,7 +810,7 @@ public class ApiGatewayController {
             //ThreadStartRuta ts = new ThreadStartRuta();
             //ts.start();
             Device device = ruta.getDevice();
-            startLinealizeService(device, ruta.getStart_date(), ruta.getEnd_date());
+            startLinealizeService(device, ruta.getStart_date(), ruta.getEnd_date(), ruta);
 
             return new ResponseEntity("WOW", HttpStatus.OK);
         }
@@ -1125,7 +1125,7 @@ public class ApiGatewayController {
                 rutaRepository.save(ruta);
     }*/
 
-    public void startLinealizeService(Device device, Date start, Date end){
+    public void startLinealizeService(Device device, Date start, Date end, Ruta ruta){
         ArrayList<String> priorityQueue = new ArrayList<>();
         priorityQueue.add("?");
         priorityQueue.add("recepcion carnes");
@@ -1134,6 +1134,7 @@ public class ApiGatewayController {
         LinealizeService linealizeService = new LinealizeService(priorityQueue,true);
         linealizeService.setLogger(logger);
         linealizeService.setAlertaRepository(alertaRepository);
+        linealizeService.setRuta(ruta);
         List<Tracking> trackingList = trackingRepository.findByDtmBetweenAndDeviceOrderByDtm(start, end, device);
         for (Tracking t : trackingList){
             linealizeService.addTrack(t);
