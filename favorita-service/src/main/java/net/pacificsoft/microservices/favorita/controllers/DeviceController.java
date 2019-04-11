@@ -1,14 +1,22 @@
 package net.pacificsoft.microservices.favorita.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
 import net.pacificsoft.microservices.favorita.models.Device;
 import net.pacificsoft.microservices.favorita.models.GoApiResponse;
 import net.pacificsoft.microservices.favorita.models.Group;
+import net.pacificsoft.microservices.favorita.models.Telemetria;
 import net.pacificsoft.microservices.favorita.models.Tracking;
+import net.pacificsoft.microservices.favorita.models.application.Producto;
+import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
 import net.pacificsoft.microservices.favorita.repository.GoApiResponseRepository;
 import net.pacificsoft.microservices.favorita.repository.GroupRepository;
+import net.pacificsoft.microservices.favorita.repository.TelemetriaRepository;
 import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,6 +45,9 @@ public class DeviceController {
         
         @Autowired
 	private GoApiResponseRepository goRepository;
+        
+        @Autowired
+	private TelemetriaRepository telemetriaRepository;
         
 	@GetMapping("/device")
 	public ResponseEntity getAllDevices() {
@@ -125,5 +136,50 @@ public class DeviceController {
                     return new ResponseEntity<String>("Device #" + deviceId + 
                             " does not exist.", HttpStatus.NOT_FOUND);
                 }
+	}
+        
+        @GetMapping("/getDevices")
+	public ResponseEntity getProductos(){
+            try{
+		List<Device> devices = deviceRepository.findAll();
+                List<Map<String, Object>> result = new ArrayList();
+                JSONObject jProducto;
+                JSONObject jDevice;
+                JSONObject jRuta;
+                Ruta ruta;
+                List<Telemetria> ts;
+                for(Device d: devices){
+                    jDevice = new JSONObject();
+                    jProducto = new JSONObject();
+                    jRuta = new JSONObject();
+                    jDevice.put("id", d.getId());
+                    jDevice.put("name", d.getName());
+                    ruta = null;
+                    ts = new ArrayList();
+                    for(Ruta r: d.getRutas()){
+                        if(!r.getStatus().equals("Finalizado"))
+                            ruta = r;
+                    }
+                    if(ruta!=null){
+                        jRuta.put("id", ruta.getId());
+                        jRuta.put("status", ruta.getStatus());
+                        jProducto.put("id", ruta.getProducto().getId());
+                        jProducto.put("name", ruta.getProducto().getName());
+                        jProducto.put("temp_max", ruta.getProducto().getTemp_max());
+                        jProducto.put("temp_min", ruta.getProducto().getTemp_min());
+                        jProducto.put("temp_max_ideal", ruta.getProducto().getTemp_max_ideal());
+                        jProducto.put("temp_min_ideal", ruta.getProducto().getTemp_min_ideal());
+                        jRuta.put("producto", jProducto);
+                        ts = telemetriaRepository.findByDtmBetweenAndDeviceOrderByDtm(ruta.getStart_date(), ruta.getEnd_date(), ruta.getDevice());
+                    }
+                    jDevice.put("ruta", jRuta);
+                    jDevice.put("telemetrias", ts.toArray());
+                    result.add(jDevice.toMap());
+                }
+                return new ResponseEntity(result, HttpStatus.OK);
+            }
+            catch (Exception e){
+                return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+         }
 	}
 }

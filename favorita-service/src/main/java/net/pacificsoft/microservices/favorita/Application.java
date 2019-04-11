@@ -29,6 +29,7 @@ public class Application {
     //private static final ThreadStartRuta ts = new ThreadStartRuta();
     
     public static void main(String[] args) {
+        System.out.println(new Date());
         SpringApplication.run(Application.class, args);
         //ts.start();
     }
@@ -50,7 +51,8 @@ public class Application {
                                                     Prediction.class, Probabilities.class, RawSensorData.class, SigfoxMessage.class,
                                                     Status.class, Telemetria.class, Tracking.class, WifiScan.class, Bodega.class,
                                                     Ciudad.class, Formato.class, Furgon.class, Locales.class, Producto.class,
-                                                    Provincia.class, Ruta.class, Zona.class, ConfigurationDevice.class);
+                                                    Provincia.class, Ruta.class, Zona.class, ConfigurationDevice.class,
+                                                    LocalesMac.class, Tracking_resp.class);
                                 config.setDefaultPageSize(Integer.MAX_VALUE);
                                 config.setReturnBodyOnCreate(Boolean.TRUE);
                                 config.setReturnBodyOnUpdate(Boolean.TRUE);

@@ -17,8 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.JProgressBar;
+import net.pacificsoft.microservices.favorita.models.Telemetria;
 import net.pacificsoft.microservices.favorita.models.application.Producto;
 import net.pacificsoft.microservices.favorita.models.application.Ruta;
+import net.pacificsoft.microservices.favorita.repository.TelemetriaRepository;
 import net.pacificsoft.microservices.favorita.repository.application.ProductoRepository;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -34,6 +37,9 @@ public class ProductoController {
 
         @Autowired
 	private RutaRepository rutaRepository;
+        
+        @Autowired
+	private TelemetriaRepository telemetriaRepository;
         
 	@GetMapping("/producto")
 	public ResponseEntity getAllProductos() {
@@ -119,5 +125,45 @@ public class ProductoController {
                     return new ResponseEntity<String>("Producto #" + productoId + 
                             " does not exist.", HttpStatus.NOT_FOUND);
                 }
+	}
+        
+        @GetMapping("/getProductos")
+	public ResponseEntity getProductos(){
+            try{
+		List<Producto> productos = productoRepository.findAll();
+                List<Map<String, Object>> result = new ArrayList();
+                List<Map<String, Object>> rutas;
+                JSONObject jRuta;
+                JSONObject jProducto;
+                JSONObject jDevice;
+                for (Producto p: productos){
+                    jProducto = new JSONObject();
+                    jProducto.put("id", p.getId());
+                    jProducto.put("name", p.getName());
+                    jProducto.put("temp_max", p.getTemp_max());
+                    jProducto.put("temp_min", p.getTemp_min());
+                    jProducto.put("temp_max_ideal", p.getTemp_max_ideal());
+                    jProducto.put("temp_min_ideal", p.getTemp_min_ideal());
+                    rutas = new ArrayList();
+                    for(Ruta r: p.getRutas()){
+                        jRuta = new JSONObject();
+                        jDevice = new JSONObject();
+                        jRuta.put("id", r.getId());
+                        jRuta.put("status", r.getStatus());
+                        jDevice.put("id", r.getDevice().getId());
+                        jDevice.put("name", r.getDevice().getName());
+                        List<Telemetria> ts = telemetriaRepository.findByDtmBetweenAndDeviceOrderByDtm(r.getStart_date(), r.getEnd_date(), r.getDevice());
+                        jDevice.put("telemetrias", ts.toArray());
+                        jRuta.put("device", jDevice);
+                        rutas.add(jRuta.toMap());
+                    }
+                    jProducto.put("rutas", rutas.toArray());
+                    result.add(jProducto.toMap());
+                }
+                return new ResponseEntity(result, HttpStatus.OK);
+            }
+            catch (Exception e){
+                return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+         }
 	}
 }

@@ -126,6 +126,7 @@ public class ThreadStateRuta extends Thread{
                         ruta.setStatus("No efectiva");
                         saveRuta(ruta, typeAlert, mensaje, t.getDtm());
                     }
+                    valErr = 0;
                     break;
                 }
             }
@@ -142,7 +143,7 @@ public class ThreadStateRuta extends Thread{
                                 String typeAlert = "fin_ruta";
                                 if(ruta.getFurgon() != null){
                                     String mensaje = "Ha completado su ruta el furgon " + ruta.getFurgon().getName();
-                                    ruta.setStatus("Finalizada");
+                                    ruta.setStatus("Finalizado");
                                     saveRuta(ruta, typeAlert, mensaje, telemetrias.get(telemetrias.size()-1).getDtm());
                                 }
                                 break;
@@ -155,7 +156,7 @@ public class ThreadStateRuta extends Thread{
                     String typeAlert = "fin_ruta";
                     if(ruta.getFurgon() != null){
                         String mensaje = "Ha terminado su ruta el furgon " + ruta.getFurgon().getName();
-                        ruta.setStatus("Finalizada");
+                        ruta.setStatus("Finalizado");
                         saveRuta(ruta, typeAlert, mensaje, ruta.getEnd_date());
                     }
                     break;

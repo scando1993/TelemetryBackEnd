@@ -17,5 +17,6 @@ public interface TelemetriaRepository extends JpaRepository<Telemetria, Long>{
     List<Telemetria> findByDtmLessThanEqualAndDevice(Date end, Device device);
     List<Telemetria> findByDtmBetweenAndDevice(Date start, Date end, Device device);
     List<Telemetria> findByDtmBetweenAndDeviceOrderByDtm(Date start, Date end, Device device);
+    List<Telemetria> findByDtmBetweenOrderByDtm(Date start, Date end);
     List<Telemetria> findAllByOrderByDtm();
 }
