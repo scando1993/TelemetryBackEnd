@@ -809,6 +809,12 @@ public class ApiGatewayController {
             ts.start();
             //run(ruta);
     }
+        
+    @GetMapping("/getRutasNotEnd")
+        public ResponseEntity getRutaNotEnd(){
+            //Ruta ruta = rutaRepository.findById(id).get();
+            return new ResponseEntity(rutaRepository.findByStatusNotLike("Finalizado"), HttpStatus.OK);
+    }
 
     @GetMapping("/CorrectRoute")
     public ResponseEntity startThreadTrack(@RequestParam Long id){
@@ -830,22 +836,20 @@ public class ApiGatewayController {
     public ResponseEntity alertasOnOrderByDtm(){
         try {
             Date now = new Date();
-            List<Ruta> rutas = rutaRepository.findAll();
+            List<Ruta> rutas = rutaRepository.findByStatusNotLike("Finalizado");
             List<Alerta> alertas = new ArrayList();
             List<Alerta> rAl = new ArrayList();
             List<Map<String, Object>> result = new ArrayList();
             JSONObject jAlerta;
             List<Date> dates = new ArrayList();
             for(Ruta r: rutas){
-                if(r.getEnd_date().compareTo(now)>0 &&
-                   r.getStart_date().compareTo(now)<0){
-                    for(Alerta a: r.getAlertas()){
-                        alertas.add(a);
-                    }
+                for(Alerta a: r.getAlertas()){
+                    alertas.add(a);
                 }
+                
             }
             Collections.sort(alertas);
-            for(Alerta a: alertas){
+            for(Aler        ta a: alertas){
                 Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDate());
                 rAl  = new ArrayList();
                 jAlerta = new JSONObject();
