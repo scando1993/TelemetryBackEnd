@@ -275,7 +275,7 @@ public class RutaController {
             try{
 		List<Ruta> rutas = rutaRepository.findByStatusNotLike("Finalizado");
                 List<Map<String, Object>> result = new ArrayList();
-                List<JSONObject> telemetrias;
+                List<Map<String, Object>> telemetrias;
                 JSONObject jProducto;
                 JSONObject jDevice;
                 JSONObject jRuta;
@@ -306,7 +306,7 @@ public class RutaController {
                         jTelemetria.put("dtm", formateT.format(tl.getDtm()));
                         jTelemetria.put("name", tl.getName());
                         jTelemetria.put("value", tl.getValue());
-                        telemetrias.add(jTelemetria);
+                        telemetrias.add(jTelemetria.toMap());
                     }
                     jDevice.put("id", d.getId());
                     jDevice.put("name", d.getName());
