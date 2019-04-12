@@ -279,6 +279,7 @@ public class RutaController {
                 JSONObject jDevice;
                 JSONObject jRuta;
                 List<Telemetria> ts;
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
                 for(Ruta r: rutas){
                     Device d = r.getDevice();
                     jRuta = new JSONObject();
@@ -286,8 +287,8 @@ public class RutaController {
                     jProducto = new JSONObject();
                     jRuta.put("id", r.getId());
                     jRuta.put("status", r.getStatus());
-                    jRuta.put("start_date", r.getStart_date());
-                    jRuta.put("end_date", r.getEnd_date());
+                    jRuta.put("start_date", simpleDateFormat.format(r.getStart_date()));
+                    jRuta.put("end_date", simpleDateFormat.format(r.getEnd_date()));
                     jProducto.put("id", r.getProducto().getId());
                     jProducto.put("name", r.getProducto().getName());
                     jProducto.put("temp_max", r.getProducto().getTemp_max());
