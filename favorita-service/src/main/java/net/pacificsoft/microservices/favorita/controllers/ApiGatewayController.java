@@ -20,12 +20,15 @@ import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
+import net.pacificsoft.microservices.favorita.SaveMacLocal;
 import net.pacificsoft.microservices.favorita.ThreadStartRuta;
 import net.pacificsoft.microservices.favorita.ThreadStateRuta;
 import net.pacificsoft.microservices.favorita.Variables;
 import net.pacificsoft.microservices.favorita.models.application.LocalesMac;
 import net.pacificsoft.microservices.favorita.models.application.Producto;
 import net.pacificsoft.microservices.favorita.models.application.Ruta;
+import net.pacificsoft.microservices.favorita.repository.application.LocalesMacRepository;
+import net.pacificsoft.microservices.favorita.repository.application.LocalesRepository;
 import net.pacificsoft.microservices.favorita.repository.application.RutaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +71,10 @@ public class ApiGatewayController {
     private StatusRepository statusRepository;
     @Autowired
     private RutaRepository rutaRepository;
+    @Autowired
+    private LocalesRepository localesRepository;
+    @Autowired
+    private LocalesMacRepository localesMacRepository;
 
     final String uri = "http://104.209.196.204:9090/track";
     //final String uri = "http://172.16.10.41:8005/track";
@@ -865,11 +872,22 @@ public class ApiGatewayController {
         }
     }
     
+    @PostMapping("/saveMacLocales")
+    public ResponseEntity saveMacLocales(@Valid @RequestBody SaveMacLocal saveMacLocal,
+                                         @RequestParam Long localid){
+        try {
+            SaveMacLocal.postMacLocales(localesRepository, localesMacRepository, saveMacLocal, localid, logger);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     
 
 
 /*
---------------------Axiliar Functions------------------------------------
+--------------------Auxiliar Functions------------------------------------
  */
     private JSONObject createTrackingJson (Date dtm, String location){
         SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
