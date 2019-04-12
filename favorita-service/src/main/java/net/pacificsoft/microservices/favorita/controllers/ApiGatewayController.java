@@ -849,7 +849,7 @@ public class ApiGatewayController {
                 
             }
             Collections.sort(alertas);
-            for(Aler        ta a: alertas){
+            for(Alerta a: alertas){
                 Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDate());
                 rAl  = new ArrayList();
                 jAlerta = new JSONObject();
