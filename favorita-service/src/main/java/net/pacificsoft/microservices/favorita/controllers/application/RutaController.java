@@ -269,4 +269,45 @@ public class RutaController {
                             HttpStatus.NOT_FOUND);
             }
         }
+        
+        @GetMapping("/getRutas")
+	public ResponseEntity getRutas(){
+            try{
+		List<Ruta> rutas = rutaRepository.findByStatusNotLike("Finalizado");
+                List<Map<String, Object>> result = new ArrayList();
+                JSONObject jProducto;
+                JSONObject jDevice;
+                JSONObject jRuta;
+                List<Telemetria> ts;
+                for(Ruta r: rutas){
+                    Device d = r.getDevice();
+                    jRuta = new JSONObject();
+                    jDevice = new JSONObject();
+                    jProducto = new JSONObject();
+                    jRuta.put("id", r.getId());
+                    jRuta.put("status", r.getStatus());
+                    jRuta.put("start_date", r.getStart_date());
+                    jRuta.put("end_date", r.getEnd_date());
+                    jProducto.put("id", r.getProducto().getId());
+                    jProducto.put("name", r.getProducto().getName());
+                    jProducto.put("temp_max", r.getProducto().getTemp_max());
+                    jProducto.put("temp_min", r.getProducto().getTemp_min());
+                    jProducto.put("temp_max_ideal", r.getProducto().getTemp_max_ideal());
+                    jProducto.put("temp_min_ideal", r.getProducto().getTemp_min_ideal());
+                    ts = telemetriaRepository.findByDtmBetweenAndDeviceOrderByDtm(r.getStart_date(), r.getEnd_date(), d);
+                    jDevice.put("id", d.getId());
+                    jDevice.put("name", d.getName());
+                    jDevice.put("uuid", d.getUuid());
+                    jDevice.put("family", d.getFamily());
+                    jDevice.put("telemetrias", ts.toArray());
+                    jRuta.put("producto", jProducto);
+                    jRuta.put("device", jDevice);
+                    result.add(jRuta.toMap());
+                }
+                return new ResponseEntity(result, HttpStatus.OK);
+            }
+            catch (Exception e){
+                return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+         }
+	}
 }

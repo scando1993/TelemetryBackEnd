@@ -10,4 +10,5 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RepositoryRestResource()
 public interface RutaRepository extends JpaRepository<Ruta, Long>{
     List<Ruta> findByStatusIs(String status);
+    List<Ruta> findByStatusNotLike(String status);
 }
