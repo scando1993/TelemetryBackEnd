@@ -275,12 +275,16 @@ public class RutaController {
             try{
 		List<Ruta> rutas = rutaRepository.findByStatusNotLike("Finalizado");
                 List<Map<String, Object>> result = new ArrayList();
+                List<JSONObject> telemetrias;
                 JSONObject jProducto;
                 JSONObject jDevice;
                 JSONObject jRuta;
+                JSONObject jTelemetria;
                 List<Telemetria> ts;
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+                SimpleDateFormat formateT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                 for(Ruta r: rutas){
+                    telemetrias = new ArrayList();
                     Device d = r.getDevice();
                     jRuta = new JSONObject();
                     jDevice = new JSONObject();
@@ -296,11 +300,19 @@ public class RutaController {
                     jProducto.put("temp_max_ideal", r.getProducto().getTemp_max_ideal());
                     jProducto.put("temp_min_ideal", r.getProducto().getTemp_min_ideal());
                     ts = telemetriaRepository.findByDtmBetweenAndDeviceOrderByDtm(r.getStart_date(), r.getEnd_date(), d);
+                    for(Telemetria tl: ts){
+                        jTelemetria = new JSONObject();
+                        jTelemetria.put("id", tl.getId());
+                        jTelemetria.put("dtm", formateT.format(tl.getDtm()));
+                        jTelemetria.put("name", tl.getName());
+                        jTelemetria.put("value", tl.getValue());
+                        telemetrias.add(jTelemetria);
+                    }
                     jDevice.put("id", d.getId());
                     jDevice.put("name", d.getName());
                     jDevice.put("uuid", d.getUuid());
                     jDevice.put("family", d.getFamily());
-                    jDevice.put("telemetrias", ts.toArray());
+                    jDevice.put("telemetrias", telemetrias.toArray());
                     jRuta.put("producto", jProducto);
                     jRuta.put("device", jDevice);
                     result.add(jRuta.toMap());
