@@ -323,4 +323,68 @@ public class RutaController {
                 return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
          }
 	}
+        
+        @GetMapping("/getAllRutas")
+	public ResponseEntity getAll(){
+            try{
+		List<Ruta> rutas = rutaRepository.findAll();
+                List<Map<String, Object>> result = new ArrayList();
+                JSONObject jProducto;
+                JSONObject jLocalInicio;
+                JSONObject jLocalFin;
+                JSONObject jDevice;
+                JSONObject jRuta;
+                JSONObject jFurgon;
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+                SimpleDateFormat formateT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                for(Ruta r: rutas){
+                    Device d = r.getDevice();
+                    jRuta = new JSONObject();
+                    jDevice = new JSONObject();
+                    jProducto = new JSONObject();
+                    jLocalInicio = new JSONObject();
+                    jLocalFin = new JSONObject();
+                    jFurgon = new JSONObject();
+                    jProducto.put("id", r.getProducto().getId());
+                    jProducto.put("name", r.getProducto().getName());
+                    jProducto.put("temp_max", r.getProducto().getTemp_max());
+                    jProducto.put("temp_min", r.getProducto().getTemp_min());
+                    jProducto.put("temp_max_ideal", r.getProducto().getTemp_max_ideal());
+                    jProducto.put("temp_min_ideal", r.getProducto().getTemp_min_ideal());
+                    jDevice.put("id", d.getId());
+                    jDevice.put("name", d.getName());
+                    jDevice.put("uuid", d.getUuid());
+                    jDevice.put("family", d.getFamily());
+                    jLocalInicio.put("id", r.getLocalInicio().getId());
+                    jLocalInicio.put("latitude", r.getLocalInicio().getLatitude());
+                    jLocalInicio.put("length", r.getLocalInicio().getLength());
+                    jLocalInicio.put("family", r.getLocalInicio().getFamily());
+                    jLocalInicio.put("name", r.getLocalInicio().getName());
+                    jLocalInicio.put("numLoc", r.getLocalInicio().getNumLoc());
+                    jLocalFin.put("id", r.getLocalFin().getId());
+                    jLocalFin.put("latitude", r.getLocalFin().getLatitude());
+                    jLocalFin.put("length", r.getLocalFin().getLength());
+                    jLocalFin.put("family", r.getLocalFin().getFamily());
+                    jLocalFin.put("name", r.getLocalFin().getName());
+                    jLocalFin.put("numLoc", r.getLocalFin().getNumLoc());
+                    jFurgon.put("id", r.getFurgon().getId());
+                    jFurgon.put("numFurgon", r.getFurgon().getNumFurgon());
+                    jFurgon.put("name", r.getFurgon().getName());
+                    jRuta.put("id", r.getId());
+                    jRuta.put("status", r.getStatus());
+                    jRuta.put("start_date", simpleDateFormat.format(r.getStart_date()));
+                    jRuta.put("end_date", simpleDateFormat.format(r.getEnd_date()));
+                    jRuta.put("producto", jProducto);
+                    jRuta.put("device", jDevice);
+                    jRuta.put("localInicio", jLocalInicio);
+                    jRuta.put("localFin", jLocalFin);
+                    jRuta.put("furgon", jFurgon);
+                    result.add(jRuta.toMap());
+                }
+                return new ResponseEntity(result, HttpStatus.OK);
+            }
+            catch (Exception e){
+                return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+         }
+	}
 }
