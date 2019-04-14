@@ -334,31 +334,80 @@ public class RutaController {
                 for(Ruta r: rutas){
                     Device d = r.getDevice();
                     jRuta = new JSONObject();
-                    jRuta.put("idProducto", r.getProducto().getId());
-                    jRuta.put("nameProducto", r.getProducto().getName());
-                    jRuta.put("temp_max", r.getProducto().getTemp_max());
-                    jRuta.put("temp_min", r.getProducto().getTemp_min());
-                    jRuta.put("temp_max_ideal", r.getProducto().getTemp_max_ideal());
-                    jRuta.put("temp_min_ideal", r.getProducto().getTemp_min_ideal());
-                    jRuta.put("idDevice", d.getId());
-                    jRuta.put("nameDevice", d.getName());
-                    jRuta.put("uuid", d.getUuid());
-                    jRuta.put("familyDevice", d.getFamily());
-                    jRuta.put("idLocalInicio", r.getLocalInicio().getId());
-                    jRuta.put("latitudeLocalInicio", r.getLocalInicio().getLatitude());
-                    jRuta.put("lengthLocalInicio", r.getLocalInicio().getLength());
-                    jRuta.put("familyLocalInicio", r.getLocalInicio().getFamily());
-                    jRuta.put("nameLocalInicio", r.getLocalInicio().getName());
-                    jRuta.put("numLocLocalInicio", r.getLocalInicio().getNumLoc());
-                    jRuta.put("idLocalFin", r.getLocalFin().getId());
-                    jRuta.put("latitudeLocalFin", r.getLocalFin().getLatitude());
-                    jRuta.put("lengthLocalFin", r.getLocalFin().getLength());
-                    jRuta.put("familyLocalFin", r.getLocalFin().getFamily());
-                    jRuta.put("nameLocalFin", r.getLocalFin().getName());
-                    jRuta.put("numLocLocalFin", r.getLocalFin().getNumLoc());
-                    jRuta.put("idFurgon", r.getFurgon().getId());
-                    jRuta.put("numFurgon", r.getFurgon().getNumFurgon());
-                    jRuta.put("nameFurgon", r.getFurgon().getName());
+                    if(r.getProducto() != null){
+                        jRuta.put("idProducto", r.getProducto().getId());
+                        jRuta.put("nameProducto", r.getProducto().getName());
+                        jRuta.put("temp_max", r.getProducto().getTemp_max());
+                        jRuta.put("temp_min", r.getProducto().getTemp_min());
+                        jRuta.put("temp_max_ideal", r.getProducto().getTemp_max_ideal());
+                        jRuta.put("temp_min_ideal", r.getProducto().getTemp_min_ideal());
+                    }
+                    else{
+                        jRuta.put("idProducto", "");
+                        jRuta.put("nameProducto", "");
+                        jRuta.put("temp_max", "");
+                        jRuta.put("temp_min", "");
+                        jRuta.put("temp_max_ideal", "");
+                        jRuta.put("temp_min_ideal", "");
+                    }
+                    
+                    if(r.getDevice() != null){
+                        jRuta.put("idDevice", d.getId());
+                        jRuta.put("nameDevice", d.getName());
+                        jRuta.put("uuid", d.getUuid());
+                        jRuta.put("familyDevice", d.getFamily());
+                    }
+                    else{
+                        jRuta.put("idDevice", "");
+                        jRuta.put("nameDevice", "");
+                        jRuta.put("uuid", "");
+                        jRuta.put("familyDevice", "");
+                    }
+                    
+                    if(r.getLocalInicio() != null){
+                        jRuta.put("idLocalInicio", r.getLocalInicio().getId());
+                        jRuta.put("latitudeLocalInicio", r.getLocalInicio().getLatitude());
+                        jRuta.put("lengthLocalInicio", r.getLocalInicio().getLength());
+                        jRuta.put("familyLocalInicio", r.getLocalInicio().getFamily());
+                        jRuta.put("nameLocalInicio", r.getLocalInicio().getName());
+                        jRuta.put("numLocLocalInicio", r.getLocalInicio().getNumLoc());
+                    }
+                    else{
+                        jRuta.put("idLocalInicio", "");
+                        jRuta.put("latitudeLocalInicio", "");
+                        jRuta.put("lengthLocalInicio", "");
+                        jRuta.put("familyLocalInicio", "");
+                        jRuta.put("nameLocalInicio", "");
+                        jRuta.put("numLocLocalInicio", "");
+                    }
+                    
+                    if(r.getLocalFin() != null){
+                        jRuta.put("idLocalFin", r.getLocalFin().getId());
+                        jRuta.put("latitudeLocalFin", r.getLocalFin().getLatitude());
+                        jRuta.put("lengthLocalFin", r.getLocalFin().getLength());
+                        jRuta.put("familyLocalFin", r.getLocalFin().getFamily());
+                        jRuta.put("nameLocalFin", r.getLocalFin().getName());
+                        jRuta.put("numLocLocalFin", r.getLocalFin().getNumLoc());
+                    }
+                    else{
+                        jRuta.put("idLocalFin", "");
+                        jRuta.put("latitudeLocalFin", "");
+                        jRuta.put("lengthLocalFin", "");
+                        jRuta.put("familyLocalFin", "");
+                        jRuta.put("nameLocalFin", "");
+                        jRuta.put("numLocLocalFin", "");
+                    }
+                    
+                    if(r.getFurgon() != null){
+                        jRuta.put("idFurgon", r.getFurgon().getId());
+                        jRuta.put("numFurgon", r.getFurgon().getNumFurgon());
+                        jRuta.put("nameFurgon", r.getFurgon().getName());
+                    }
+                    else{
+                        jRuta.put("idFurgon", "");
+                        jRuta.put("numFurgon", "");
+                        jRuta.put("nameFurgon", "");
+                    }
                     jRuta.put("idRuta", r.getId());
                     jRuta.put("status", r.getStatus());
                     jRuta.put("start_date", simpleDateFormat.format(r.getStart_date()));
