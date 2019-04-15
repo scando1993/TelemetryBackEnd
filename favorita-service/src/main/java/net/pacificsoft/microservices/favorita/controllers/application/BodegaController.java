@@ -1,6 +1,9 @@
 package net.pacificsoft.microservices.favorita.controllers.application;
 
 import javax.validation.Valid;
+
+import net.pacificsoft.microservices.favorita.models.application.Provincia;
+import net.pacificsoft.microservices.favorita.models.application.Zona;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -127,4 +130,36 @@ public class BodegaController {
                 }
             
 	}
+
+    @GetMapping("/getBodegas")
+    public ResponseEntity getLocales(){
+        try{
+            List<Bodega> bodegas = bodegaRepository.findAll();
+            List<Map<String, Object>> result = new ArrayList();
+            JSONObject jBodega;
+            for(Bodega l: bodegas){
+                jBodega = new JSONObject();
+                Ciudad c = l.getCiudad();
+                Provincia p = c.getProvincia();
+                Zona z = p.getZona();
+                jBodega.put("idBodega", l.getId());
+                jBodega.put("nameBodega", l.getName());
+
+                jBodega.put("idCiudad", c.getId());
+                jBodega.put("nameCiudad", c.getName());
+
+                jBodega.put("idProvincia", p.getId());
+                jBodega.put("nameProvincia", p.getName());
+
+                jBodega.put("idZona", z.getId());
+                jBodega.put("nameZona", z.getName());
+
+                result.add(jBodega.toMap());
+            }
+            return new ResponseEntity(result, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
