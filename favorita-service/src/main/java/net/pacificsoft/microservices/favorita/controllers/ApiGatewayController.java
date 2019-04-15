@@ -811,6 +811,7 @@ public class ApiGatewayController {
                                 rAl.add(b);
                             }
                         }
+                        Collections.sort(rAl);
                         jAlerta.put("Dtm", d);
                         jAlerta.put("Alertas", rAl.toArray());
                         result.add(jAlerta.toMap());
@@ -839,6 +840,7 @@ public class ApiGatewayController {
                                 rAl.add(b);
                             }
                         }
+                        Collections.sort(rAl);
                         jAlerta.put("Dtm", d);
                         jAlerta.put("Alertas", rAl.toArray());
                         result.add(jAlerta.toMap());
@@ -879,6 +881,7 @@ public class ApiGatewayController {
                                     rAl.add(b);
                                 }
                             }
+                            Collections.sort(rAl);
                             jAlerta.put("Dtm", d);
                             jAlerta.put("Alertas", rAl.toArray());
                             result.add(jAlerta.toMap());
@@ -956,6 +959,7 @@ public class ApiGatewayController {
                             rAl.add(b);
                         }
                     }
+                    Collections.sort(rAl);
                     jAlerta.put("Dtm", d);
                     jAlerta.put("Alertas", rAl.toArray());
                     result.add(jAlerta.toMap());
