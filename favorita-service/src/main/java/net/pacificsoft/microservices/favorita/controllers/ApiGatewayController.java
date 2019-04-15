@@ -864,6 +864,7 @@ public class ApiGatewayController {
                         jAlerta.put("id", a.getId());
                         jAlerta.put("mensaje", a.getMensaje());
                         jAlerta.put("typeAlert", a.getTypeAlert());
+                        jAlerta.put("dtm", a.getDtm());
                         alertas.add(jAlerta.toMap());
                     }
                     jRuta.put("alertas", alertas.toArray());
