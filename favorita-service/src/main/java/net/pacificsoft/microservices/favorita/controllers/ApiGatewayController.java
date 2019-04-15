@@ -788,7 +788,7 @@ public class ApiGatewayController {
 
     @GetMapping("/getAlertasRuta")
         public ResponseEntity getAlertasRuta(@RequestParam Long rutaid){
-            if(rutaid != 0){
+            if(rutaid > 0){
                 Ruta ruta = rutaRepository.findById(rutaid).get();
                 List<Alerta> alertas = alertaRepository.findByRutaOrderByDtm(ruta);
                 List<Alerta> rAl = new ArrayList();
@@ -817,8 +817,42 @@ public class ApiGatewayController {
                 }
                 return new ResponseEntity(result,HttpStatus.OK);
             }
-            else{
+            else if(rutaid==0){
                 List<Alerta> alertas = alertaRepository.findByRutaIsNotNullOrderByDtm();
+                List<Alerta> rAl = new ArrayList();
+                List<Map<String, Object>> result = new ArrayList();
+                JSONObject jAlerta;
+                List<Date> dates = new ArrayList();
+                for(Alerta a: alertas){
+                    Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDate());
+                    rAl  = new ArrayList();
+                    jAlerta = new JSONObject();
+                    if(!dates.contains(d)){
+                        dates.add(d);
+                        rAl.add(a);
+                        Date comp = a.getDtm();
+                        for (Alerta b: alertas){
+                            Date m = b.getDtm();
+                            if(m.getYear()==comp.getYear() && m.getMonth()==comp.getMonth() &&
+                               m.getDate()==comp.getDate() && b.getId()!=a.getId()){
+                                rAl.add(b);
+                            }
+                        }
+                        jAlerta.put("Dtm", d);
+                        jAlerta.put("Alertas", rAl.toArray());
+                        result.add(jAlerta.toMap());
+                    }
+                }
+                return new ResponseEntity(result,HttpStatus.OK);
+            }
+            else{
+                List<Ruta> rutas = rutaRepository.findByStatusLike("Finalizado");
+                List<Alerta> alertas = new ArrayList();
+                for(Ruta r: rutas){
+                    for(Alerta a: r.getAlertas()){
+                        alertas.add(a);
+                    }
+                }
                 List<Alerta> rAl = new ArrayList();
                 List<Map<String, Object>> result = new ArrayList();
                 JSONObject jAlerta;

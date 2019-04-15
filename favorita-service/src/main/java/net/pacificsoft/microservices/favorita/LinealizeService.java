@@ -179,8 +179,8 @@ public class LinealizeService {
             //RestTemplate restTemplate = new RestTemplate();
             SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             String changeDate = as.format(date);
-            String msg = "Se cambio de zona a " + actualLocation +  "aporximadamente a la: " + changeDate;
-            Alerta alert = new Alerta("Cambio de zona", msg, date);
+            String msg = "Se cambio de zona a " + actualLocation +  " aproximadamente a las: " + changeDate;
+            Alerta alert = new Alerta("cambio_zona", msg, date);
             try{
                 List<Alerta> alertas = alertaRepository.findByRutaAndDtmAndTypeAlert(this.ruta, date, msg);
                 if(alertas.size() == 0){
@@ -190,7 +190,7 @@ public class LinealizeService {
                 }
             }
             catch (Exception e){
-                this.logger.warn("No so se puede error");
+                this.logger.warn("No se puede error");
             }
         }
 

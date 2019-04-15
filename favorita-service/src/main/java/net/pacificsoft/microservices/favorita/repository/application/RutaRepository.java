@@ -12,4 +12,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface RutaRepository extends JpaRepository<Ruta, Long>{
     List<Ruta> findByStatusIs(String status);
     List<Ruta> findByStatusNotLike(String status);
+    List<Ruta> findByStatusLike(String status);
 }
