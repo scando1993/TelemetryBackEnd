@@ -614,14 +614,10 @@ public class ApiGatewayController {
 
     @GetMapping("/getTrackingBetweenDates")
     public ResponseEntity getTrackingBetweenDates(
-            @Valid @RequestBody String data) {
+            @RequestParam String deviceName, @RequestParam String startDate, @RequestParam String endDate) {
         try{
             SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-            JSONObject jData = new JSONObject(data);
-            String deviceName = jData.getString("device");
-            String startDate = jData.getString("startDate");
-            String endDate = jData.getString("endDate");
-            Device device = new Device();
+            Device device;
             if(deviceRepository.existsByName(deviceName)){
                 device = deviceRepository.findByName(deviceName).get(0);
             }
@@ -659,14 +655,11 @@ public class ApiGatewayController {
 
     @GetMapping("/getTelemetryBetweenDates")
     public ResponseEntity getTelemetryBetweenDate(
-            @Valid @RequestBody String data) {
+            @RequestParam String deviceName, @RequestParam String startDate, @RequestParam String endDate) {
         try{
             SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-            JSONObject jData = new JSONObject(data);
-            String deviceName = jData.getString("device");
-            String startDate = jData.getString("startDate");
-            String endDate = jData.getString("endDate");
-            Device device = new Device();
+
+            Device device;
             if(deviceRepository.existsByName(deviceName)){
                 device = deviceRepository.findByName(deviceName).get(0);
             }
