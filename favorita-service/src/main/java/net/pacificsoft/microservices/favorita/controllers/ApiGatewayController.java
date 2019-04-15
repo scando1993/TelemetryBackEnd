@@ -848,38 +848,46 @@ public class ApiGatewayController {
             }
             else{
                 List<Ruta> rutas = rutaRepository.findByStatusLike("Finalizado");
-                List<Alerta> alertas = new ArrayList();
+                JSONObject jRuta;
+                List<Map<String, Object>> fResult = new ArrayList();
                 for(Ruta r: rutas){
-                    for(Alerta a: r.getAlertas()){
+                    jRuta = new JSONObject();
+                    jRuta.put("id", r.getId());
+                    jRuta.put("status", r.getStatus());
+                    jRuta.put("start_date", r.getStart_date());
+                    jRuta.put("end_date", r.getEnd_date());
+                    List<Alerta> alertas = new ArrayList();
+                    for(Alerta a: r.getAlertas())
                         alertas.add(a);
-                    }
-                }
-                List<Alerta> rAl = new ArrayList();
-                List<Map<String, Object>> result = new ArrayList();
-                JSONObject jAlerta;
-                List<Date> dates = new ArrayList();
-                Collections.sort(alertas);
-                for(Alerta a: alertas){
-                    Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDate());
-                    rAl  = new ArrayList();
-                    jAlerta = new JSONObject();
-                    if(!dates.contains(d)){
-                        dates.add(d);
-                        rAl.add(a);
-                        Date comp = a.getDtm();
-                        for (Alerta b: alertas){
-                            Date m = b.getDtm();
-                            if(m.getYear()==comp.getYear() && m.getMonth()==comp.getMonth() &&
-                               m.getDate()==comp.getDate() && b.getId()!=a.getId()){
-                                rAl.add(b);
+                    Collections.sort(alertas);
+                    List<Alerta> rAl = new ArrayList();
+                    List<Map<String, Object>> result = new ArrayList();
+                    JSONObject jAlerta;
+                    List<Date> dates = new ArrayList();
+                    for(Alerta a: alertas){
+                        Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDate());
+                        rAl  = new ArrayList();
+                        jAlerta = new JSONObject();
+                        if(!dates.contains(d)){
+                            dates.add(d);
+                            rAl.add(a);
+                            Date comp = a.getDtm();
+                            for (Alerta b: alertas){
+                                Date m = b.getDtm();
+                                if(m.getYear()==comp.getYear() && m.getMonth()==comp.getMonth() &&
+                                   m.getDate()==comp.getDate() && b.getId()!=a.getId()){
+                                    rAl.add(b);
+                                }
                             }
+                            jAlerta.put("Dtm", d);
+                            jAlerta.put("Alertas", rAl.toArray());
+                            result.add(jAlerta.toMap());
                         }
-                        jAlerta.put("Dtm", d);
-                        jAlerta.put("Alertas", rAl.toArray());
-                        result.add(jAlerta.toMap());
                     }
+                    jRuta.put("groupAlertas", result.toArray());
+                    fResult.add(jRuta.toMap());
                 }
-                return new ResponseEntity(result,HttpStatus.OK);
+                return new ResponseEntity(fResult,HttpStatus.OK);
             }
 
     }
