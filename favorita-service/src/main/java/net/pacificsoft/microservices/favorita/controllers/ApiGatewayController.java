@@ -788,6 +788,7 @@ public class ApiGatewayController {
 
     @GetMapping("/getAlertasRuta")
         public ResponseEntity getAlertasRuta(@RequestParam Long rutaid){
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
             if(rutaid > 0){
                 Ruta ruta = rutaRepository.findById(rutaid).get();
                 List<Alerta> alertas = alertaRepository.findByRutaOrderByDtm(ruta);
@@ -847,35 +848,26 @@ public class ApiGatewayController {
             }
             else{
                 List<Ruta> rutas = rutaRepository.findByStatusLike("Finalizado");
-                List<Alerta> alertas = new ArrayList();
-                for(Ruta r: rutas){
-                    for(Alerta a: r.getAlertas()){
-                        alertas.add(a);
-                    }
-                }
-                List<Alerta> rAl = new ArrayList();
                 List<Map<String, Object>> result = new ArrayList();
+                List<Map<String, Object>> alertas;
+                JSONObject jRuta;
                 JSONObject jAlerta;
-                List<Date> dates = new ArrayList();
-                for(Alerta a: alertas){
-                    Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDate());
-                    rAl  = new ArrayList();
-                    jAlerta = new JSONObject();
-                    if(!dates.contains(d)){
-                        dates.add(d);
-                        rAl.add(a);
-                        Date comp = a.getDtm();
-                        for (Alerta b: alertas){
-                            Date m = b.getDtm();
-                            if(m.getYear()==comp.getYear() && m.getMonth()==comp.getMonth() &&
-                               m.getDate()==comp.getDate() && b.getId()!=a.getId()){
-                                rAl.add(b);
-                            }
-                        }
-                        jAlerta.put("Dtm", d);
-                        jAlerta.put("Alertas", rAl.toArray());
-                        result.add(jAlerta.toMap());
+                for(Ruta r: rutas){
+                    jRuta = new JSONObject();
+                    alertas = new ArrayList();
+                    jRuta.put("id", r.getId());
+                    jRuta.put("status", r.getStatus());
+                    jRuta.put("start_date", simpleDateFormat.format(r.getStart_date()));
+                    jRuta.put("end_date", simpleDateFormat.format(r.getEnd_date()));
+                    for(Alerta a: r.getAlertas()){
+                        jAlerta = new JSONObject();
+                        jAlerta.put("id", a.getId());
+                        jAlerta.put("mensaje", a.getMensaje());
+                        jAlerta.put("typeAlert", a.getTypeAlert());
+                        alertas.add(jAlerta.toMap());
                     }
+                    jRuta.put("alertas", alertas.toArray());
+                    result.add(jRuta.toMap());
                 }
                 return new ResponseEntity(result,HttpStatus.OK);
             }
