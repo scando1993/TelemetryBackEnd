@@ -66,14 +66,14 @@ public class ThreadStartRuta extends Thread{
             for (Ruta r: rutas){
                 Date date = new Date();
                 if(date.compareTo(r.getStart_date())>=0 &&
-                   (!ids.contains(r.getId()))){
+                   (!ids.contains(r.getId())) && !(r.getStatus().equals("Finalizado"))){
                     ids.add(r.getId());
                     r.setStatus("Activo");
                     repository.save(r);
                     LinealThread linealThread = new LinealThread(r,alertaRepository, trackingRepository);
                     String typeAlert = "inicio_ruta";
-                    if(r.getDevice()!=null && r.getProducto()!=null){
-                        String mensaje = "Inicio ruta. Device: " + r.getDevice().getName() + 
+                    if(r.getDevice()!=null && r.getProducto()!=null ){
+                        String mensaje = "Inicio ruta "+r.getId()+". Device: " + r.getDevice().getName() + 
                                     " y producto " + r.getProducto().getName();
                         ThreadStateRuta ts = new ThreadStateRuta(r, repository, deviceRepository, alertaRepository,
                                                         trackingRepository, telemetriaRepository, rawSensorDataRepository);

@@ -20,12 +20,15 @@ import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
+import net.pacificsoft.microservices.favorita.SaveMacLocal;
 import net.pacificsoft.microservices.favorita.ThreadStartRuta;
 import net.pacificsoft.microservices.favorita.ThreadStateRuta;
 import net.pacificsoft.microservices.favorita.Variables;
 import net.pacificsoft.microservices.favorita.models.application.LocalesMac;
 import net.pacificsoft.microservices.favorita.models.application.Producto;
 import net.pacificsoft.microservices.favorita.models.application.Ruta;
+import net.pacificsoft.microservices.favorita.repository.application.LocalesMacRepository;
+import net.pacificsoft.microservices.favorita.repository.application.LocalesRepository;
 import net.pacificsoft.microservices.favorita.repository.application.RutaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +71,10 @@ public class ApiGatewayController {
     private StatusRepository statusRepository;
     @Autowired
     private RutaRepository rutaRepository;
+    @Autowired
+    private LocalesRepository localesRepository;
+    @Autowired
+    private LocalesMacRepository localesMacRepository;
 
     final String uri = "http://104.209.196.204:9090/track";
     //final String uri = "http://172.16.10.41:8005/track";
@@ -774,14 +781,106 @@ public class ApiGatewayController {
 
     @GetMapping("/getAlertasRuta")
         public ResponseEntity getAlertasRuta(@RequestParam Long rutaid){
-            if(rutaid != 0){
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+            if(rutaid > 0){
                 Ruta ruta = rutaRepository.findById(rutaid).get();
                 List<Alerta> alertas = alertaRepository.findByRutaOrderByDtm(ruta);
-                return new ResponseEntity(alertas,HttpStatus.OK);
+                List<Alerta> rAl = new ArrayList();
+                List<Map<String, Object>> result = new ArrayList();
+                JSONObject jAlerta;
+                List<Date> dates = new ArrayList();
+                for(Alerta a: alertas){
+                    Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDate());
+                    rAl  = new ArrayList();
+                    jAlerta = new JSONObject();
+                    if(!dates.contains(d)){
+                        dates.add(d);
+                        rAl.add(a);
+                        Date comp = a.getDtm();
+                        for (Alerta b: alertas){
+                            Date m = b.getDtm();
+                            if(m.getYear()==comp.getYear() && m.getMonth()==comp.getMonth() &&
+                               m.getDate()==comp.getDate() && b.getId()!=a.getId()){
+                                rAl.add(b);
+                            }
+                        }
+                        jAlerta.put("Dtm", d);
+                        jAlerta.put("Alertas", rAl.toArray());
+                        result.add(jAlerta.toMap());
+                    }
+                }
+                return new ResponseEntity(result,HttpStatus.OK);
+            }
+            else if(rutaid==0){
+                List<Alerta> alertas = alertaRepository.findByRutaIsNotNullOrderByDtm();
+                List<Alerta> rAl = new ArrayList();
+                List<Map<String, Object>> result = new ArrayList();
+                JSONObject jAlerta;
+                List<Date> dates = new ArrayList();
+                for(Alerta a: alertas){
+                    Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDate());
+                    rAl  = new ArrayList();
+                    jAlerta = new JSONObject();
+                    if(!dates.contains(d)){
+                        dates.add(d);
+                        rAl.add(a);
+                        Date comp = a.getDtm();
+                        for (Alerta b: alertas){
+                            Date m = b.getDtm();
+                            if(m.getYear()==comp.getYear() && m.getMonth()==comp.getMonth() &&
+                               m.getDate()==comp.getDate() && b.getId()!=a.getId()){
+                                rAl.add(b);
+                            }
+                        }
+                        jAlerta.put("Dtm", d);
+                        jAlerta.put("Alertas", rAl.toArray());
+                        result.add(jAlerta.toMap());
+                    }
+                }
+                return new ResponseEntity(result,HttpStatus.OK);
             }
             else{
-                List<Alerta> alertas = alertaRepository.findByRutaIsNotNullOrderByDtm();
-                return new ResponseEntity(alertas,HttpStatus.OK);
+                List<Ruta> rutas = rutaRepository.findByStatusLike("Finalizado");
+                JSONObject jRuta;
+                List<Map<String, Object>> fResult = new ArrayList();
+                for(Ruta r: rutas){
+                    jRuta = new JSONObject();
+                    jRuta.put("id", r.getId());
+                    jRuta.put("status", r.getStatus());
+                    jRuta.put("start_date", r.getStart_date());
+                    jRuta.put("end_date", r.getEnd_date());
+                    List<Alerta> alertas = new ArrayList();
+                    for(Alerta a: r.getAlertas())
+                        alertas.add(a);
+                    Collections.sort(alertas);
+                    List<Alerta> rAl = new ArrayList();
+                    List<Map<String, Object>> result = new ArrayList();
+                    JSONObject jAlerta;
+                    List<Date> dates = new ArrayList();
+                    for(Alerta a: alertas){
+                        Date d = new Date(a.getDtm().getYear(), a.getDtm().getMonth(), a.getDtm().getDate());
+                        rAl  = new ArrayList();
+                        jAlerta = new JSONObject();
+                        if(!dates.contains(d)){
+                            dates.add(d);
+                            rAl.add(a);
+                            Date comp = a.getDtm();
+                            for (Alerta b: alertas){
+                                Date m = b.getDtm();
+                                if(m.getYear()==comp.getYear() && m.getMonth()==comp.getMonth() &&
+                                   m.getDate()==comp.getDate() && b.getId()!=a.getId()){
+                                    rAl.add(b);
+                                }
+                            }
+                            jAlerta.put("Dtm", d);
+                            jAlerta.put("Alertas", rAl.toArray());
+                            result.add(jAlerta.toMap());
+                        }
+                    }
+                    jRuta.put("groupAlertas", result.toArray());
+                    fResult.add(jRuta.toMap());
+                }
+                return new ResponseEntity(fResult,HttpStatus.OK);
             }
 
     }
@@ -794,6 +893,12 @@ public class ApiGatewayController {
             ts.setLogger(logger);
             ts.start();
             //run(ruta);
+    }
+        
+    @GetMapping("/getRutasNotEnd")
+        public ResponseEntity getRutaNotEnd(){
+            //Ruta ruta = rutaRepository.findById(id).get();
+            return new ResponseEntity(rutaRepository.findByStatusNotLike("Finalizado"), HttpStatus.OK);
     }
 
     @GetMapping("/CorrectRoute")
@@ -816,19 +921,17 @@ public class ApiGatewayController {
     public ResponseEntity alertasOnOrderByDtm(){
         try {
             Date now = new Date();
-            List<Ruta> rutas = rutaRepository.findAll();
+            List<Ruta> rutas = rutaRepository.findByStatusNotLike("Finalizado");
             List<Alerta> alertas = new ArrayList();
             List<Alerta> rAl = new ArrayList();
             List<Map<String, Object>> result = new ArrayList();
             JSONObject jAlerta;
             List<Date> dates = new ArrayList();
             for(Ruta r: rutas){
-                if(r.getEnd_date().compareTo(now)>0 &&
-                   r.getStart_date().compareTo(now)<0){
-                    for(Alerta a: r.getAlertas()){
-                        alertas.add(a);
-                    }
+                for(Alerta a: r.getAlertas()){
+                    alertas.add(a);
                 }
+                
             }
             Collections.sort(alertas);
             for(Alerta a: alertas){
@@ -858,11 +961,22 @@ public class ApiGatewayController {
         }
     }
     
+    @PostMapping("/saveMacLocales")
+    public ResponseEntity saveMacLocales(@Valid @RequestBody SaveMacLocal saveMacLocal,
+                                         @RequestParam Long localid){
+        try {
+            SaveMacLocal.postMacLocales(localesRepository, localesMacRepository, saveMacLocal, localid, logger);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     
 
 
 /*
---------------------Axiliar Functions------------------------------------
+--------------------Auxiliar Functions------------------------------------
  */
     private JSONObject createTrackingJson (Date dtm, String location){
         SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");

@@ -269,4 +269,155 @@ public class RutaController {
                             HttpStatus.NOT_FOUND);
             }
         }
+        
+        @GetMapping("/getRutas")
+	public ResponseEntity getRutas(){
+            try{
+		List<Ruta> rutas = rutaRepository.findByStatusNotLike("Finalizado");
+                List<Map<String, Object>> result = new ArrayList();
+                List<Map<String, Object>> telemetrias;
+                JSONObject jProducto;
+                JSONObject jDevice;
+                JSONObject jRuta;
+                JSONObject jTelemetria;
+                List<Telemetria> ts;
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+                SimpleDateFormat formateT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                for(Ruta r: rutas){
+                    telemetrias = new ArrayList();
+                    Device d = r.getDevice();
+                    jRuta = new JSONObject();
+                    jDevice = new JSONObject();
+                    jProducto = new JSONObject();
+                    jRuta.put("id", r.getId());
+                    jRuta.put("status", r.getStatus());
+                    jRuta.put("start_date", simpleDateFormat.format(r.getStart_date()));
+                    jRuta.put("end_date", simpleDateFormat.format(r.getEnd_date()));
+                    jProducto.put("id", r.getProducto().getId());
+                    jProducto.put("name", r.getProducto().getName());
+                    jProducto.put("temp_max", r.getProducto().getTemp_max());
+                    jProducto.put("temp_min", r.getProducto().getTemp_min());
+                    jProducto.put("temp_max_ideal", r.getProducto().getTemp_max_ideal());
+                    jProducto.put("temp_min_ideal", r.getProducto().getTemp_min_ideal());
+                    ts = telemetriaRepository.findByDtmBetweenAndDeviceOrderByDtm(r.getStart_date(), r.getEnd_date(), d);
+                    for(Telemetria tl: ts){
+                        jTelemetria = new JSONObject();
+                        jTelemetria.put("id", tl.getId());
+                        jTelemetria.put("dtm", formateT.format(tl.getDtm()));
+                        jTelemetria.put("name", tl.getName());
+                        jTelemetria.put("value", tl.getValue());
+                        telemetrias.add(jTelemetria.toMap());
+                    }
+                    jDevice.put("id", d.getId());
+                    jDevice.put("name", d.getName());
+                    jDevice.put("uuid", d.getUuid());
+                    jDevice.put("family", d.getFamily());
+                    jDevice.put("telemetrias", telemetrias.toArray());
+                    jRuta.put("producto", jProducto);
+                    jRuta.put("device", jDevice);
+                    result.add(jRuta.toMap());
+                }
+                return new ResponseEntity(result, HttpStatus.OK);
+            }
+            catch (Exception e){
+                return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+         }
+	}
+        
+        @GetMapping("/getAllRutas")
+	public ResponseEntity getAll(){
+            try{
+		List<Ruta> rutas = rutaRepository.findAll();
+                List<Map<String, Object>> result = new ArrayList();
+                JSONObject jRuta;
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+                for(Ruta r: rutas){
+                    Device d = r.getDevice();
+                    jRuta = new JSONObject();
+                    if(r.getProducto() != null){
+                        jRuta.put("idProducto", r.getProducto().getId());
+                        jRuta.put("nameProducto", r.getProducto().getName());
+                        jRuta.put("temp_max", r.getProducto().getTemp_max());
+                        jRuta.put("temp_min", r.getProducto().getTemp_min());
+                        jRuta.put("temp_max_ideal", r.getProducto().getTemp_max_ideal());
+                        jRuta.put("temp_min_ideal", r.getProducto().getTemp_min_ideal());
+                    }
+                    else{
+                        jRuta.put("idProducto", "");
+                        jRuta.put("nameProducto", "");
+                        jRuta.put("temp_max", "");
+                        jRuta.put("temp_min", "");
+                        jRuta.put("temp_max_ideal", "");
+                        jRuta.put("temp_min_ideal", "");
+                    }
+                    
+                    if(r.getDevice() != null){
+                        jRuta.put("idDevice", d.getId());
+                        jRuta.put("nameDevice", d.getName());
+                        jRuta.put("uuid", d.getUuid());
+                        jRuta.put("familyDevice", d.getFamily());
+                    }
+                    else{
+                        jRuta.put("idDevice", "");
+                        jRuta.put("nameDevice", "");
+                        jRuta.put("uuid", "");
+                        jRuta.put("familyDevice", "");
+                    }
+                    
+                    if(r.getLocalInicio() != null){
+                        jRuta.put("idLocalInicio", r.getLocalInicio().getId());
+                        jRuta.put("latitudeLocalInicio", r.getLocalInicio().getLatitude());
+                        jRuta.put("lengthLocalInicio", r.getLocalInicio().getLength());
+                        jRuta.put("familyLocalInicio", r.getLocalInicio().getFamily());
+                        jRuta.put("nameLocalInicio", r.getLocalInicio().getName());
+                        jRuta.put("numLocLocalInicio", r.getLocalInicio().getNumLoc());
+                    }
+                    else{
+                        jRuta.put("idLocalInicio", "");
+                        jRuta.put("latitudeLocalInicio", "");
+                        jRuta.put("lengthLocalInicio", "");
+                        jRuta.put("familyLocalInicio", "");
+                        jRuta.put("nameLocalInicio", "");
+                        jRuta.put("numLocLocalInicio", "");
+                    }
+                    
+                    if(r.getLocalFin() != null){
+                        jRuta.put("idLocalFin", r.getLocalFin().getId());
+                        jRuta.put("latitudeLocalFin", r.getLocalFin().getLatitude());
+                        jRuta.put("lengthLocalFin", r.getLocalFin().getLength());
+                        jRuta.put("familyLocalFin", r.getLocalFin().getFamily());
+                        jRuta.put("nameLocalFin", r.getLocalFin().getName());
+                        jRuta.put("numLocLocalFin", r.getLocalFin().getNumLoc());
+                    }
+                    else{
+                        jRuta.put("idLocalFin", "");
+                        jRuta.put("latitudeLocalFin", "");
+                        jRuta.put("lengthLocalFin", "");
+                        jRuta.put("familyLocalFin", "");
+                        jRuta.put("nameLocalFin", "");
+                        jRuta.put("numLocLocalFin", "");
+                    }
+                    
+                    if(r.getFurgon() != null){
+                        jRuta.put("idFurgon", r.getFurgon().getId());
+                        jRuta.put("numFurgon", r.getFurgon().getNumFurgon());
+                        jRuta.put("nameFurgon", r.getFurgon().getName());
+                    }
+                    else{
+                        jRuta.put("idFurgon", "");
+                        jRuta.put("numFurgon", "");
+                        jRuta.put("nameFurgon", "");
+                    }
+                    jRuta.put("idRuta", r.getId());
+                    jRuta.put("status", r.getStatus());
+                    jRuta.put("start_date", simpleDateFormat.format(r.getStart_date()));
+                    jRuta.put("end_date", simpleDateFormat.format(r.getEnd_date()));
+                    result.add(jRuta.toMap());
+                }
+                return new ResponseEntity(result, HttpStatus.OK);
+            }
+            catch (Exception e){
+                return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+         }
+	}
 }
