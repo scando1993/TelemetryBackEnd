@@ -725,7 +725,30 @@ public class ApiGatewayController {
             if(deviceRepository.existsByName(device)){
                 Device d = deviceRepository.findByName(device).get(0);
                 List<Telemetria> ts = telemetriaRepository.findByDeviceOrderByDtmDesc(d);
-                return new ResponseEntity(ts.get(0),HttpStatus.OK);
+                if(ts.isEmpty()){
+                    return new ResponseEntity(new ArrayList(), HttpStatus.NOT_FOUND);
+                }
+                else{
+                    return new ResponseEntity(ts.get(0),HttpStatus.OK);
+                }
+            }
+            else{
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+
+        }
+        
+    @GetMapping("/getLastStatus")
+	public ResponseEntity getLastStatus(@RequestParam String device) {
+            if(deviceRepository.existsByName(device)){
+                Device d = deviceRepository.findByName(device).get(0);
+                List<Status> ts = statusRepository.findByDeviceOrderByLastTransmisionDesc(d);
+                if(ts.isEmpty()){
+                    return new ResponseEntity(new ArrayList(), HttpStatus.NOT_FOUND);
+                }
+                else{
+                    return new ResponseEntity(ts.get(0),HttpStatus.OK);
+                }
             }
             else{
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -738,7 +761,12 @@ public class ApiGatewayController {
         if(deviceRepository.existsByName(device)){
             Device d = deviceRepository.findByName(device).get(0);
             List<Tracking> ts = trackingRepository.findByDeviceOrderByDtmDesc(d);
-            return new ResponseEntity(ts.get(0),HttpStatus.OK);
+            if(ts.isEmpty()){
+               return new ResponseEntity(new ArrayList(), HttpStatus.NOT_FOUND);
+            }
+            else{
+               return new ResponseEntity(ts.get(0),HttpStatus.OK);
+            }
         }
         else{
             return new ResponseEntity(HttpStatus.NOT_FOUND);

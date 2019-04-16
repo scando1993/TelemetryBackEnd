@@ -22,7 +22,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 
 public class Application {
     //asdm
-    
+    //com
     //@Autowired
     //DataSource datasource;
     private static final Logger logger = LogManager.getLogger(Application.class);
