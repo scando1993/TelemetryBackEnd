@@ -82,9 +82,9 @@ public class StatusController {
                 if(statusRepository.existsById(statusid)){
                     Status status = statusRepository.findById(statusid).get();
                     status.setBatery(statusDetails.getBatery());
-                    status.setLast_transmision(statusDetails.getLast_transmision());
-                    status.setSignal_level(statusDetails.getSignal_level());
-                    status.setLast_update(statusDetails.getLast_update());
+                    status.setLastTransmision(statusDetails.getLastTransmision());
+                    status.setSignalLevel(statusDetails.getSignalLevel());
+                    status.setLastUpdate(statusDetails.getLastUpdate());
                     final Status updatedStatus = statusRepository.save(status);
                     return new ResponseEntity(HttpStatus.OK);
                 }

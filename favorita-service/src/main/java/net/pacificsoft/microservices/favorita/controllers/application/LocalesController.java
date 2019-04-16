@@ -3,6 +3,8 @@ package net.pacificsoft.microservices.favorita.controllers.application;
 import javax.validation.Valid;
 
 import net.pacificsoft.microservices.favorita.models.application.Locales;
+import net.pacificsoft.microservices.favorita.models.application.Provincia;
+import net.pacificsoft.microservices.favorita.models.application.Zona;
 import net.pacificsoft.microservices.favorita.repository.application.LocalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -128,4 +130,55 @@ public class LocalesController {
                             " does not exist.", HttpStatus.NOT_FOUND);
                 }
 	}
+
+    @GetMapping("/getLocales")
+    public ResponseEntity getLocales(){
+        try{
+            List<Locales> localeses = localesRepository.findAll();
+            List<Map<String, Object>> result = new ArrayList();
+            JSONObject jLocal;
+            for(Locales l: localeses){
+                jLocal = new JSONObject();
+                Ciudad c = l.getCiudad();
+                Provincia p = c.getProvincia();
+                Zona z = p.getZona();
+                jLocal.put("idLocal", l.getId());
+                jLocal.put("family", l.getFamily());
+                jLocal.put("latitude", l.getLatitude());
+                jLocal.put("numLoc", l.getNumLoc());
+                jLocal.put("nameLocal", l.getName());
+                jLocal.put("length", l.getLength());
+                if(c != null){
+                    jLocal.put("idCiudad", c.getId());
+                    jLocal.put("nameCiudad", c.getName());
+                }
+                else{
+                    jLocal.put("idCiudad", "");
+                    jLocal.put("nameCiudad", "");
+                }
+                if(p != null){
+                    jLocal.put("idProvincia", p.getId());
+                    jLocal.put("nameProvincia", p.getName());
+                }
+                else{
+                    jLocal.put("idProvincia", "");
+                    jLocal.put("nameProvincia", "");
+                }
+                if(z != null){
+                    jLocal.put("idZona", z.getId());
+                    jLocal.put("nameZona", z.getName());
+                }
+                else{
+                    jLocal.put("idZona", "");
+                    jLocal.put("nameZona", "");
+                }
+
+                result.add(jLocal.toMap());
+            }
+            return new ResponseEntity(result, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

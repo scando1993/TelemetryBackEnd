@@ -16,15 +16,11 @@
     </parent>
 
     <modules>
-        <module>zipkin-service</module>
-        <module>gateway-service</module>
         <module>discovery-service</module>
         <module>cloud-admin-service</module>
         <module>admin-service</module>
         <module>Loka-service</module>
         <module>config-server</module>
-        <module>Telemetry-service</module>
-        <module>TelemetrySMS-service</module>
         <module>iot-service</module>
         <module>favorita-service</module>
     </modules>

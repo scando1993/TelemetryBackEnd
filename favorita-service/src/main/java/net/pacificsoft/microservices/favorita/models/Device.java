@@ -70,7 +70,7 @@ public class Device{
             mappedBy = "device")
         private Set<GoApiResponse> goApiResponses = new HashSet<>();
         
-        @OneToMany(fetch = FetchType.EAGER,
+        @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "device")
         private Set<Status> statuses = new HashSet<>();
