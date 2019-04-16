@@ -144,16 +144,31 @@ public class BodegaController {
                 Zona z = p.getZona();
                 jBodega.put("idBodega", l.getId());
                 jBodega.put("nameBodega", l.getName());
-
-                jBodega.put("idCiudad", c.getId());
-                jBodega.put("nameCiudad", c.getName());
-
-                jBodega.put("idProvincia", p.getId());
-                jBodega.put("nameProvincia", p.getName());
-
-                jBodega.put("idZona", z.getId());
-                jBodega.put("nameZona", z.getName());
-
+                
+                if(c != null){
+                    jBodega.put("idCiudad", c.getId());
+                    jBodega.put("nameCiudad", c.getName());
+                }
+                else{
+                    jBodega.put("idCiudad", "");
+                    jBodega.put("nameCiudad", "");
+                }
+                if(p != null){
+                    jBodega.put("idProvincia", p.getId());
+                    jBodega.put("nameProvincia", p.getName());
+                }
+                else{
+                    jBodega.put("idProvincia", "");
+                    jBodega.put("nameProvincia", "");
+                }
+                if(z != null){
+                    jBodega.put("idZona", z.getId());
+                    jBodega.put("nameZona", z.getName());
+                }
+                else{
+                    jBodega.put("idZona", "");
+                    jBodega.put("nameZona", "");
+                }
                 result.add(jBodega.toMap());
             }
             return new ResponseEntity(result, HttpStatus.OK);

@@ -148,15 +148,30 @@ public class LocalesController {
                 jLocal.put("numLoc", l.getNumLoc());
                 jLocal.put("nameLocal", l.getName());
                 jLocal.put("length", l.getLength());
-
-                jLocal.put("idCiudad", c.getId());
-                jLocal.put("nameCiudad", c.getName());
-
-                jLocal.put("idProvincia", p.getId());
-                jLocal.put("nameProvincia", p.getName());
-
-                jLocal.put("idZona", z.getId());
-                jLocal.put("nameZona", z.getName());
+                if(c != null){
+                    jLocal.put("idCiudad", c.getId());
+                    jLocal.put("nameCiudad", c.getName());
+                }
+                else{
+                    jLocal.put("idCiudad", "");
+                    jLocal.put("nameCiudad", "");
+                }
+                if(p != null){
+                    jLocal.put("idProvincia", p.getId());
+                    jLocal.put("nameProvincia", p.getName());
+                }
+                else{
+                    jLocal.put("idProvincia", "");
+                    jLocal.put("nameProvincia", "");
+                }
+                if(z != null){
+                    jLocal.put("idZona", z.getId());
+                    jLocal.put("nameZona", z.getName());
+                }
+                else{
+                    jLocal.put("idZona", "");
+                    jLocal.put("nameZona", "");
+                }
 
                 result.add(jLocal.toMap());
             }

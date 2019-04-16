@@ -153,12 +153,22 @@ public class FormatoController {
                 jFormato.put("idFormato", f.getId());
                 jFormato.put("nameFormato", f.getName());
                 jFormato.put("code", f.getCode());
-                jFormato.put("idLocal", l.getId());
-                jFormato.put("family", l.getFamily());
-                jFormato.put("latitude", l.getLatitude());
-                jFormato.put("numLoc", l.getNumLoc());
-                jFormato.put("nameLocal", l.getName());
-                jFormato.put("length", l.getLength());
+                if(l != null){
+                    jFormato.put("idLocal", l.getId());
+                    jFormato.put("family", l.getFamily());
+                    jFormato.put("latitude", l.getLatitude());
+                    jFormato.put("numLoc", l.getNumLoc());
+                    jFormato.put("nameLocal", l.getName());
+                    jFormato.put("length", l.getLength());
+                }
+                else{
+                    jFormato.put("idLocal", "");
+                    jFormato.put("family", "");
+                    jFormato.put("latitude", "");
+                    jFormato.put("numLoc", "");
+                    jFormato.put("nameLocal", "");
+                    jFormato.put("length", "");
+                }
                 result.add(jFormato.toMap());
             }
             return new ResponseEntity(result, HttpStatus.OK);
