@@ -13,4 +13,5 @@ import java.util.List;
 public interface WifiScanRepository extends JpaRepository<WifiScan, Long>{
     List<WifiScan> findByRawSensorDataOrderById(RawSensorData rawSensorData);
     //List<WifiScan> findAllAndOrderById();
+    List<WifiScan> findByMacNotLikeAndRawSensorData(String mac, RawSensorData rawSensorData);
 }

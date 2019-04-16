@@ -3,13 +3,11 @@ package net.pacificsoft.microservices.favorita;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
+
 import org.slf4j.Logger;
 import net.pacificsoft.microservices.favorita.models.Alerta;
-import net.pacificsoft.microservices.favorita.models.Device;
 import net.pacificsoft.microservices.favorita.models.RawSensorData;
 import net.pacificsoft.microservices.favorita.models.Telemetria;
-import net.pacificsoft.microservices.favorita.models.Tracking;
 import net.pacificsoft.microservices.favorita.models.WifiScan;
 import net.pacificsoft.microservices.favorita.models.application.LocalesMac;
 import net.pacificsoft.microservices.favorita.models.application.Producto;
@@ -21,9 +19,7 @@ import net.pacificsoft.microservices.favorita.repository.TelemetriaRepository;
 import net.pacificsoft.microservices.favorita.repository.TrackingRepository;
 import net.pacificsoft.microservices.favorita.repository.application.RutaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
 
 //@RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -138,7 +134,7 @@ public class ThreadStateRuta extends Thread{
                     Set<LocalesMac> localesMacs = ruta.getLocalFin().getLocalesMacs();
                     for(WifiScan ws: rw.getWifiScans()){
                         for(LocalesMac lm: localesMacs){
-                            if(lm.getMac().equals(ws.getMAC())){
+                            if(lm.getMac().equals(ws.getMac())){
                                 fin = false;
                                 String typeAlert = "fin_ruta";
                                 if(ruta.getFurgon() != null){

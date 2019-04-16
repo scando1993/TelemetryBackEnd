@@ -10,18 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import net.pacificsoft.microservices.favorita.models.application.Bodega;
-import net.pacificsoft.microservices.favorita.repository.application.BodegaRepository;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import net.pacificsoft.microservices.favorita.models.application.Ciudad;
 import net.pacificsoft.microservices.favorita.models.RawSensorData;
 import net.pacificsoft.microservices.favorita.models.WifiScan;
-import net.pacificsoft.microservices.favorita.repository.application.CiudadRepository;
 import net.pacificsoft.microservices.favorita.repository.RawSensorDataRepository;
 import net.pacificsoft.microservices.favorita.repository.WifiScanRepository;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -90,8 +82,8 @@ public class WifiScanController {
             try{
                 if(wifiScanRepository.existsById(wifiId)) {
                     WifiScan wifi = wifiScanRepository.findById(wifiId).get();
-                    wifi.setMAC(wifiDetails.getMAC());
-                    wifi.setRSSI(wifiDetails.getRSSI());
+                    wifi.setMac(wifiDetails.getMac());
+                    wifi.setRssi(wifiDetails.getRssi());
                     final WifiScan wifiUpdate = wifiScanRepository.save(wifi);
                     return new ResponseEntity(HttpStatus.OK);
                 }
