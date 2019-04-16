@@ -168,7 +168,7 @@ public class ApiGatewayController {
             logger.info("Raw data has been storaged");
 
             //-------Obtainning MACS
-            JSONObject wifiList = getWifiMACs(wifis);
+            JSONObject wifiList = getWifiMACs(wifis, device);
 
             //-----------creating wifiSensor
             postWifiScans(wifiList,rawSensorData);
@@ -186,7 +186,7 @@ public class ApiGatewayController {
             logger.info("Telemetry has been storaged");
 
             //-------getting Families
-            String family = findFamilyMac(wifiList);
+            String family = findFamilyMac(wifiList, rawSensorData);
             Set<Family> families = null;
             //family = "favorita";
             if(family.compareTo("") == 0){
@@ -1054,9 +1054,17 @@ public class ApiGatewayController {
         json.put("epochDateTime", dtmFormated);
         return json;
     }
-    private String findFamilyMac(JSONObject wifiList){
+    private String findFamilyMac(JSONObject wifiList, RawSensorData rawSensorData){
+        //this condition happends when any WIFI MAC is close
         if(wifiList.has("00:00:00:00:00:00") || wifiList.has("ff:ff:ff:ff:ff:ff")) {
-            List<WifiScan> wifiScans = wifiScanRepository.findAll();
+            RawSensorData rawSensorData1;
+            try{
+                rawSensorData1 = rawDataRepository.findById(rawSensorData.getId() -1).get();
+            }
+            catch (Exception e){return "";}
+            //List<WifiScan> wifiScans = wifiScanRepository.findAll();
+            List<WifiScan> wifiScans = wifiScanRepository.findByRawSensorData(rawSensorData1);
+            //List<WifiScan> wifiScans = (List)rawSensorData.getWifiScans();
             for(int i = wifiScans.size() -1; i>=0; i--){
                 WifiScan wifiScan = wifiScans.get(i);
                 String mac = wifiScan.getMac();
@@ -1095,19 +1103,22 @@ public class ApiGatewayController {
             postWifiScan(wifiScan,rawSensorData);
         }
     }
-    private JSONObject getWifiMACs(JSONArray wifi){
-        if(wifi.isEmpty()){
-            List<RawSensorData> rawSensorDataList= rawDataRepository.findAll();
-            RawSensorData rawSensorData = rawSensorDataList.get(rawSensorDataList.size() - 2);
-            //List<WifiScan> wifiScans = wifiScanRepository.findByRawSensorDataOrderById(rawSensorData);
-            //wifiScans = wifiScans.subList(0,2);
-            Set<WifiScan> wifiScans = rawSensorData.getWifiScans();
-            Iterator<WifiScan> iterator = wifiScans.iterator();
+    private JSONObject getWifiMACs(JSONArray wifi, Device device){
+        boolean d = wifi.getJSONObject(0).getString("MAC").compareTo("ff:ff:ff:ff:ff:ff") == 0;
+        //this conition happends when the location has not changed, so we send the last MACs different from ff:ff:ff:ff:ff:ff
+        if(wifi.isEmpty() || d){
             JSONObject json = new JSONObject();
-            while(iterator.hasNext()){
-                WifiScan wifiScan = iterator.next();
-                json.put(wifiScan.getMac(),wifiScan.getRssi());
+            try {
+                List<RawSensorData> rawSensorDataList = rawDataRepository.findByDeviceOrderByDtm(device);
+                RawSensorData rawSensorData = rawSensorDataList.get(rawSensorDataList.size() - 2);
+                Set<WifiScan> wifiScans = rawSensorData.getWifiScans();
+                Iterator<WifiScan> iterator = wifiScans.iterator();
+                while (iterator.hasNext()) {
+                    WifiScan wifiScan = iterator.next();
+                    json.put(wifiScan.getMac(), wifiScan.getRssi());
+                }
             }
+            catch (Exception e){json.put("00:00:00:00:00:00", 0);}
             return json;
         }
         Iterator<Object> iterator = wifi.iterator();
