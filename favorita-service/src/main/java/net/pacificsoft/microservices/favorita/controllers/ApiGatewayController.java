@@ -735,9 +735,9 @@ public class ApiGatewayController {
         }
         
     @GetMapping("/getLastStatus")
-	public ResponseEntity getLastStatus(@RequestParam String device) {
-            if(deviceRepository.existsByName(device)){
-                Device d = deviceRepository.findByName(device).get(0);
+	public ResponseEntity getLastStatus(@RequestParam Long deviceid) {
+            if(deviceRepository.existsById(deviceid)){
+                Device d = deviceRepository.findById(deviceid).get();
                 List<Status> ts = statusRepository.findByDeviceOrderByLastTransmisionDesc(d);
                 if(ts.isEmpty()){
                     return new ResponseEntity(new ArrayList(), HttpStatus.NOT_FOUND);
@@ -1104,12 +1104,18 @@ public class ApiGatewayController {
         }
     }
     private JSONObject getWifiMACs(JSONArray wifi, Device device){
-        boolean d = wifi.getJSONObject(0).getString("MAC").compareTo("ff:ff:ff:ff:ff:ff") == 0;
+        boolean d;
+        try{
+            d = wifi.getJSONObject(0).getString("MAC").compareTo("ff:ff:ff:ff:ff:ff") == 0;
+        }
+        catch(Exception e){
+            d = true;
+        }
         //this conition happends when the location has not changed, so we send the last MACs different from ff:ff:ff:ff:ff:ff
         if(wifi.isEmpty() || d){
             JSONObject json = new JSONObject();
             try {
-                List<RawSensorData> rawSensorDataList = rawDataRepository.findByDeviceOrderByDtm(device);
+                List<RawSensorData> rawSensorDataList = rawDataRepository.findByDeviceOrderByEpoch(device);
                 RawSensorData rawSensorData = rawSensorDataList.get(rawSensorDataList.size() - 2);
                 Set<WifiScan> wifiScans = rawSensorData.getWifiScans();
                 Iterator<WifiScan> iterator = wifiScans.iterator();

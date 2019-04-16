@@ -3,6 +3,8 @@ package net.pacificsoft.microservices.favorita;
 
 import java.sql.Types;
 import java.util.Date;
+import java.util.TimeZone;
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import net.pacificsoft.microservices.favorita.models.*;
 import net.pacificsoft.microservices.favorita.models.application.*;
@@ -27,6 +29,14 @@ public class Application {
     //DataSource datasource;
     private static final Logger logger = LogManager.getLogger(Application.class);
     //private static final ThreadStartRuta ts = new ThreadStartRuta();
+    
+    
+    
+    @PostConstruct
+    public void init(){
+        TimeZone.setDefault(TimeZone.getTimeZone("EST"));   // It will set UTC timezone
+        System.out.println("Spring boot application running in UTC timezone :"+new Date());   // It will print UTC timezone
+    }
     
     public static void main(String[] args) {
         System.out.println(new Date());
