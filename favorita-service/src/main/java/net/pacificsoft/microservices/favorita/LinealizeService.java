@@ -157,9 +157,10 @@ public class LinealizeService {
                 break;
             }
             else {
-                if (indexChangesCount == 2) {
+                if (indexChangesCount == 2 || this.locationPriority.get(index).compareTo(this.locationPriority.get(initialIndex)) == 0) {
                     if (initialIndex + a == this.locationPriority.size() -1)
                         return;
+                    this.index = initialIndex + a;
                     return;
                 }
                 else if (this.index == this.locationPriority.size() - 1 & righ)
@@ -185,7 +186,7 @@ public class LinealizeService {
                 List<Alerta> alertas = alertaRepository.findByRutaAndDtmAndTypeAlert(this.ruta, date, msg);
                 if(alertas.size() == 0){
                     //this.alertaRepository.save(alert);
-                    postAlert(alert, ruta);
+                    //postAlert(alert, ruta);
                     this.logger.info("Creando alerta");
                 }
             }

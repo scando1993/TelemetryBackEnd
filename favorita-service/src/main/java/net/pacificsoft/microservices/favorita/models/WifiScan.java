@@ -16,13 +16,13 @@ public class WifiScan{
 
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+    	private long id;
         
-        @Column(name = "RSSI", nullable = false)
-        private int RSSI;
+        @Column(name = "rssi", nullable = false)
+        private int rssi;
         
         @Column(name = "formatoID", nullable = false)
-	private String MAC;
+	    private String mac;
                 
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "rawSensorDataID")
@@ -31,9 +31,9 @@ public class WifiScan{
         public WifiScan() {
         }
         
-        public WifiScan(int RSSI, String MAC) {
-            this.RSSI = RSSI;
-            this.MAC = MAC;
+        public WifiScan(int rssi, String mac) {
+            this.rssi = rssi;
+            this.mac = mac;
         }
         public long getId() {
             return id;
@@ -43,20 +43,20 @@ public class WifiScan{
             this.id = id;
         }
 
-        public int getRSSI() {
-            return RSSI;
+        public int getRssi() {
+            return rssi;
         }
 
-        public void setRSSI(int RSSI) {
-            this.RSSI = RSSI;
+        public void setRssi(int rssi) {
+            this.rssi = rssi;
         }
 
-        public String getMAC() {
-            return MAC;
+        public String getMac() {
+            return mac;
         }
 
-        public void setMAC(String MAC) {
-            this.MAC = MAC;
+        public void setMac(String mac) {
+            this.mac = mac;
         }
 
         public RawSensorData getRawSensorData() {

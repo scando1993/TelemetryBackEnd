@@ -16,16 +16,11 @@ import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.Level;
+
 import net.pacificsoft.microservices.favorita.SaveMacLocal;
 import net.pacificsoft.microservices.favorita.ThreadStartRuta;
-import net.pacificsoft.microservices.favorita.ThreadStateRuta;
-import net.pacificsoft.microservices.favorita.Variables;
-import net.pacificsoft.microservices.favorita.models.application.LocalesMac;
-import net.pacificsoft.microservices.favorita.models.application.Producto;
 import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import net.pacificsoft.microservices.favorita.repository.application.LocalesMacRepository;
 import net.pacificsoft.microservices.favorita.repository.application.LocalesRepository;
@@ -234,11 +229,14 @@ public class ApiGatewayController {
                     Family f = iterator.next();
                     jsonRequesGoServer.put("f",f.getName());
                     jData = new JSONObject(restTemplate.postForObject( uri, jsonRequesGoServer.toString(), String.class));
-                    Boolean empty = jData.getJSONObject("message").getJSONObject("location_names").isEmpty();
-                    if(empty)
-                        jsonRequesGoServer.remove("f");
-                    else
-                        break;
+                    try {
+                        Boolean empty = jData.getJSONObject("message").getJSONObject("location_names").isEmpty();
+                        if (empty)
+                            jsonRequesGoServer.remove("f");
+                        else
+                            break;
+                    }
+                    catch (Exception e){break;}
                 }
                 if(iterator.hasNext()){
                     logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
@@ -249,7 +247,12 @@ public class ApiGatewayController {
             }
 
             logger.info("Successfull Responce");
-            if(jData.getJSONObject("message").getJSONObject("location_names").isEmpty()){
+            boolean conditionGoServer;
+            try {
+                conditionGoServer = jData.getJSONObject("message").getJSONObject("location_names").isEmpty();
+            }
+            catch (Exception e){conditionGoServer = true;}
+            if(conditionGoServer){
                 logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?");
                 Alerta alert = new Alerta("Go Server error", "Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?", new Date());
                 postAlert(alert,device);
@@ -901,7 +904,7 @@ public class ApiGatewayController {
             return new ResponseEntity(rutaRepository.findByStatusNotLike("Finalizado"), HttpStatus.OK);
     }
 
-    @GetMapping("/CorrectRoute")
+    @GetMapping("/correctRoute")
     public ResponseEntity startThreadTrack(@RequestParam Long id){
         try {
             Ruta ruta = rutaRepository.findById(id).get();
@@ -1020,12 +1023,12 @@ public class ApiGatewayController {
         return json;
     }
     private String findFamilyMac(JSONObject wifiList){
-        if(wifiList.has("00:00:00:00:00:00")) {
+        if(wifiList.has("00:00:00:00:00:00") || wifiList.has("ff:ff:ff:ff:ff:ff")) {
             List<WifiScan> wifiScans = wifiScanRepository.findAll();
             for(int i = wifiScans.size() -1; i>=0; i--){
                 WifiScan wifiScan = wifiScans.get(i);
-                String mac = wifiScan.getMAC();
-                if (mac.compareTo("00:00:00:00:00:00") != 0) {
+                String mac = wifiScan.getMac();
+                if (mac.compareTo("00:00:00:00:00:00") != 0 || mac.compareTo("ff:ff:ff:ff:ff:ff") != 0) {
                     if (macRepository.existsByMac(mac)) {
                         return macRepository.findByMac(mac).get(0).getFamily();
                     } else return "";
@@ -1054,7 +1057,7 @@ public class ApiGatewayController {
     private void postWifiScans(JSONObject wifiList, RawSensorData rawSensorData){
         Iterator<String> iterator = wifiList.keys();
         while(iterator.hasNext()){
-            String key = (String)iterator.next();
+            String key = iterator.next();
             int rssi = wifiList.getInt(key);
             WifiScan wifiScan = new WifiScan(rssi,key);
             postWifiScan(wifiScan,rawSensorData);
@@ -1071,7 +1074,7 @@ public class ApiGatewayController {
             JSONObject json = new JSONObject();
             while(iterator.hasNext()){
                 WifiScan wifiScan = iterator.next();
-                json.put(wifiScan.getMAC(),wifiScan.getRSSI());
+                json.put(wifiScan.getMac(),wifiScan.getRssi());
             }
             return json;
         }
@@ -1207,7 +1210,7 @@ public class ApiGatewayController {
                 Set<LocalesMac> localesMacs = ruta.getLocalFin().getLocalesMacs();
                 for(WifiScan ws: rw.getWifiScans()){
                     for(LocalesMac lm: localesMacs){
-                        if(lm.getMac().equals(ws.getMAC())){
+                        if(lm.getMac().equals(ws.getMac())){
                             fin = false;
                             String typeAlert = "fin_ruta";
                             String mensaje = "Ha completado su ruta el furgon " + ruta.getFurgon().getName();
@@ -1249,7 +1252,7 @@ public class ApiGatewayController {
         }
         List<Tracking> q =linealizeService.getTrackingList();
         for (Tracking t : q){
-            logger.info(t.getLocation());
+            logger.info(t.getId() + " " + t.getLocation() +"  " + t.getDtm());
         }
     }
 
