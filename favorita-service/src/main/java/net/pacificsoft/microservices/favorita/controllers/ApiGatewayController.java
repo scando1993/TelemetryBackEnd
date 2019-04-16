@@ -1109,7 +1109,7 @@ public class ApiGatewayController {
         if(wifi.isEmpty() || d){
             JSONObject json = new JSONObject();
             try {
-                List<RawSensorData> rawSensorDataList = rawDataRepository.findByDeviceOrderByDtm(device);
+                List<RawSensorData> rawSensorDataList = rawDataRepository.findByDeviceOrderByEpoch(device);
                 RawSensorData rawSensorData = rawSensorDataList.get(rawSensorDataList.size() - 2);
                 Set<WifiScan> wifiScans = rawSensorData.getWifiScans();
                 Iterator<WifiScan> iterator = wifiScans.iterator();
