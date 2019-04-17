@@ -28,18 +28,25 @@ public class SaveMacLocal {
     public static void postMacLocales(LocalesRepository localesRepository,
             LocalesMacRepository localesMacRepository, SaveMacLocal saveMacLocal, Long localid, Logger logger){
         if(localesRepository.existsById(localid)){
+             logger.warn("Device exist");
             String info[] = saveMacLocal.getCadena().split("\n");
+            logger.warn("Datos: "+info.length);
             Locales local = localesRepository.findById(localid).get();
             int i=0;
             for (String s: info){
+                s = s.replaceAll("\n", ""); 
+                s = s.trim();
                 if(i==0){
                     i+=1;
                 }
                 else{
-                    String c[] = s.split(",");
-                    if(c.length >=2){
+                    String c[] = s.split(";");
+                    if(c.length >=2){                        
                         String ssid = c[0];
                         String mac = c[1];
+                        logger.warn("Linea: "+s);
+                        logger.warn("ssid: "+ssid);
+                        logger.warn("mac: "+mac);
                         String elementsMac[] = mac.split(":");
                         boolean valSintax = true;
                         boolean valElem = true;
@@ -47,12 +54,17 @@ public class SaveMacLocal {
                             valElem = false;
                         if(valElem){
                             for(String e: elementsMac){
-                                if(e.length()!=2){
+                                String b = e.trim();
+                                if(b.length()!=2){
                                     valSintax = false;
+                                    logger.warn("ERRRIN: "+e);
                                 }
                             }
                         }
+                        logger.warn("macSize: "+elementsMac.length);
+                        logger.warn("valSintax: "+valSintax);
                         if(valElem && valSintax){
+                            logger.warn("saved LocalesMac");
                             LocalesMac lm = new LocalesMac(ssid, mac);
                             lm.setLocales(local);
                             local.getLocalesMacs().add(lm);
@@ -62,10 +74,13 @@ public class SaveMacLocal {
                 }
             }
             localesRepository.save(local);
+            logger.warn(saveMacLocal.getCadena());
             logger.warn("Saved locales MAC");
         }
         else{
             logger.error("Local not found");
         }
+        logger.warn("Cadena "+saveMacLocal.getCadena());
+        logger.warn("Saved locales MAC");
     }
 }

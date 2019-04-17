@@ -253,6 +253,7 @@ public class ApiGatewayController {
             }
             catch (Exception e){conditionGoServer = true;}
             if(conditionGoServer){
+                logger.error(jData.toString());
                 logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?");
                 Alerta alert = new Alerta("Go Server error", "Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?", new Date());
                 postAlert(alert,device);
@@ -1115,7 +1116,7 @@ public class ApiGatewayController {
         if(wifi.isEmpty() || d){
             JSONObject json = new JSONObject();
             try {
-                List<RawSensorData> rawSensorDataList = rawDataRepository.findByDeviceOrderByEpoch(device);
+                List<RawSensorData> rawSensorDataList = rawDataRepository.findByDevice(device);
                 RawSensorData rawSensorData = rawSensorDataList.get(rawSensorDataList.size() - 2);
                 Set<WifiScan> wifiScans = rawSensorData.getWifiScans();
                 Iterator<WifiScan> iterator = wifiScans.iterator();
