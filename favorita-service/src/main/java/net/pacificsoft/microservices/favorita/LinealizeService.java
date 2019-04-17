@@ -175,9 +175,9 @@ public class LinealizeService {
                 //when the acual priority is the same that the initilPriority or the the number of priority changes have reached to the top
                 if (indexChangesCount !=0 && this.locationPriority.get(index).compareTo(this.locationPriority.get(initialIndex)) == 0) {
                     if (initialIndex + a >= this.locationPriority.size() -1)
-                        return;
+                        break;
                     this.index = initialIndex + a;
-                    return;
+                    break;
                 }
                 //when the actual priority is in the last in the list son we reboot it to the first one
                 else if (this.index >= this.locationPriority.size() - 1 & righ)
@@ -206,7 +206,7 @@ public class LinealizeService {
             String msg = "Se cambio de zona a|" + actualLocation + "|" + changeDate;
             Alerta alert = new Alerta("cambio_zona", msg, date);
             try{
-                List<Alerta> alertas = alertaRepository.findByRutaAndDtmAndTypeAlert(this.ruta, date, msg);
+                List<Alerta> alertas = alertaRepository.findByRutaAndDtmAndTypeAlert(this.ruta, date, "cambio_zona");
                 if(alertas.size() == 0){
                     //this.alertaRepository.save(alert);
                     postAlert(alert, ruta);
