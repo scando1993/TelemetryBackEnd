@@ -115,18 +115,17 @@ public class RutaController {
                     Locales lFin = localesRepository.findById(localFin).get();
                     lFin.getRutasFin().add(ruta);
                     Producto p = productoRepository.findById(producto).get();
-                    p.getRutas().add(ruta);
-                    
-                    Alerta a = new Alerta("ruta_registrada", "Se ha registrado la ruta");
-                    a.setRuta(ruta);
-                    a.setDevice(ruta.getDevice());
-                    ruta.getDevice().getAlertas().add(a);
-                    ruta.getAlertas().add(a);                    
+                    p.getRutas().add(ruta);             
                     ruta.setFurgon(f);
                     ruta.setProducto(p);
                     ruta.setDevice(d);
                     ruta.setLocalInicio(lInicio);
                     ruta.setLocalFin(lFin);
+                    Alerta a = new Alerta("ruta_registrada", "Se ha registrado la ruta");
+                    a.setRuta(ruta);
+                    a.setDevice(ruta.getDevice());
+                    ruta.getDevice().getAlertas().add(a);
+                    ruta.getAlertas().add(a); 
                     Ruta r = rutaRepository.save(ruta);
                     furgonRepository.save(f);
                     deviceRepository.save(d);
