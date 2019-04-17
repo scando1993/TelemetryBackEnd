@@ -1,5 +1,7 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -22,7 +24,7 @@ public class Zona{
         
         @Column(name = "name", nullable = false)
 	private String name;
-        
+    @JsonIgnore
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "zona")

@@ -1,5 +1,7 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -37,26 +39,31 @@ public class Locales{
         
         @Column(name = "family", nullable = false)
         private String family;
-        
+
+        @JsonIgnore
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "ciudadID")
         private Ciudad ciudad;
-        
+
+        @JsonIgnore
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "localInicio")
         private Set<Ruta> rutasInicio = new HashSet<>();
-        
+
+        @JsonIgnore
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "localFin")
         private Set<Ruta> rutasFin = new HashSet<>();
-        
+
+        @JsonIgnore
         @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "locales")
         private Set<LocalesMac> localesMacs = new HashSet<>();
-        
+
+        @JsonIgnore
         @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "locales")

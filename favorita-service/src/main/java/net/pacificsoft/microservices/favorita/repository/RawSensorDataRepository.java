@@ -14,4 +14,5 @@ import net.pacificsoft.microservices.favorita.models.Device;
 public interface RawSensorDataRepository extends JpaRepository<RawSensorData, Long>{
     List<RawSensorData> findByEpochDateTimeBetweenAndDeviceOrderByEpochDateTimeDesc(Date start, Date end, Device device);
     List<RawSensorData> findByDeviceOrderByEpoch(Device device);
+    List<RawSensorData> findByDevice(Device device);
 }
