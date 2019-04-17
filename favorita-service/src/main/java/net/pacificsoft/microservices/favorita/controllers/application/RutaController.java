@@ -174,7 +174,8 @@ public class RutaController {
                     ruta.setProducto(p);
                     ruta.setDevice(d);
                     ruta.setLocalInicio(lInicio);
-                    ruta.setLocalFin(lFin);                    
+                    ruta.setLocalFin(lFin);   
+                    ruta.setStatus(rutaDetails.getStatus());
                     Ruta r = rutaRepository.save(ruta);
                     furgonRepository.save(f);
                     deviceRepository.save(d);
@@ -190,7 +191,7 @@ public class RutaController {
                 }
 	}
 
-	@DeleteMapping("/ruta/{id}")
+	@DeleteMapping("/rutas/{id}")
 	public ResponseEntity deleteRuta(
 			@PathVariable(value = "id") Long rutaId){
                 if(rutaRepository.existsById(rutaId)){
