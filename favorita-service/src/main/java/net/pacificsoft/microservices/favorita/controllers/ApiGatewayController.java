@@ -1289,7 +1289,7 @@ public class ApiGatewayController {
         ArrayList<String> priorityQueue = new ArrayList<>();
         priorityQueue.add("?");
         priorityQueue.add("recepcion carnes");
-        priorityQueue.add("carga furgon");
+            priorityQueue.add("carga furgon");
 
         LinealizeService linealizeService = new LinealizeService(priorityQueue,true);
         linealizeService.setLogger(logger);
@@ -1302,7 +1302,8 @@ public class ApiGatewayController {
         }
         List<Tracking> q =linealizeService.getTrackingList();
         for (Tracking t : q){
-            logger.info(t.getId() + " " + t.getLocation() +"  " + t.getDtm());
+            //logger.info(t.getId() + " " + t.getLocation() +"  " + t.getDtm());
+            System.out.println(t.getId() + " " + t.getLocation() +"  " + t.getDtm());
         }
     }
 

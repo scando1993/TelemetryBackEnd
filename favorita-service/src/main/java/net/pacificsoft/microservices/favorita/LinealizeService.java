@@ -85,8 +85,10 @@ public class LinealizeService {
 
     }
     public void correctLocations(boolean righ) {
+        //this function only stars to work when there are three elements in the queue
         if (this.queue.size() < 3)
             return;
+        //a is some constant to add to the index position in the arraylist
         int a = 1;
         if (!righ)
             a = -1;
@@ -94,14 +96,19 @@ public class LinealizeService {
         boolean flag1 = true;
         int indexChangesCount = 0;
         int initialIndex = this.index;
-
+        //it will only finishes when a desition has been decided: save or change anomalies in the queue
+        //or continue to the next stream element when the queue can not decide or find the priority
         while (flag1) {
             String actualLocation = this.locationPriority.get(this.index);
             int queueCounter = 0;
             int possitivesCount = 0;
             List<QueueElement> negativesTrackings = new ArrayList<>();
             List<Integer> negativesPos = new ArrayList<>();
+            //we count the positives and negatives elements in the queue depending of the actual priority
             for (QueueElement queueElement: this.queue) {
+                if(!locationPriority.contains(queueElement.getLocation()))
+                    locationPriority.add(queueElement.getLocation());
+
                 if (queueElement.getLocation().compareTo(actualLocation) == 0){
                     possitivesCount ++;
                 }
@@ -111,9 +118,12 @@ public class LinealizeService {
                 }
                 queueCounter ++;
             }
+            //only if possitives > negatives. So we are in the correct priority
             if (possitivesCount >= negativesTrackings.size()){
                 boolean flag2 = true;
+                //just for indexing
                 Object[] arrayQueue = this.queue.toArray();
+
                 for (int i = 0; i < negativesTrackings.size(); i++) {
                     QueueElement anomaly = negativesTrackings.get(i);
                     String anomalyLocation = anomaly.getLocation();
@@ -121,13 +131,15 @@ public class LinealizeService {
                     int anomalyPosQueue = negativesPos.get(i);
                     boolean condition = indexCondition(anomaly, anomalyPosQueue, righ);
 
+                    //it verifies if the anomaly is alredy marked as anomaly, if so, it changes that one
                     if (this.anomaliesMap.containsKey(anomalyPosArray)){
                         Tracking trackChange = this.anomaliesMap.get(anomalyPosArray);
                         this.trackingList.set(anomalyPosArray, trackChange );
                         ((QueueElement)arrayQueue[anomalyPosQueue]).setTracking(trackChange);
                         //anomaly.setTracking(trackChange);
                     }
-                    else if(condition){
+                    //if verifies if the anomaly is until 3 prioritis behind the actual one, if so, it changes that one
+                    else if(false){
                         String priorityChange = this.locationPriority.get(this.index);
                         Tracking trackChange = this.trackingList.get(anomalyPosArray);
                         trackChange.setLocation(priorityChange);
@@ -135,6 +147,7 @@ public class LinealizeService {
                         ((QueueElement)arrayQueue[anomalyPosQueue]).setTracking(trackChange);
                         //anomaly.setTracking(trackChange);
                     }
+                    //if all failed, we just add it to a anomaly dictionary with key=positin in trackingList and value = tracking with the position that should be changed
                     else {
                         String priorityChange = this.locationPriority.get(this.index);
                         //anomaly.setLocation(priorityChange);
@@ -150,43 +163,53 @@ public class LinealizeService {
                     }
 
                 }
-                //return;
+                //we resemble thw queue and finish the while loop;
                 for (Object q:arrayQueue) {
                     this.queue.add((QueueElement) q);
                 }
                 break;
             }
+            // if there are more negatives than possitives we change the priority to the next one or until the actual priority is the same that
+            // the initilPriority
             else {
-                if (indexChangesCount == 2 || this.locationPriority.get(index).compareTo(this.locationPriority.get(initialIndex)) == 0) {
-                    if (initialIndex + a == this.locationPriority.size() -1)
+                //when the acual priority is the same that the initilPriority or the the number of priority changes have reached to the top
+                if (indexChangesCount !=0 && this.locationPriority.get(index).compareTo(this.locationPriority.get(initialIndex)) == 0) {
+                    if (initialIndex + a >= this.locationPriority.size() -1)
                         return;
                     this.index = initialIndex + a;
                     return;
                 }
-                else if (this.index == this.locationPriority.size() - 1 & righ)
+                //when the actual priority is in the last in the list son we reboot it to the first one
+                else if (this.index >= this.locationPriority.size() - 1 & righ)
                     this.index = 0;
-                else if (this.index == 0 & !righ )
+                else if (this.index <= 0 & !righ )
                     this.index = this.locationPriority.size() - 1;
+                //finally we just change the priority to the next one
                 else
                     this.index = this.index + a;
+                //we reboot the anomaly diccionary nad increase the number of priority changes
                 this.anomaliesMap = new TreeMap<>();
                 indexChangesCount ++;
             }
         }
-        if(initialIndex != this.index && indexChangesCount == 1){
+        //we create an alert indicating that the Locarion/Zone/Priority has changed,
+        //this happends when the the actual location is different from the initial locarion
+        // and when the number of priorities changes is equal to 1
+        if(initialIndex != this.index ){
             String initialLocation = this.locationPriority.get(initialIndex);
             String actualLocation = this.locationPriority.get(index);
             Date date = ((QueueElement)this.queue.toArray()[1]).getTracking().getDtm();
             //RestTemplate restTemplate = new RestTemplate();
             SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             String changeDate = as.format(date);
-            String msg = "Ruta "+ ruta.getId()+". Se cambio de zona a " + actualLocation +  " aproximadamente a las: " + changeDate;
+            //String msg = "Se cambio de zona a " + actualLocation +  " aproximadamente a las: " + changeDate;
+            String msg = "Se cambio de zona a|" + actualLocation + "|" + changeDate;
             Alerta alert = new Alerta("cambio_zona", msg, date);
             try{
                 List<Alerta> alertas = alertaRepository.findByRutaAndDtmAndTypeAlert(this.ruta, date, msg);
                 if(alertas.size() == 0){
                     //this.alertaRepository.save(alert);
-                    //postAlert(alert, ruta);
+                    postAlert(alert, ruta);
                     this.logger.info("Creando alerta");
                 }
             }
@@ -217,7 +240,7 @@ public class LinealizeService {
         }
         if(anomalyPosQueue == d){
             if(right){
-                for(Integer i: restList){
+                for(int i = 0 ; i <= this.index -1; i ++){
                     if (this.index - i >= 0){
                         String compareLocation = this.locationPriority.get(this.index - i);
                         condition = condition || anomalyLocation.compareTo(compareLocation) == 0;
