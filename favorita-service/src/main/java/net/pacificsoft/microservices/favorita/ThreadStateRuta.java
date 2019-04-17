@@ -95,7 +95,7 @@ public class ThreadStateRuta extends Thread{
                    (temp <= temp_min_ideal && temp >= temp_min)){
                     if(ruta.getProducto()!=null){
                         String typeAlert = "temperatura_limite_ideales";
-                        String mensaje = "Temperatura del producto " + p.getName() + 
+                        String mensaje = "Ruta " + ruta.getId() + ". Temperatura del producto " + p.getName() + 
                                         " esta fuera de los límites ideales con una temperatura de "+temp+" grados, temperatura máxima ideal: "+temp_max_ideal
                                         +", temperatura mínima ideal: "+temp_min_ideal;
                         ruta.setStatus("No ideal");
@@ -116,7 +116,7 @@ public class ThreadStateRuta extends Thread{
                 if (valErr >= 3600){
                     if(ruta.getProducto()!=null){
                         String typeAlert = "temperatura_limite_maximas";
-                        String mensaje = "Temperatura del producto " + p.getName() + 
+                        String mensaje = "Ruta " + ruta.getId() + ". Temperatura del producto " + p.getName() + 
                                         " esta fuera de los límites máximos con una temperatura de "+temp+" grados, temperatura máxima: "+temp_max
                                 +", temperatura mínima: "+temp_min;
                         ruta.setStatus("No efectiva");
@@ -138,7 +138,7 @@ public class ThreadStateRuta extends Thread{
                                 fin = false;
                                 String typeAlert = "fin_ruta";
                                 if(ruta.getFurgon() != null){
-                                    String mensaje = "Ha completado su ruta el furgon " + ruta.getFurgon().getName();
+                                    String mensaje = "Ruta " + ruta.getId() + ". Ha completado su ruta el furgon " + ruta.getFurgon().getName();
                                     ruta.setStatus("Finalizado");
                                     saveRuta(ruta, typeAlert, mensaje, telemetrias.get(telemetrias.size()-1).getDtm());
                                 }
@@ -151,7 +151,7 @@ public class ThreadStateRuta extends Thread{
                     fin = false;
                     String typeAlert = "fin_ruta";
                     if(ruta.getFurgon() != null){
-                        String mensaje = "Ha terminado su ruta el furgon " + ruta.getFurgon().getName();
+                        String mensaje = "Ruta " + ruta.getId() + ". Ha terminado su ruta el furgon " + ruta.getFurgon().getName();
                         ruta.setStatus("Finalizado");
                         saveRuta(ruta, typeAlert, mensaje, ruta.getEnd_date());
                     }

@@ -200,8 +200,8 @@ public class RutaController {
                         a.setRuta(null);
                         alertaRepository.save(a);
                     }
-                    //ruta.getLocalFin().setRutaFin(null);
-                    //ruta.getLocalInicio().setRutaInicio(null);
+                    ruta.getLocalInicio().getRutasInicio().remove(ruta);
+                    ruta.getLocalFin().getRutasFin().remove(ruta);
                     ruta.getFurgon().getRutas().remove(ruta);
                     ruta.getProducto().getRutas().remove(ruta);
                     ruta.getDevice().getRutas().remove(ruta);
