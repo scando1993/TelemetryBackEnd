@@ -94,39 +94,39 @@ public class RutaController {
                 }
 	}
 
-	@PostMapping("/ruta/{furgonid}/{deviceid}/{productid}/{localinicioid}/{localfinid}")
-	public ResponseEntity createRuta(@PathVariable(value = "furgonid") Long furgonid,
-                               @PathVariable(value = "deviceid") Long deviceid,
-                               @PathVariable(value = "productid") Long productid,
-                               @PathVariable(value = "localinicioid") Long localinicioid,
-                               @PathVariable(value = "localfinid") Long localfinid,
+	@PostMapping("/rutas")
+	public ResponseEntity createRuta(@RequestParam Long furgon,
+                                    @RequestParam Long device,
+                                    @RequestParam Long producto,
+                                    @RequestParam Long localInicio,
+                                    @RequestParam Long localFin,
                                @Valid @RequestBody Ruta ruta) {
-                if(furgonRepository.existsById(furgonid) &&
-                   deviceRepository.existsById(deviceid) &&
-                   localesRepository.existsById(localinicioid) &&
-                   localesRepository.existsById(localfinid) &&
-                   productoRepository.existsById(productid) ){
-                    Furgon furgon = furgonRepository.findById(furgonid).get();
-                    furgon.getRutas().add(ruta);
-                    Device device = deviceRepository.findById(deviceid).get();
-                    device.getRutas().add(ruta);
-                    Locales localInicio = localesRepository.findById(localinicioid).get();
-                    //localInicio.setRutaInicio(ruta);
-                    Locales localFin = localesRepository.findById(localfinid).get();
-                    //localFin.setRutaFin(ruta);
-                    Producto producto = productoRepository.findById(productid).get();
-                    producto.getRutas().add(ruta);
-                    ruta.setFurgon(furgon);
-                    ruta.setProducto(producto);
-                    ruta.setDevice(device);
-                    ruta.setLocalInicio(localInicio);
-                    ruta.setLocalFin(localFin);
+                if(furgonRepository.existsById(furgon) &&
+                   deviceRepository.existsById(device) &&
+                   localesRepository.existsById(localInicio) &&
+                   localesRepository.existsById(localFin) &&
+                   productoRepository.existsById(producto) ){
+                    Furgon f = furgonRepository.findById(furgon).get();
+                    f.getRutas().add(ruta);
+                    Device d = deviceRepository.findById(device).get();
+                    d.getRutas().add(ruta);
+                    Locales lInicio = localesRepository.findById(localInicio).get();
+                    lInicio.getRutasInicio().add(ruta);
+                    Locales lFin = localesRepository.findById(localFin).get();
+                    lFin.getRutasFin().add(ruta);
+                    Producto p = productoRepository.findById(producto).get();
+                    p.getRutas().add(ruta);
+                    ruta.setFurgon(f);
+                    ruta.setProducto(p);
+                    ruta.setDevice(d);
+                    ruta.setLocalInicio(lInicio);
+                    ruta.setLocalFin(lFin);
                     Ruta r = rutaRepository.save(ruta);
-                    furgonRepository.save(furgon);
-                    deviceRepository.save(device);
-                    localesRepository.save(localInicio);
-                    localesRepository.save(localFin);
-                    productoRepository.save(producto);
+                    furgonRepository.save(f);
+                    deviceRepository.save(d);
+                    localesRepository.save(lInicio);
+                    localesRepository.save(lFin);
+                    productoRepository.save(p);
                     
                     return new ResponseEntity(r, HttpStatus.CREATED);
                 }
