@@ -19,4 +19,5 @@ public interface AlertaRepository extends JpaRepository<Alerta, Long>{
     List<Alerta> findByRutaIsNotNullOrderByDtm();
     List<Alerta> findByRutaAndDtm(Ruta ruta, Date dtm);
     List<Alerta> findByRutaAndDtmAndTypeAlert(Ruta ruta, Date dtm, String type_alert);
+    List<Alerta> findByRutaAndTypeAlertAndDtm(Ruta ruta, String typeAlerta, Date dtm);
 }

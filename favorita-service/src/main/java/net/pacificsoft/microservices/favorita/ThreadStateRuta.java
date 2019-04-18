@@ -99,7 +99,8 @@ public class ThreadStateRuta extends Thread{
                                         " esta fuera de los límites ideales con una temperatura de "+temp+" grados, temperatura máxima ideal: "+temp_max_ideal
                                         +", temperatura mínima ideal: "+temp_min_ideal;
                         ruta.setStatus("No ideal");
-                        saveRuta(ruta, typeAlert, mensaje, t.getDtm());
+                        if(alertaRepository.findByRutaAndTypeAlertAndDtm(ruta, typeAlert, t.getDtm()).size() == 0)
+                            saveRuta(ruta, typeAlert, mensaje, t.getDtm());
                     }
                 }
                 else if(temp >= temp_max || temp <= temp_min){
@@ -120,7 +121,8 @@ public class ThreadStateRuta extends Thread{
                                         " esta fuera de los límites máximos con una temperatura de "+temp+" grados, temperatura máxima: "+temp_max
                                 +", temperatura mínima: "+temp_min;
                         ruta.setStatus("No efectiva");
-                        saveRuta(ruta, typeAlert, mensaje, t.getDtm());
+                        if(alertaRepository.findByRutaAndTypeAlertAndDtm(ruta, typeAlert, t.getDtm()).size() == 0)
+                            saveRuta(ruta, typeAlert, mensaje, t.getDtm());
                     }
                     valErr = 0;
                     break;
