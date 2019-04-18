@@ -23,14 +23,14 @@ public class Status{
         @Column(name = "batery")
         private Integer batery;
         
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "America/Guayaquil")
         @Column(name = "lastTransmision")
         private Date lastTransmision;
         
         @Column(name = "signalLevel")
         private Double signalLevel;
         
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "America/Guayaquil")
         @Column(name = "lastUpdate")
 	private Date lastUpdate;
 

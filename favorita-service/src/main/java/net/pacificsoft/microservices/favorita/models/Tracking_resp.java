@@ -43,7 +43,7 @@ public class Tracking_resp {
         private Set<LocationPriority> locationPrioritys = new HashSet<>();*/
         
     
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "America/Guayaquil")
         @Column(name = "dtm")
         private Date dtm;
 

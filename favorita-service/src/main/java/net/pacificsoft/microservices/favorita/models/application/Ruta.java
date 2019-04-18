@@ -27,14 +27,14 @@ public class Ruta{
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
         
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "America/Guayaquil")
         @Column(name = "start_date", nullable = false)
 	private Date start_date;
         
         @Column(name = "status")
 	private String status;
         
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "America/Guayaquil")
         @Column(name = "end_date", nullable = false)
 	private Date end_date;
         
