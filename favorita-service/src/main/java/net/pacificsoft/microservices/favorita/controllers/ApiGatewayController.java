@@ -253,6 +253,7 @@ public class ApiGatewayController {
             }
             catch (Exception e){conditionGoServer = true;}
             if(conditionGoServer){
+                logger.error(jData.toString());
                 logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?");
                 Alerta alert = new Alerta("Go Server error", "Response is empty. Could not obtain a valid prediction, maybe invalid family. Setting location to : ?", new Date());
                 postAlert(alert,device);
@@ -1008,6 +1009,65 @@ public class ApiGatewayController {
         }
     }
     
+    @GetMapping("/getDataTrack")
+    public ResponseEntity getDataTrack(@RequestParam Long rutaid){
+        try {
+            Ruta ruta = rutaRepository.findById(rutaid).get();
+            List<Alerta> alertas = alertaRepository.findByRutaAndTypeAlert(ruta, "cambio_zona");
+            List<Map<String, Object>> result = new ArrayList();
+            Collections.sort(alertas);            
+            JSONObject jData;
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            if(alertas.size() == 1){
+                jData = new JSONObject();
+                Date d = new Date();
+                String dat[] = alertas.get(0).getMensaje().split("\\|");
+                logger.warn("if1");
+                if(dat.length==3){
+                    logger.warn("if2");
+                    String lugar = dat[1];
+                    String fecha = dat[2];
+                    jData.put("start_date", fecha);
+                    jData.put("end_date", simpleDateFormat.format(d));
+                    jData.put("lugar", lugar);
+                    result.add(jData.toMap());
+                }
+            }
+            else if(alertas.size() >1){
+                logger.warn("if3");
+                String dat[] = alertas.get(0).getMensaje().split("\\|");
+                logger.warn("if3 " + dat.length);
+                String fechaInicio = "";
+                String fechaFin = "";
+                String lugar = "";
+                if(dat.length==3){        
+                    logger.warn("if4 " + dat.length);
+                    lugar = dat[1];
+                    fechaInicio = dat[2];
+                }
+                for(int i = 1; i < alertas.size(); i++){
+                    String dati[] = alertas.get(i).getMensaje().split("\\|");
+                    logger.warn("for "+ i + " "+dat.length);
+                    if(dat.length==3){
+                        logger.warn("if5 " + dat.length);
+                        jData = new JSONObject();
+                        fechaFin = dati[2];
+                        jData.put("start_date", fechaInicio);
+                        jData.put("end_date", fechaFin);
+                        jData.put("lugar", lugar);
+                        result.add(jData.toMap());
+                        fechaInicio = dati[2];
+                        lugar = dati[1];
+                    }
+                }
+            }
+            return new ResponseEntity(result, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
 
 
 /*
@@ -1115,7 +1175,7 @@ public class ApiGatewayController {
         if(wifi.isEmpty() || d){
             JSONObject json = new JSONObject();
             try {
-                List<RawSensorData> rawSensorDataList = rawDataRepository.findByDeviceOrderByEpoch(device);
+                List<RawSensorData> rawSensorDataList = rawDataRepository.findByDevice(device);
                 RawSensorData rawSensorData = rawSensorDataList.get(rawSensorDataList.size() - 2);
                 Set<WifiScan> wifiScans = rawSensorData.getWifiScans();
                 Iterator<WifiScan> iterator = wifiScans.iterator();
