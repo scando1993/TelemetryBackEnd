@@ -29,7 +29,7 @@ public class Alerta implements Comparable<Alerta>{
     @Column(name = "mensaje", nullable = false)
     private String mensaje;
     
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "America/Guayaquil")
     @Column(name = "dtm")
     private Date dtm;
 

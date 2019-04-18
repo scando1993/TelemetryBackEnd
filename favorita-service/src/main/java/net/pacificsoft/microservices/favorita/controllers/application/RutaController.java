@@ -94,7 +94,7 @@ public class RutaController {
                 }
 	}
 
-	@PostMapping("/rutas")
+	@PostMapping("/postRutas")
 	public ResponseEntity createRuta(@RequestParam Long furgon,
                                     @RequestParam Long device,
                                     @RequestParam Long producto,
@@ -142,7 +142,7 @@ public class RutaController {
                 }
 	}
 
-	@PutMapping("/rutas/{id}")
+	@PutMapping("/putRutas/{id}")
 	public ResponseEntity updateRuta(
 			@PathVariable(value = "id") Long rutaId,
                         @RequestParam Long furgon,
@@ -191,7 +191,7 @@ public class RutaController {
                 }
 	}
 
-	@DeleteMapping("/rutas/{id}")
+	@DeleteMapping("/delRutas/{id}")
 	public ResponseEntity deleteRuta(
 			@PathVariable(value = "id") Long rutaId){
                 if(rutaRepository.existsById(rutaId)){

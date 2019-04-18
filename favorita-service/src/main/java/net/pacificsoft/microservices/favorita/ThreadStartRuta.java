@@ -89,7 +89,7 @@ public class ThreadStartRuta extends Thread{
         }
         
     public void saveRuta(Ruta ruta, String typeAlert, String mensaje){
-        Alerta alert = new Alerta(typeAlert, mensaje, new Date());
+        Alerta alert = new Alerta(typeAlert, mensaje, ruta.getStart_date());
                 alert.setDevice(ruta.getDevice());
                 alert.setRuta(ruta);
                 ruta.getDevice().getAlertas().add(alert);

@@ -18,6 +18,7 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
+import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 //@EnableIgniteRepositories
 //@EnableDiscoveryClient
@@ -39,8 +40,10 @@ public class Application {
     }
     
     public static void main(String[] args) {
+        RestTemplate restTemplate = new RestTemplate();
         System.out.println(new Date());
         SpringApplication.run(Application.class, args);
+        //restTemplate.getForObject("http://localhost:2222/startThread", ThreadStartRuta.class);
         //ts.start();
     }
     

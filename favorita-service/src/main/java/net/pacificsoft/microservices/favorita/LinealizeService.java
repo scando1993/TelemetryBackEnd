@@ -203,7 +203,7 @@ public class LinealizeService {
             SimpleDateFormat as = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             String changeDate = as.format(date);
             //String msg = "Se cambio de zona a " + actualLocation +  " aproximadamente a las: " + changeDate;
-            String msg = "Se cambió de zona a |" + actualLocation + "|" + changeDate;
+            String msg = "Ruta "+ ruta.getId()+". Se cambió de zona a |" + actualLocation + "|" + changeDate;
             Alerta alert = new Alerta("cambio_zona", msg, date);
             try{
                 List<Alerta> alertas = alertaRepository.findByRutaAndDtmAndTypeAlert(this.ruta, date, "cambio_zona");

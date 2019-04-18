@@ -31,7 +31,7 @@ public class RawSensorData {
         @Column(name = "temperature", nullable = false)
         private double temperature;
         
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "America/Guayaquil")
         @Column(name = "epochDateTime", nullable = false)
         private Date epochDateTime;
         

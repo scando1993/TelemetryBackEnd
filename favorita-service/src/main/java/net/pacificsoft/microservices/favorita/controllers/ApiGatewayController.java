@@ -1013,11 +1013,13 @@ public class ApiGatewayController {
     public ResponseEntity getDataTrack(@RequestParam Long rutaid){
         try {
             Ruta ruta = rutaRepository.findById(rutaid).get();
-            List<Alerta> alertas = alertaRepository.findByRutaAndTypeAlert(ruta, "cambio_zona");
-            List<Map<String, Object>> result = new ArrayList();
-            Collections.sort(alertas);            
+            List<Alerta> alertas = alertaRepository.findByRutaAndTypeAlertOrderByDtm(ruta, "cambio_zona");
+            List<Map<String, Object>> result = new ArrayList();         
             JSONObject jData;
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            logger.warn(""+ruta.getId());
+            logger.warn(""+alertas.size());
+            //Collections.sort(alertas);
             if(alertas.size() == 1){
                 jData = new JSONObject();
                 Date d = new Date();
@@ -1029,6 +1031,8 @@ public class ApiGatewayController {
                     String fecha = dat[2];
                     jData.put("start_date", fecha);
                     jData.put("end_date", simpleDateFormat.format(d));
+                    if(lugar.equals("?"))
+                        lugar = "en ruta";
                     jData.put("lugar", lugar);
                     result.add(jData.toMap());
                 }
@@ -1054,8 +1058,12 @@ public class ApiGatewayController {
                         fechaFin = dati[2];
                         jData.put("start_date", fechaInicio);
                         jData.put("end_date", fechaFin);
+                        if(lugar.equals("?"))
+                            lugar = "en ruta";
                         jData.put("lugar", lugar);
-                        result.add(jData.toMap());
+                        if(!(fechaInicio.equals(fechaFin))){
+                            result.add(jData.toMap());
+                        }                        
                         fechaInicio = dati[2];
                         lugar = dati[1];
                     }
