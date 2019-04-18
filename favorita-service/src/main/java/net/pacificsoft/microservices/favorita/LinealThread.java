@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,8 +45,8 @@ public class LinealThread extends Thread {
             ArrayList<String> priorityQueue = new ArrayList<>();
 
             priorityQueue.add("?");
-            //priorityQueue.add("recepcion carnes");
-            //priorityQueue.add("carga furgon");
+            priorityQueue.add("recepcion carnes");
+            priorityQueue.add("carga furgon");
 
             LinealizeService linealizeService = new LinealizeService(priorityQueue,true);
             linealizeService.setLogger(logger);
@@ -55,10 +56,18 @@ public class LinealThread extends Thread {
             for (Tracking t : trackingList){
                 linealizeService.addTrack(t);
             }
+            /*
             List<Tracking> q =linealizeService.getTrackingList();
             for (Tracking t : q){
                 this.logger.info(t.getLocation());
             }
+            */
+            try {
+                Thread.sleep(Variables.time_check);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
 
     }

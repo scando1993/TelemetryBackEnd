@@ -209,8 +209,9 @@ public class LinealizeService {
                 List<Alerta> alertas = alertaRepository.findByRutaAndDtmAndTypeAlert(this.ruta, date, "cambio_zona");
                 if(alertas.size() == 0){
                     //this.alertaRepository.save(alert);
-                    postAlert(alert, ruta);
-                    this.logger.info("Creando alerta");
+                    postAlert(alert, this.ruta);
+                    if(this.logger !=null)
+                        this.logger.info("Creando alerta");
                 }
             }
             catch (Exception e){
