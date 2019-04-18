@@ -80,7 +80,7 @@ public class ThreadStartRuta extends Thread{
                         saveRuta(r, typeAlert, mensaje);
                         ts.setLogger(logger);
                         ts.start();
-                        linealThread.start();
+                        //linealThread.start();
                     }
                 }
             }
