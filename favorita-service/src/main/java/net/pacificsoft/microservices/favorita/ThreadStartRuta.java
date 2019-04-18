@@ -70,7 +70,6 @@ public class ThreadStartRuta extends Thread{
                     ids.add(r.getId());
                     r.setStatus("Activo");
                     repository.save(r);
-                    LinealThread linealThread = new LinealThread(r,alertaRepository, trackingRepository);
                     String typeAlert = "inicio_ruta";
                     if(r.getDevice()!=null && r.getProducto()!=null ){
                         String mensaje = "Inicio ruta "+r.getId()+". Device: " + r.getDevice().getName() + 
@@ -79,8 +78,10 @@ public class ThreadStartRuta extends Thread{
                                                         trackingRepository, telemetriaRepository, rawSensorDataRepository);
                         saveRuta(r, typeAlert, mensaje);
                         ts.setLogger(logger);
+                        LinealThread linealThread = new LinealThread(r,alertaRepository, trackingRepository);
+                        //linealThread.setLogger(logger);
+                        linealThread.start();
                         ts.start();
-                        //linealThread.start();
                     }
                 }
             }
