@@ -1013,13 +1013,13 @@ public class ApiGatewayController {
     public ResponseEntity getDataTrack(@RequestParam Long rutaid){
         try {
             Ruta ruta = rutaRepository.findById(rutaid).get();
-            List<Alerta> alertas = alertaRepository.findByRutaAndTypeAlert(ruta, "cambio_zona");
+            List<Alerta> alertas = alertaRepository.findByRutaAndTypeAlertOrderByDtm(ruta, "cambio_zona");
             List<Map<String, Object>> result = new ArrayList();         
             JSONObject jData;
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             logger.warn(""+ruta.getId());
             logger.warn(""+alertas.size());
-            Collections.sort(alertas);
+            //Collections.sort(alertas);
             if(alertas.size() == 1){
                 jData = new JSONObject();
                 Date d = new Date();
