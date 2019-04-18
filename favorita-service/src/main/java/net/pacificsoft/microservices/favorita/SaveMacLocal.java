@@ -44,9 +44,6 @@ public class SaveMacLocal {
                     if(c.length >=2){                        
                         String ssid = c[0];
                         String mac = c[1];
-                        logger.warn("Linea: "+s);
-                        logger.warn("ssid: "+ssid);
-                        logger.warn("mac: "+mac);
                         String elementsMac[] = mac.split(":");
                         boolean valSintax = true;
                         boolean valElem = true;
@@ -57,14 +54,10 @@ public class SaveMacLocal {
                                 String b = e.trim();
                                 if(b.length()!=2){
                                     valSintax = false;
-                                    logger.warn("ERRRIN: "+e);
                                 }
                             }
                         }
-                        logger.warn("macSize: "+elementsMac.length);
-                        logger.warn("valSintax: "+valSintax);
                         if(valElem && valSintax){
-                            logger.warn("saved LocalesMac");
                             LocalesMac lm = new LocalesMac(ssid, mac);
                             lm.setLocales(local);
                             local.getLocalesMacs().add(lm);
