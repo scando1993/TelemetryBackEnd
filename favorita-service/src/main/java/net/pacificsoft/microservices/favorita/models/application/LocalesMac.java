@@ -15,14 +15,17 @@ public class LocalesMac{
 	private String ssid;
         @Column(name = "mac", nullable = false)
 	private String mac;
+        @Column(name = "password", nullable = false)
+	private String password;
         
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "localesid")
         private Locales locales;
 
-        public LocalesMac(String ssid, String mac) {
+        public LocalesMac(String ssid, String mac, String password) {
             this.ssid = ssid;
             this.mac = mac;
+            this.password = password;
         }
         public LocalesMac(){}
 
@@ -57,4 +60,12 @@ public class LocalesMac{
         public void setLocales(Locales locales) {
             this.locales = locales;
         }     
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }    
 }
