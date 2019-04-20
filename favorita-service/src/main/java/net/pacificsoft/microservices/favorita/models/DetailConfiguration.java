@@ -21,7 +21,7 @@ public class DetailConfiguration {
     @Column(name = "ssid", nullable = false)
     private String ssid;
 
-    @Column(name = "mac", nullable = false)
+    @Column(name = "mac", nullable = true)
     private String mac;
 
     @ColumnTransformer(
@@ -38,6 +38,9 @@ public class DetailConfiguration {
         this.ssid = ssid;
         this.mac = mac;
         this.password = password;
+    }
+
+    public DetailConfiguration() {
     }
 
     public long getId() {
