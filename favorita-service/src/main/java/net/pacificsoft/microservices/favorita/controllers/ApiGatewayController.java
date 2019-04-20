@@ -71,6 +71,8 @@ public class ApiGatewayController {
     private LocalesRepository localesRepository;
     @Autowired
     private LocalesMacRepository localesMacRepository;
+    @Autowired
+    private ConfigurationDeviceRepository configurationDeviceRepository;
 
     final String uri = "http://104.209.196.204:9090/track";
     //final String uri = "http://172.16.10.41:8005/track";
@@ -870,7 +872,12 @@ public class ApiGatewayController {
                 wifiList.add(detailConfiguration);
 
             }
+            if(device.getConfigDevice() == null) {
+                return new ResponseEntity("Device most be configure fist", HttpStatus.PRECONDITION_FAILED);
+            }
             device.getConfigDevice().setDetailConfigurations(wifiList);
+            //ConfigurationDevice configurationDevice = configurationDeviceRepository.findByDevice(device).get(0);
+            //configurationDevice.setDetailConfigurations(wifiList);
             deviceRepository.save(device);
             return new ResponseEntity(csv, HttpStatus.OK);
         }
