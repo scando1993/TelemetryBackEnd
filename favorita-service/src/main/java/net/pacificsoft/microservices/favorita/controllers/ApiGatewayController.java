@@ -4,6 +4,7 @@ package net.pacificsoft.microservices.favorita.controllers;
 
 import net.pacificsoft.microservices.favorita.LinealizeService;
 import net.pacificsoft.microservices.favorita.models.*;
+import net.pacificsoft.microservices.favorita.models.application.LocalesMac;
 import net.pacificsoft.microservices.favorita.repository.*;
 import org.json.JSONArray;
 import javax.validation.Valid;
@@ -364,235 +365,6 @@ public class ApiGatewayController {
         }
     }
 
-    /*@PostMapping("/track")
-    public ResponseEntity Storage(
-            @Valid @RequestBody String dataBody) {
-        try{
-            boolean validDevice = true;
-            JSONObject qq = new JSONObject(dataBody);
-
-            // parsing initial data
-            dataBody = "[" + dataBody + "]";
-            JSONArray j = new JSONArray(dataBody);
-            JSONObject jDataBody = j.getJSONObject(0);
-            JSONArray wifis = (JSONArray)jDataBody.remove("wifi");
-            JSONObject wifiList = getWifiMACs(wifis);
-
-            int batteryLevel = (int)jDataBody.remove("battery");
-            String deviceName = (String)jDataBody.remove("device");
-            String familyDevice = (String)jDataBody.remove("family");
-            String dtmS = (String) jDataBody.remove("EpochDateTime");
-            if (dtmS.length() > 16){
-                dtmS = dtmS.substring(0,16);
-            }
-            jDataBody.put("epochDateTime", dtmS);
-            Date epochDateTime = as.parse(dtmS);
-            double temperature = jDataBody.getDouble("temperature");
-
-            //------log
-            logger.info("All data have been parsed correctly");
-            //-------
-
-            //----------getting Device
-            Device device = new Device();
-            if(deviceRepository.existsByName(deviceName)){
-                logger.info("Device found");
-                device= (deviceRepository.findByName(deviceName)).get(0);
-            }
-            else {
-                device = (deviceRepository.findByName("unknown")).get(0);
-                logger.warn("Device no found in database, setting relations to device = 'unknown'");
-                //creating alert
-                endPoint = "/" + device.getId() + "/0";
-                Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, continuing ith Device: unknown");
-                Alerta alertResponse = restTemplate.postForObject(urlAlert + endPoint, alerta, Alerta.class);
-                validDevice = false;
-            }
-            long deviceId = device.getId();
-
-
-            //-----------creating rawsSensorData
-            JSONObject jRawSensorData = jDataBody;
-            endPoint = "/" + deviceId;
-            RawSensorData rawData = (restTemplate.postForObject( urlRawSensorData + endPoint, jRawSensorData.toMap(), RawSensorData.class));
-            logger.info("Raw data have been storaged");
-
-            //-----------creating wifiSensor
-            endPoint = "/" + rawData.getId();
-            postWifiScan(wifiList,urlWifiSensor + endPoint,restTemplate);
-            logger.info("WifiSensor have been storaged");
-
-            if(!validDevice){
-                Alerta alerta = new Alerta("Device error","Device: " + deviceName + " not found, saving data with deviceName: unknown");
-                return new ResponseEntity("", HttpStatus.CHECKPOINT);
-            }
-
-            //-------getting Families
-            Set<Family> families = device.getGroup().getFamilies();
-            if(families.size() == 0){
-                logger.error("Device is not associated with any family");
-                endPoint = "/" + deviceId + "/0";
-                Alerta alert = new Alerta("Device error","Device does not have any family");
-                Alerta alertResponse = restTemplate.postForObject(urlAlert + endPoint, alert, Alerta.class);
-                return new ResponseEntity(alert.toJson().toMap(),HttpStatus.PRECONDITION_FAILED);
-            }
-
-
-            //-----creatinig Telemetry
-            endPoint = "/" +deviceId;
-            JSONObject jsonTelemtry = createTelemetryJson(epochDateTime,"temperature",temperature);
-            JSONObject jsonTelemtryResponse = new JSONObject(restTemplate.postForObject( urlTelemetry + endPoint, jsonTelemtry.toMap(), Telemetria.class));
-            logger.info("Telemetry have been storaged");
-
-
-            //-------creating request to send Go server
-            JSONObject jsonRequesGoServer = new JSONObject();
-            JSONObject s = new JSONObject();
-            jsonRequesGoServer.put("t", jDataBody.getInt("epoch"));
-            logger.info("T1");
-            jsonRequesGoServer.put("d", deviceName);
-            s.put("wifi", wifiList);
-            jsonRequesGoServer.put("s", s);
-            JSONObject jData = new JSONObject();
-            logger.info("Data prepared to send");
-            logger.info("sending data to: " + uri);
-            logger.info("" + jsonRequesGoServer.toString());
-            //jData = new JSONObject(restTemplate.postForObject( uri, json1.toString(), String.class));
-            for(Family family:families){
-                jsonRequesGoServer.put("f",family.getName());
-                jData = new JSONObject(restTemplate.postForObject( uri, jsonRequesGoServer.toString(), String.class));
-                Boolean empty = jData.getJSONObject("message").getJSONObject("location_names").isEmpty();
-                logger.info("" + empty);
-                if(empty){
-                    jsonRequesGoServer.remove("f");
-                }
-                else{
-                    break;
-                }
-            }
-            logger.info("Successfull Responce");
-            if(jData.getJSONObject("message").getJSONObject("location_names").isEmpty()){
-                logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
-                //creating Alert
-                //endPoint = "/" + deviceId;
-                endPoint = "/" + device.getId() + "/0";
-                Alerta alerta = new Alerta("Go Server error","Response is empty. Could not obtain a valid prediction, maybe invalid family");
-                Alerta alertResponse = restTemplate.postForObject(urlAlert + endPoint, alerta, Alerta.class);
-
-                //JSONObject jsonTrackingResponse = new JSONObject(restTemplate.postForObject( urlAlert + endPoint, alerta, Alerta.class));
-                return new ResponseEntity(alerta.toJson().toMap(),HttpStatus.PRECONDITION_FAILED);
-            }
-
-            //---------obtening Data
-            Boolean status = jData.getBoolean("success");
-            JSONObject location_Names = jData.getJSONObject("message").getJSONObject("location_names");
-            JSONArray guessess = jData.getJSONObject("message").getJSONArray("guesses");
-            JSONArray predictions = jData.getJSONObject("message").getJSONArray("predictions");
-
-            JSONObject temp = guessess.getJSONObject(0);
-            String finalLocation = (String) temp.get("location");
-            Double finalProbability = temp.getDouble("probability");
-
-            logger.info("Go response successfully parse");
-
-            //---------creating Tracting
-            endPoint = "/" + device.getId() + "/" + defaultTrackingLocationGroup;
-            JSONObject jsonTracking = createTrackingJson(epochDateTime, finalLocation);
-            JSONObject jsonTrackingResponse = new JSONObject(restTemplate.postForObject( urlTracking + endPoint, jsonTracking.toMap(), Tracking.class));
-            logger.info("Tracking have been storaged");
-
-            //-------Creating MessageGuess
-            MessageGuess messageGuess = new MessageGuess(finalLocation, finalProbability);
-            JSONObject jsonResponseMessageGuess = new JSONObject(restTemplate.postForObject( urlMessaguess, messageGuess, MessageGuess.class));
-            long idMessageGuess = (long)jsonResponseMessageGuess.get("id");
-            logger.info("MessageGuess have been storaged");
-
-            //---------Creating Message
-            endPoint = "/" + idMessageGuess;
-            Message temp1 = new Message();
-            Message jsonResponseMessage = (Message)(restTemplate.postForObject( urlMessage + endPoint, temp1, Message.class));
-            //long idMessage = jsonResponseMessage.getLong("id");
-            long idMessage = jsonResponseMessage.getId();
-            logger.info("Message have been storaged");
-
-            //--------Creating goApiResponse
-            endPoint = "/" +idMessage + "/" + device.getId();
-            GoApiResponse goApiResponse = new GoApiResponse(status);
-            JSONObject jsonResponseGoApiResponse = new JSONObject(restTemplate.postForObject( urlApiGoResponse + endPoint, goApiResponse, GoApiResponse.class));
-            long idGoApiResponse = jsonResponseGoApiResponse.getLong("id");
-            logger.info("goApiResponse have been storaged");
-
-            //------------creating Predictions, LocationNames and Probabilities
-            jData.getJSONObject("message").getJSONObject("location_names");
-            for(Object i: predictions){
-                List<Object> locations = (((JSONObject)i).getJSONArray("locations")).toList();
-                String predictionName = ((JSONObject)i).getString("name");
-                List<Object> probabilites = (((JSONObject)i).getJSONArray("probabilities")).toList();
-
-                Prediction prediction = new Prediction(predictionName);
-                List<LocationNames> listLocationNames = new ArrayList<>();
-                List<Probabilities> listProbabilities = new ArrayList<>();
-
-                //------------posting prediction
-                endPoint = "/" + idMessage;
-                JSONObject jsonResponsePrediction = new JSONObject(restTemplate.postForObject( urlPrediction + endPoint, prediction, Prediction.class));
-                long idPrediction = jsonResponsePrediction.getLong("id");
-               *//*
-                prediction.setMessage(jsonResponseMessage);
-                jsonResponseMessage.getPredictions().add(prediction);
-                prediction = predictionsRepository.save(prediction);
-                messageRepository.save(jsonResponseMessage);
-                long idPrediction = prediction.getId();
-                *//*
-                for(int n = 0; n < locations.size(); n++){
-                    String idName = (String) locations.get(n);
-                    String nameIndexed = (String)location_Names.get(idName);
-                    Double probabilityIndexed;
-                    try{
-                        probabilityIndexed = (Double)probabilites.get(n);
-                    }
-                    catch(Exception e){
-                        String convertedToDouble = Integer.toString((Integer)probabilites.get(n));
-                        convertedToDouble = convertedToDouble + ".0";
-                        probabilityIndexed = Double.parseDouble(convertedToDouble);
-                    }
-
-                    Probabilities probability = new Probabilities(Double.parseDouble(idName), probabilityIndexed);
-                    LocationNames locationNames = new LocationNames(Double.parseDouble(idName),nameIndexed);
-
-                    //posting probability and locationNames
-                    endPoint = "/" + idPrediction;
-                    //JSONObject jsonResponseProbability = new JSONObject(restTemplate.postForObject( urlProbability + endPoint, probability, Probabilities.class));
-                    //JSONObject jsonResponseLocationNames = new JSONObject(restTemplate.postForObject( urlLocationNames, locationNames, LocationNames.class));
-                    prediction.getProbabilitieses().add(probability);
-                    probability.setPrediction(prediction);
-
-                    prediction.getLocationNames().add(locationNames);
-                    locationNames.setPrediction(prediction);
-
-                    listProbabilities.add(probability);
-                    listLocationNames.add(locationNames);
-
-                }
-                predictionsRepository.save(prediction);
-                probabilitiesRepository.saveAll(listProbabilities);
-                locationNamesRepository.saveAll(listLocationNames);
-            }
-            logger.info("All predictions,, locationNames and probabilities have been storaged");
-            logger.info("All data have been Successfully storaged");
-            System.gc();
-
-            return new ResponseEntity(goApiResponse,HttpStatus.CREATED);
-        }
-        catch(Exception e){
-            String a = e + "\n" + e.getCause() + "\n";
-
-            return new ResponseEntity<String>("It's not possible create new Data, the reason: \n" +
-                    a,
-                    HttpStatus.NOT_FOUND);
-
-        }
-    }*/
     @PostMapping("/CreateDeviceFamily")
     public ResponseEntity s(
             @Valid @RequestBody String rawData) {
@@ -1075,7 +847,31 @@ public class ApiGatewayController {
             return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+    @GetMapping("/getMacConfiguration")
+    public ResponseEntity getMacConfiguration(@RequestParam Long deviceid) {
+        try{
+            if(!deviceRepository.existsById(deviceid))
+                return new ResponseEntity("Device Not Found", HttpStatus.NOT_FOUND);
+            Device device = deviceRepository.findById(deviceid).get();
+            if(device.getRutas().isEmpty())
+                return new ResponseEntity("Any Route is associated with this device", HttpStatus.BAD_REQUEST);
+            Ruta ruta = rutaRepository.findByStatusAndDevice("Activo", device).get(0);
+            Set<LocalesMac> localesMacs = ruta.getLocalInicio().getLocalesMacs();
+            localesMacs.addAll(ruta.getLocalFin().getLocalesMacs());
+            String csv = "";
+            Iterator<LocalesMac> iterator = localesMacs.iterator();
+            while(iterator.hasNext()){
+                LocalesMac localesMac = iterator.next();
+                String line = String.format("%s,%s,%s\n",localesMac.getSsid(),localesMac.getMac(), localesMac.getPassword());
+                csv = csv + line;
+            }
+            return new ResponseEntity(csv, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 /*
@@ -1273,84 +1069,6 @@ public class ApiGatewayController {
         deviceRepository.save(device);
     }
 
-
-      /*  public void run(Ruta ruta) {
-        boolean process = true;
-        boolean fin = true;
-        while(process && fin){
-            try {
-                Thread.sleep(Variables.time_check);
-            } catch (InterruptedException ex) {
-                java.util.logging.Logger.getLogger(ThreadStateRuta.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            long valErr = 0;
-            Telemetria tAnterior = null;
-            Producto p = ruta.getProducto();
-            List<Telemetria> telemetrias = telemetriaRepository.findByDtmBetweenAndDevice(ruta.getStart_date(), ruta.getEnd_date(),ruta.getDevice());
-            float temp_max = p.getTemp_max();
-            float temp_min = p.getTemp_min();
-            float temp_max_ideal = p.getTemp_max_ideal();
-            float temp_min_ideal = p.getTemp_min_ideal();
-            for (Telemetria t: telemetrias){
-                double temp = t.getValue();
-                if((temp >= temp_max_ideal || temp <= temp_min_ideal) &&
-                   (temp <= temp_max || temp >= temp_min)){
-                    String typeAlert = "temperatura_limite_ideales";
-                    String mensaje = "Temperatura del producto " + p.getName() +
-                                    " esta fuera de los límites ideales";
-                    ruta.setStatus("No ideal");
-                    saveRuta(ruta, typeAlert, mensaje);
-                }
-                else if(temp >= temp_max || temp <= temp_min){
-                    if(tAnterior != null) {
-                        valErr = valErr + (t.getDtm().getTime() - tAnterior.getDtm().getTime());
-                    }
-                    tAnterior = new Telemetria(t.getDtm(), t.getName(), t.getValue());
-                }
-                else{
-                    tAnterior = new Telemetria(t.getDtm(), t.getName(), t.getValue());
-                    valErr = 0;
-                }
-                if (valErr >= 3600){
-                    String typeAlert = "temperatura_limite_maximas";
-                    String mensaje = "Temperatura del producto " + p.getName() +
-                                    " esta fuera de los límites máximos";
-                    ruta.setStatus("No efectiva");
-                    saveRuta(ruta, typeAlert, mensaje);
-                    process = false;
-                    break;
-                }
-            }
-            if(!process){
-                RawSensorData rw = rawDataRepository.findByEpochDateTimeBetweenAndDeviceOrderByEpochDateTimeDesc(
-                                    ruta.getStart_date(), ruta.getEnd_date(), ruta.getDevice()).get(0);
-                Set<LocalesMac> localesMacs = ruta.getLocalFin().getLocalesMacs();
-                for(WifiScan ws: rw.getWifiScans()){
-                    for(LocalesMac lm: localesMacs){
-                        if(lm.getMac().equals(ws.getMac())){
-                            fin = false;
-                            String typeAlert = "fin_ruta";
-                            String mensaje = "Ha completado su ruta el furgon " + ruta.getFurgon().getName();
-                            ruta.setStatus("Finalizada");
-                            saveRuta(ruta, typeAlert, mensaje);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public void saveRuta(Ruta ruta, String typeAlert, String mensaje){
-        Alerta alert = new Alerta(typeAlert, mensaje, new Date());
-                alert.setDevice(ruta.getDevice());
-                alert.setRuta(ruta);
-                ruta.getDevice().getAlertas().add(alert);
-                ruta.getAlertas().add(alert);
-                alertaRepository.save(alert);
-                deviceRepository.save(ruta.getDevice());
-                rutaRepository.save(ruta);
-    }*/
 
     public void startLinealizeService(Device device, Date start, Date end, Ruta ruta){
         ArrayList<String> priorityQueue = new ArrayList<>();
