@@ -863,10 +863,9 @@ public class ApiGatewayController {
             Iterator<LocalesMac> iterator = localesMacs.iterator();
             while(iterator.hasNext()){
                 LocalesMac localesMac = iterator.next();
-                String line = String.format("%s,%s\n",localesMac.getSsid(),localesMac.getMac());
+                String line = String.format("%s,%s,%s\n",localesMac.getSsid(),localesMac.getMac(), localesMac.getPassword());
                 csv = csv + line;
             }
-            
             return new ResponseEntity(csv, HttpStatus.OK);
         }
         catch (Exception e){
