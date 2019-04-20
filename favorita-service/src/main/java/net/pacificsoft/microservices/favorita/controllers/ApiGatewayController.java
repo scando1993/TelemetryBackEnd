@@ -861,11 +861,17 @@ public class ApiGatewayController {
             localesMacs.addAll(ruta.getLocalFin().getLocalesMacs());
             String csv = "";
             Iterator<LocalesMac> iterator = localesMacs.iterator();
+            Set<DetailConfiguration> wifiList = new HashSet<DetailConfiguration>();
             while(iterator.hasNext()){
                 LocalesMac localesMac = iterator.next();
                 String line = String.format("%s,%s,%s\n",localesMac.getSsid(),localesMac.getMac(), localesMac.getPassword());
                 csv = csv + line;
+                DetailConfiguration detailConfiguration = new DetailConfiguration(localesMac.getSsid(),localesMac.getMac(), localesMac.getPassword());
+                wifiList.add(detailConfiguration);
+
             }
+            device.getConfigDevice().setDetailConfigurations(wifiList);
+            deviceRepository.save(device);
             return new ResponseEntity(csv, HttpStatus.OK);
         }
         catch (Exception e){

@@ -34,6 +34,12 @@ public class DetailConfiguration {
     @JoinColumn(name = "configurationID")
     private ConfigurationDevice configDevice;
 
+    public DetailConfiguration(String ssid, String mac, String password) {
+        this.ssid = ssid;
+        this.mac = mac;
+        this.password = password;
+    }
+
     public long getId() {
         return id;
     }
