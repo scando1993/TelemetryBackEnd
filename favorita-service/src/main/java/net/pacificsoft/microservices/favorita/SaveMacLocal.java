@@ -41,9 +41,10 @@ public class SaveMacLocal {
                 }
                 else{
                     String c[] = s.split(";");
-                    if(c.length >=2){                        
+                    if(c.length >=3){                        
                         String ssid = c[0];
                         String mac = c[1];
+                        String password = c[2];
                         String elementsMac[] = mac.split(":");
                         boolean valSintax = true;
                         boolean valElem = true;
@@ -58,7 +59,7 @@ public class SaveMacLocal {
                             }
                         }
                         if(valElem && valSintax){
-                            LocalesMac lm = new LocalesMac(ssid, mac);
+                            LocalesMac lm = new LocalesMac(ssid, mac, password);
                             lm.setLocales(local);
                             local.getLocalesMacs().add(lm);
                             localesMacRepository.save(lm);
