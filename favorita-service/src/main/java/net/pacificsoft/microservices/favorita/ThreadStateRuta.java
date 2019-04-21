@@ -152,7 +152,7 @@ public class ThreadStateRuta extends Thread{
                 if(fin && (new Date()).compareTo(ruta.getEnd_date())>=0){
                     fin = false;
                     String typeAlert = "fin_ruta";
-                    if(ruta.getFurgon() != null){
+                    if(ruta.getFurgon() != null && (alertaRepository.findByRutaAndTypeAlertAndDtm(ruta, typeAlert, ruta.getEnd_date()).size() == 0)){
                         String mensaje = "Ruta " + ruta.getId() + ". Ha terminado su ruta el furgon " + ruta.getFurgon().getName();
                         ruta.setStatus("Finalizado");
                         saveRuta(ruta, typeAlert, mensaje, ruta.getEnd_date());

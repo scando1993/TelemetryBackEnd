@@ -34,7 +34,7 @@ spring:
       allow-bean-definition-overriding: true
   datasource:
     #driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:mysql://25.4.250.51/tracking?userSSL=false&serverTimezone=EST
+    url: jdbc:mysql://localhost/tracking?userSSL=false&serverTimezone=EST
     #url: jdbc:mysql://localhost/Tracking?userSSL=false&serverTimezone=UTC
     username: allan
     password: allan
