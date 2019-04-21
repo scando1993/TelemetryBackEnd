@@ -71,6 +71,10 @@ public class ApiGatewayController {
     private LocalesRepository localesRepository;
     @Autowired
     private LocalesMacRepository localesMacRepository;
+    @Autowired
+    private ConfigurationDeviceRepository configurationDeviceRepository;
+    @Autowired
+    private DetailConfigurationRepository detailConfigurationRepository;
 
     final String uri = "http://104.209.196.204:9090/track";
     //final String uri = "http://172.16.10.41:8005/track";
@@ -861,11 +865,31 @@ public class ApiGatewayController {
             localesMacs.addAll(ruta.getLocalFin().getLocalesMacs());
             String csv = "";
             Iterator<LocalesMac> iterator = localesMacs.iterator();
+            Set<DetailConfiguration> wifiList = new HashSet<DetailConfiguration>();
+            ConfigurationDevice configurationDevice;
+            if(device.getConfigDevice() == null){
+                configurationDevice = new ConfigurationDevice();
+                device.setConfigDevice(configurationDevice);
+                configurationDevice.setDevice(device);
+                //configurationDeviceRepository.save(configurationDevice);
+            }
+            else configurationDevice = device.getConfigDevice();
             while(iterator.hasNext()){
                 LocalesMac localesMac = iterator.next();
                 String line = String.format("%s,%s,%s\n",localesMac.getSsid(),localesMac.getMac(), localesMac.getPassword());
                 csv = csv + line;
+                DetailConfiguration detailConfiguration = new DetailConfiguration(localesMac.getSsid(),localesMac.getMac(), localesMac.getPassword());
+                detailConfiguration.setConfigDevice(configurationDevice);
+                detailConfigurationRepository.save(detailConfiguration);
+                wifiList.add(detailConfiguration);
             }
+
+           // configurationDevice.setDetailConfigurations(wifiList);
+            configurationDeviceRepository.save(configurationDevice);
+            //device.getConfigDevice().setDetailConfigurations(wifiList);
+            //ConfigurationDevice configurationDevice = configurationDeviceRepository.findByDevice(device).get(0);
+            //configurationDevice.setDetailConfigurations(wifiList);
+            deviceRepository.save(device);
             return new ResponseEntity(csv, HttpStatus.OK);
         }
         catch (Exception e){
