@@ -206,7 +206,7 @@ public class LinealizeService {
             String msg = "Ruta "+ ruta.getId()+". Se cambió de zona a |" + actualLocation + "|" + changeDate;
             Alerta alert = new Alerta("cambio_zona", msg, date);
             try{
-                List<Alerta> alertas = alertaRepository.findByRutaAndDtmAndTypeAlert(this.ruta, date, "cambio_zona");
+                List<Alerta> alertas = alertaRepository.findByDeviceAndTypeAlertAndDtm(this.ruta.getDevice(), "cambio_zona", date);
                 if(alertas.size() == 0){
                     //this.alertaRepository.save(alert);
                     postAlert(alert, this.ruta);
