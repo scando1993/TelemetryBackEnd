@@ -34,10 +34,10 @@ spring:
       allow-bean-definition-overriding: true
   datasource:
     #driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:mysql://localhost/tracking?userSSL=false&serverTimezone=EST
+    url: jdbc:mysql://192.168.10.103/tracking?userSSL=false&serverTimezone=EST
     #url: jdbc:mysql://localhost/Tracking?userSSL=false&serverTimezone=UTC
-    username: allan
-    password: allan
+    username: soporte
+    password: Pacific12Pacific12
     tomcat:
           test-while-idle: true
           validation-query: SELECT 1
