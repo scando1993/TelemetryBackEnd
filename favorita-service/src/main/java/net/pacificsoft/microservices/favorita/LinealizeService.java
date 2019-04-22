@@ -139,7 +139,7 @@ public class LinealizeService {
                         //anomaly.setTracking(trackChange);
                     }
                     //if verifies if the anomaly is until 3 prioritis behind the actual one, if so, it changes that one
-                    else if(false){
+                    else if(condition){
                         String priorityChange = this.locationPriority.get(this.index);
                         Tracking trackChange = this.trackingList.get(anomalyPosArray);
                         trackChange.setLocation(priorityChange);
