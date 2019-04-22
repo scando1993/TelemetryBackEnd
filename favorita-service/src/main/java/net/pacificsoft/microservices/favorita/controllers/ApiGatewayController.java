@@ -76,9 +76,9 @@ public class ApiGatewayController {
     @Autowired
     private DetailConfigurationRepository detailConfigurationRepository;
 
-    //final String uri = "http://104.209.196.204:9090/track";
+    final String uri = "http://104.209.196.204:9090/track";
 
-    final String uri = "http://172.16.10.98:8005/track";
+    //final String uri = "http://172.16.10.98:8005/track";
     final String urlTracking = "http://localhost:2222/tracking";
     final String urlRawSensorData = "http://localhost:2222/rawSensorData";
     final String urlPrediction = "http://localhost:2222/prediction";
@@ -723,7 +723,7 @@ public class ApiGatewayController {
             Device device = ruta.getDevice();
             startLinealizeService(device, ruta.getStart_date(), ruta.getEnd_date(), ruta);
 
-            return new ResponseEntity("WOW", HttpStatus.OK);
+            return new ResponseEntity("Finalizado", HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -1099,8 +1099,8 @@ public class ApiGatewayController {
     public void startLinealizeService(Device device, Date start, Date end, Ruta ruta){
         ArrayList<String> priorityQueue = new ArrayList<>();
         priorityQueue.add("?");
-        priorityQueue.add("recepcion carnes");
-            priorityQueue.add("carga furgon");
+        //priorityQueue.add("recepcion carnes");
+        //    priorityQueue.add("carga furgon");
 
         LinealizeService linealizeService = new LinealizeService(priorityQueue,true);
         linealizeService.setLogger(logger);

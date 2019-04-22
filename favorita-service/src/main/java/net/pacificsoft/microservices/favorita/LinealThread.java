@@ -45,8 +45,8 @@ public class LinealThread extends Thread {
             ArrayList<String> priorityQueue = new ArrayList<>();
 
             priorityQueue.add("?");
-            priorityQueue.add("recepcion carnes");
-            priorityQueue.add("carga furgon");
+            //priorityQueue.add("recepcion carnes");
+            //priorityQueue.add("carga furgon");
 
             LinealizeService linealizeService = new LinealizeService(priorityQueue,true);
             linealizeService.setLogger(logger);
