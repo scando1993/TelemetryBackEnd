@@ -76,9 +76,9 @@ public class ApiGatewayController {
     @Autowired
     private DetailConfigurationRepository detailConfigurationRepository;
 
-    //final String uri = "http://104.209.196.204:9090/track";
+    final String uri = "http://104.209.196.204:9090/track";
 
-    final String uri = "http://172.16.10.98:8005/track";
+    //final String uri = "http://172.16.10.98:8005/track";
     final String urlTracking = "http://localhost:2222/tracking";
     final String urlRawSensorData = "http://localhost:2222/rawSensorData";
     final String urlPrediction = "http://localhost:2222/prediction";
