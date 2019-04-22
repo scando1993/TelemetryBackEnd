@@ -2,7 +2,10 @@ package net.pacificsoft.microservices.favorita.controllers.application;
 
 import javax.validation.Valid;
 
+import net.pacificsoft.microservices.favorita.models.Device;
+import net.pacificsoft.microservices.favorita.models.Telemetria;
 import net.pacificsoft.microservices.favorita.models.application.Locales;
+import net.pacificsoft.microservices.favorita.models.application.Ruta;
 import net.pacificsoft.microservices.favorita.repository.application.LocalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import net.pacificsoft.microservices.favorita.models.application.Formato;
 import net.pacificsoft.microservices.favorita.repository.application.FormatoRepository;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -134,4 +139,42 @@ public class FormatoController {
                             " does not exist.", HttpStatus.NOT_FOUND);
                 }
 	}
+
+
+    @GetMapping("/getFormatoes")
+    public ResponseEntity getFormatos(){
+        try{
+            List<Formato> formatoes = formatoRepository.findAll();
+            List<Map<String, Object>> result = new ArrayList();
+            JSONObject jFormato;
+            for(Formato f: formatoes){
+                jFormato = new JSONObject();
+                Locales l = f.getLocales();
+                jFormato.put("idFormato", f.getId());
+                jFormato.put("nameFormato", f.getName());
+                jFormato.put("code", f.getCode());
+                if(l != null){
+                    jFormato.put("idLocal", l.getId());
+                    jFormato.put("family", l.getFamily());
+                    jFormato.put("latitude", l.getLatitude());
+                    jFormato.put("numLoc", l.getNumLoc());
+                    jFormato.put("nameLocal", l.getName());
+                    jFormato.put("length", l.getLength());
+                }
+                else{
+                    jFormato.put("idLocal", "");
+                    jFormato.put("family", "");
+                    jFormato.put("latitude", "");
+                    jFormato.put("numLoc", "");
+                    jFormato.put("nameLocal", "");
+                    jFormato.put("length", "");
+                }
+                result.add(jFormato.toMap());
+            }
+            return new ResponseEntity(result, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

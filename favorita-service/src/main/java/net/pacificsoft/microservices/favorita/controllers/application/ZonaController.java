@@ -1,9 +1,7 @@
 package net.pacificsoft.microservices.favorita.controllers.application;
 
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import javax.validation.Valid;
 
 import net.pacificsoft.microservices.favorita.repository.application.ProvinciaRepository;
@@ -138,5 +136,36 @@ public class ZonaController {
                             " does not exist.", HttpStatus.NOT_FOUND);
                 }
 	}
-        
+
+    @GetMapping("/getZonas")
+    public ResponseEntity getZonas(){
+        try{
+            List<Zona> zonas = zonaRepository.findAll();
+            List<Map<String, Object>> result = new ArrayList();
+            List<Map<String, Object>> provs;
+            JSONObject jZona;
+            JSONObject jProvincia;
+            for(Zona l: zonas){
+                jZona = new JSONObject();
+                provs = new ArrayList();
+                Set<Provincia> provincias = l.getProvincias();
+                jZona.put("id", l.getId());
+                jZona.put("name", l.getName());
+                for(Provincia p: provincias){
+                    jProvincia = new JSONObject();
+                    jProvincia.put("id", p.getId());
+                    jProvincia.put("name", p.getName());
+                    provs.add(jProvincia.toMap());
+                }
+                jZona.put("provincias", provs.toArray());
+                result.add(jZona.toMap());
+            }
+            return new ResponseEntity(result, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 }

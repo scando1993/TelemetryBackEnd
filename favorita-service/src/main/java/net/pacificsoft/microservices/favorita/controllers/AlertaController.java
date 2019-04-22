@@ -106,7 +106,7 @@ public class AlertaController {
         if(alertaRepository.existsById(alertaId)){
             Alerta alerta = alertaRepository.findById(alertaId).get();
             alerta.setMensaje(alertaDetails.getMensaje());
-            alerta.setType_alert(alertaDetails.getType_alert());
+            alerta.setTypeAlert(alertaDetails.getTypeAlert());
             final Alerta updatedAlerta = alertaRepository.save(alerta);
             return new ResponseEntity(HttpStatus.OK);
         }

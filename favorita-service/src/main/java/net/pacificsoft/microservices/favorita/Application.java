@@ -3,6 +3,8 @@ package net.pacificsoft.microservices.favorita;
 
 import java.sql.Types;
 import java.util.Date;
+import java.util.TimeZone;
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import net.pacificsoft.microservices.favorita.models.*;
 import net.pacificsoft.microservices.favorita.models.application.*;
@@ -16,20 +18,36 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
+import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 //@EnableIgniteRepositories
 //@EnableDiscoveryClient
 
 public class Application {
-    
+    //asdm
+    //com
     //@Autowired
     //DataSource datasource;
+    private static final Logger logger = LogManager.getLogger(Application.class);
+    //private static final ThreadStartRuta ts = new ThreadStartRuta();
     
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+    
+    
+    @PostConstruct
+    public void init(){
+        TimeZone.setDefault(TimeZone.getTimeZone("EST"));   // It will set UTC timezone
+        System.out.println("Spring boot application running in UTC timezone :"+new Date());   // It will print UTC timezone
     }
     
-    private static final Logger logger = LogManager.getLogger(Application.class);
+    public static void main(String[] args) {
+        RestTemplate restTemplate = new RestTemplate();
+        System.out.println(new Date());
+        SpringApplication.run(Application.class, args);
+        //restTemplate.getForObject("http://localhost:2222/startThread", ThreadStartRuta.class);
+    }
+    
+    
+    
     @Bean
 	public RepositoryRestConfigurer repositoryRestConfigurer() {
 
@@ -45,7 +63,8 @@ public class Application {
                                                     Prediction.class, Probabilities.class, RawSensorData.class, SigfoxMessage.class,
                                                     Status.class, Telemetria.class, Tracking.class, WifiScan.class, Bodega.class,
                                                     Ciudad.class, Formato.class, Furgon.class, Locales.class, Producto.class,
-                                                    Provincia.class, Ruta.class, Zona.class, ConfigurationDevice.class);
+                                                    Provincia.class, Ruta.class, Zona.class, ConfigurationDevice.class,
+                                                    LocalesMac.class, Tracking_resp.class);
                                 config.setDefaultPageSize(Integer.MAX_VALUE);
                                 config.setReturnBodyOnCreate(Boolean.TRUE);
                                 config.setReturnBodyOnUpdate(Boolean.TRUE);

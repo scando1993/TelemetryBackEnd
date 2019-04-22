@@ -19,8 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "tracking")
-public class Tracking {
+@Table (name = "tracking_resp")
+public class Tracking_resp {
 
 	@Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,11 +47,11 @@ public class Tracking {
         @Column(name = "dtm")
         private Date dtm;
 
-        public Tracking(String location, Date dtm) {
+        public Tracking_resp(String location, Date dtm) {
             this.location = location;
             this.dtm = dtm;
         }
-        public Tracking() {
+        public Tracking_resp() {
 
         }
 

@@ -10,9 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table (name = "status")
 public class Status{
@@ -22,28 +21,29 @@ public class Status{
 	private long id;
         
         @Column(name = "batery")
-        private int batery;
+        private Integer batery;
         
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-        @Column(name = "last_transmision")
-        private Date last_transmision;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "America/Guayaquil")
+        @Column(name = "lastTransmision")
+        private Date lastTransmision;
         
-        @Column(name = "signal_level")
-        private double signal_level;
+        @Column(name = "signalLevel")
+        private Double signalLevel;
         
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-        @Column(name = "last_update")
-	private Date last_update;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "America/Guayaquil")
+        @Column(name = "lastUpdate")
+	private Date lastUpdate;
 
+        @JsonIgnore
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "deviceID")
         private Device device;
 
-        public Status(int batery, Date last_transmision, double signal_level, Date last_update) {
+        public Status(Integer batery, Date lastTransmision, Double signalLevel, Date lastUpdate) {
             this.batery = batery;
-            this.last_transmision = last_transmision;
-            this.signal_level = signal_level;
-            this.last_update = last_update;
+            this.lastTransmision = lastTransmision;
+            this.signalLevel = signalLevel;
+            this.lastUpdate = lastUpdate;
         }
 
         public Status() {
@@ -57,36 +57,36 @@ public class Status{
             this.id = id;
         }
 
-        public int getBatery() {
+        public Integer getBatery() {
             return batery;
         }
 
-        public void setBatery(int batery) {
+        public void setBatery(Integer batery) {
             this.batery = batery;
         }
 
-        public Date getLast_transmision() {
-            return last_transmision;
+        public Date getLastTransmision() {
+            return lastTransmision;
         }
 
-        public void setLast_transmision(Date last_transmision) {
-            this.last_transmision = last_transmision;
+        public void setLastTransmision(Date lastTransmision) {
+            this.lastTransmision = lastTransmision;
         }
 
-        public double getSignal_level() {
-            return signal_level;
+        public Double getSignalLevel() {
+            return signalLevel;
         }
 
-        public void setSignal_level(double signal_level) {
-            this.signal_level = signal_level;
+        public void setSignalLevel(Double signalLevel) {
+            this.signalLevel = signalLevel;
         }
 
-        public Date getLast_update() {
-            return last_update;
+        public Date getLastUpdate() {
+            return lastUpdate;
         }
 
-        public void setLast_update(Date last_update) {
-            this.last_update = last_update;
+        public void setLastUpdate(Date lastUpdate) {
+            this.lastUpdate = lastUpdate;
         }
 
         public Device getDevice() {

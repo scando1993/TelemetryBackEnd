@@ -1,6 +1,7 @@
 package net.pacificsoft.microservices.favorita.models.application;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import net.pacificsoft.microservices.favorita.models.Alerta;
 import net.pacificsoft.microservices.favorita.models.Device;
@@ -27,34 +27,43 @@ public class Ruta{
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
         
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "America/Guayaquil")
         @Column(name = "start_date", nullable = false)
 	private Date start_date;
         
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        @Column(name = "status")
+	private String status;
+        
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "America/Guayaquil")
         @Column(name = "end_date", nullable = false)
 	private Date end_date;
         
+        @JsonIgnore
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "furgonID")
         private Furgon furgon;
         
+        @JsonIgnore
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "deviceID")
         private Device device;
         
+        @JsonIgnore
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "productoID")
         private Producto producto;
         
+        @JsonIgnore
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "localInicioID")
         private Locales localInicio;
         
+        @JsonIgnore
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "localFinID")
         private Locales localFin;
         
+        @JsonIgnore
         @OneToMany(fetch = FetchType.LAZY,
             cascade =  CascadeType.ALL,
             mappedBy = "ruta")
@@ -138,5 +147,13 @@ public class Ruta{
 
         public void setAlertas(Set<Alerta> alertas) {
             this.alertas = alertas;
-        }        
+        }     
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }   
 }

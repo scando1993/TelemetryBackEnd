@@ -10,14 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import net.pacificsoft.microservices.favorita.models.Device;
 import net.pacificsoft.microservices.favorita.models.Status;
 import net.pacificsoft.microservices.favorita.repository.DeviceRepository;
 import net.pacificsoft.microservices.favorita.repository.StatusRepository;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -86,9 +82,9 @@ public class StatusController {
                 if(statusRepository.existsById(statusid)){
                     Status status = statusRepository.findById(statusid).get();
                     status.setBatery(statusDetails.getBatery());
-                    status.setLast_transmision(statusDetails.getLast_transmision());
-                    status.setSignal_level(statusDetails.getSignal_level());
-                    status.setLast_update(statusDetails.getLast_update());
+                    status.setLastTransmision(statusDetails.getLastTransmision());
+                    status.setSignalLevel(statusDetails.getSignalLevel());
+                    status.setLastUpdate(statusDetails.getLastUpdate());
                     final Status updatedStatus = statusRepository.save(status);
                     return new ResponseEntity(HttpStatus.OK);
                 }

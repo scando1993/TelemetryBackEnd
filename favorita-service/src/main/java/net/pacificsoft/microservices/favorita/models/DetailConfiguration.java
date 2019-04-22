@@ -21,7 +21,7 @@ public class DetailConfiguration {
     @Column(name = "ssid", nullable = false)
     private String ssid;
 
-    @Column(name = "mac", nullable = false)
+    @Column(name = "mac", nullable = true)
     private String mac;
 
     @ColumnTransformer(
@@ -33,6 +33,15 @@ public class DetailConfiguration {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "configurationID")
     private ConfigurationDevice configDevice;
+
+    public DetailConfiguration(String ssid, String mac, String password) {
+        this.ssid = ssid;
+        this.mac = mac;
+        this.password = password;
+    }
+
+    public DetailConfiguration() {
+    }
 
     public long getId() {
         return id;

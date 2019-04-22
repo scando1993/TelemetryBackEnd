@@ -3,6 +3,7 @@ package net.pacificsoft.microservices.favorita.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
+import java.util.TimeZone;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,7 +22,8 @@ public class Telemetria{
         @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
         
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "America/Guayaquil")
         @Column(name = "dtm", nullable = false)
 	private Date dtm;
         

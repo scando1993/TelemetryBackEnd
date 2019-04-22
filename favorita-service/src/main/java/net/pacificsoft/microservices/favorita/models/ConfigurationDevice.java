@@ -43,8 +43,18 @@ public class ConfigurationDevice{
             cascade =  CascadeType.ALL,
             mappedBy = "configDevice")
         private Set<DetailConfiguration> detailConfigurations = new HashSet<>();
-        
-        public long getId() {
+
+    public ConfigurationDevice(long id, double resolution_time, double send_time, double delta_temperature) {
+        this.id = id;
+        this.resolution_time = resolution_time;
+        this.send_time = send_time;
+        this.delta_temperature = delta_temperature;
+    }
+
+    public ConfigurationDevice() {
+    }
+
+    public long getId() {
             return id;
         }
 
