@@ -76,8 +76,9 @@ public class ApiGatewayController {
     @Autowired
     private DetailConfigurationRepository detailConfigurationRepository;
 
-    final String uri = "http://104.209.196.204:9090/track";
-    //final String uri = "http://172.16.10.41:8005/track";
+    //final String uri = "http://104.209.196.204:9090/track";
+
+    final String uri = "http://172.16.10.98:8005/track";
     final String urlTracking = "http://localhost:2222/tracking";
     final String urlRawSensorData = "http://localhost:2222/rawSensorData";
     final String urlPrediction = "http://localhost:2222/prediction";
@@ -230,6 +231,7 @@ public class ApiGatewayController {
             }
             else{
                 Iterator<Family> iterator = families.iterator();
+                boolean errorGetData = false;
                 while(iterator.hasNext()){
                     Family f = iterator.next();
                     jsonRequesGoServer.put("f",f.getName());
@@ -241,9 +243,9 @@ public class ApiGatewayController {
                         else
                             break;
                     }
-                    catch (Exception e){break;}
+                    catch (Exception e){errorGetData = true;}
                 }
-                if(iterator.hasNext()){
+                if(errorGetData){
                     logger.error("Response is empty. Could not obtain a valid prediction, maybe invalid family");
                     Alerta alert = new Alerta("Go Server error", "Response is empty. Could not obtain a valid prediction, maybe invalid family", new Date());
                     postAlert(alert,device);
