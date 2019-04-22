@@ -363,12 +363,14 @@ public class RutaController {
                         jRuta.put("nameDevice", d.getName());
                         jRuta.put("uuid", d.getUuid());
                         jRuta.put("familyDevice", d.getFamily());
+                        jRuta.put("descriptionDevice", d.getDescription());
                     }
                     else{
                         jRuta.put("idDevice", "");
                         jRuta.put("nameDevice", "");
                         jRuta.put("uuid", "");
                         jRuta.put("familyDevice", "");
+                        jRuta.put("descriptionDevice", "");
                     }
                     
                     if(r.getLocalInicio() != null){

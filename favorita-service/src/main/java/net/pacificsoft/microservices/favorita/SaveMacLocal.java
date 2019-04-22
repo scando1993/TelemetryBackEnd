@@ -28,9 +28,7 @@ public class SaveMacLocal {
     public static void postMacLocales(LocalesRepository localesRepository,
             LocalesMacRepository localesMacRepository, SaveMacLocal saveMacLocal, Long localid, Logger logger){
         if(localesRepository.existsById(localid)){
-             logger.warn("Device exist");
             String info[] = saveMacLocal.getCadena().split("\n");
-            logger.warn("Datos: "+info.length);
             Locales local = localesRepository.findById(localid).get();
             int i=0;
             for (String s: info){

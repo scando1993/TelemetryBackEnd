@@ -44,7 +44,6 @@ public class Application {
         System.out.println(new Date());
         SpringApplication.run(Application.class, args);
         //restTemplate.getForObject("http://localhost:2222/startThread", ThreadStartRuta.class);
-        //ts.start();
     }
     
     

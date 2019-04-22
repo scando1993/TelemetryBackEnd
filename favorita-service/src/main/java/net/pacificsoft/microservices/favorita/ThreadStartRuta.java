@@ -71,7 +71,7 @@ public class ThreadStartRuta extends Thread{
                     r.setStatus("Activo");
                     repository.save(r);
                     String typeAlert = "inicio_ruta";
-                    if(r.getDevice()!=null && r.getProducto()!=null ){
+                    if(r.getDevice()!=null && r.getProducto()!=null &&(alertaRepository.findByDeviceAndTypeAlertAndDtm(r.getDevice(), typeAlert, r.getStart_date()).size() == 0)){
                         String mensaje = "Inicio ruta "+r.getId()+". Device: " + r.getDevice().getName() + 
                                     " y producto " + r.getProducto().getName();
                         ThreadStateRuta ts = new ThreadStateRuta(r, repository, deviceRepository, alertaRepository,
